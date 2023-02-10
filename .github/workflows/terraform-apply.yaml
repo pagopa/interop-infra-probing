@@ -30,7 +30,7 @@ on:
 
 jobs:
   manual-trigger:
-    if: ${{ github.event_name = 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     name: "terraform-apply (manual)"
     runs-on: ubuntu-latest
     continue-on-error: false
