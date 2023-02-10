@@ -1,25 +1,21 @@
 variable "aws_region" {
   type        = string
-  description = "AWS region (default is Milan)"
-  default     = "eu-south-1"
+  description = "AWS region"
 }
 
-variable "environment" {
+variable "env" {
   type        = string
-  description = "Environment. Possible values are: Dev, Uat, Prod"
-  default     = "Uat"
+  description = "Environment name"
 }
 
 variable "github_repository" {
   type        = string
-  description = "This github repository"
+  description = "Github repository for this configuration"
 }
-
 
 variable "tags" {
   type = map(any)
   default = {
     "CreatedBy" : "Terraform",
-    "Environment" : "Uat"
   }
 }

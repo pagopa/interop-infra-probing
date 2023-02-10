@@ -1,9 +1,13 @@
-environment = "Dev"
+aws_region        = "eu-central-1"
+env               = "dev"
+github_repository = "pagopa/interop-infra-probing"
+
 tags = {
   "CreatedBy"   = "Terraform"
-  "Environment" = "Dev"
+  "Environment" = "dev"
   "Owner"       = "PagoPa"
   "Scope"       = "tfstate"
-  "Source"      = "<git repository url>"
+  "Source"      = "https://github.com/pagopa/interop-infra-probing"
   "name"        = "S3 Remote Terraform State Store"
 }
+
