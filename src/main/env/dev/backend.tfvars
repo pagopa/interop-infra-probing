@@ -1,4 +1,4 @@
-bucket         = "<backend s3 bucket>"
-key            = "dev/main/tfstate"
-region         = "eu-south-1"
+bucket         = "terraform-backend-774300547186"
+key            = "dev/main/terraform.tfstate"
+region         = "eu-central-1"
 dynamodb_table = "terraform-lock"

@@ -1,7 +1,6 @@
 variable "aws_region" {
   type        = string
-  description = "AWS region to create resources. Default Milan"
-  default     = "eu-south-1"
+  description = "AWS region"
 }
 
 variable "app_name" {
@@ -9,17 +8,12 @@ variable "app_name" {
   description = "App name."
 }
 
-variable "environment" {
+variable "env" {
   type        = string
   default     = "dev"
-  description = "Environment"
+  description = "Environment name"
 }
 
-variable "env_short" {
-  type        = string
-  default     = "d"
-  description = "Evnironment short."
-}
 
 variable "vpc_cidr" {
   type        = string
