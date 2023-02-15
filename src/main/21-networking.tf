@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.19.0"
+  version = "~> 3.19.0"
 
   name = "${var.app_name}-${var.env}-vpc"
   cidr = "10.0.0.0/16"
@@ -18,5 +18,4 @@ module "vpc" {
   create_flow_log_cloudwatch_iam_role  = true
   create_flow_log_cloudwatch_log_group = true
 
-  tags = var.tags
 }
