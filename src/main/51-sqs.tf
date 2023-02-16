@@ -1,7 +1,7 @@
 module "sqs" {
-  source  = "terraform-aws-modules/sqs/aws"
+  source = "terraform-aws-modules/sqs/aws"
 
-  name = "${var.app_name}-${var.env}-queue"
+  name       = "${var.app_name}-${var.env}-queue"
   fifo_queue = true
 
 }
