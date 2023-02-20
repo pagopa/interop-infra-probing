@@ -34,6 +34,11 @@ variable "app_public_subnets" {
   description = "Application VPC public subnets"
 }
 
+variable "kubernetes_version" {
+  type        = string
+  description = "Kubernetes version to use"
+}
+
 variable "tags" {
   type = map(any)
   default = {
