@@ -7,7 +7,7 @@ module "endpoints" {
   endpoints = {
     s3 = {
       # interface endpoint
-      service             = "s3"
+      service = "s3"
     },
     sqs = {
       service             = "sqs"
