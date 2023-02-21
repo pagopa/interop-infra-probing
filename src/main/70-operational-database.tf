@@ -1,32 +1,30 @@
-module "aurora" {
-    source  = "terraform-aws-modules/rds-aurora/aws"
+module "aurora_postgresql_v2" {
+  source = "terraform-aws-modules/rds-aurora/aws"
 
-    name           = "${var.app_name}-operational-database-${var.env}"
-    engine         = "aurora-postgresql"
-    engine_version = "14.3"
-    engine_mode = "serverless"
-    instance_class = "db.serverless"
+  name              = "${var.app_name}-operational-database-${var.env}"
+  engine            = "aurora-postgresql"
+  engine_mode       = "provisioned"
+  engine_version    = "14.6"
+  storage_encrypted = true
 
+  vpc_id                = module.vpc.vpc_id
+  subnets               = module.vpc.database_subnets
+  create_security_group = true
+  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
 
-    create_db_subnet_group = true
-    db_subnet_group_name = "${var.app_name}-aurora-${var.env}"
+  monitoring_interval = 60
 
-    vpc_id  = module.vpc.vpc_id
-    subnets = [
-        module.vpc.private_subnets[6],
-        module.vpc.private_subnets[7],
-        module.vpc.private_subnets[8]
-    ]
+  apply_immediately   = true
+  skip_final_snapshot = true
 
-    storage_encrypted   = true
-    apply_immediately   = true
-    monitoring_interval = 10
+  serverlessv2_scaling_configuration = {
+    min_capacity = 2
+    max_capacity = 10
+  }
 
-
-    enabled_cloudwatch_logs_exports = ["postgresql"]
-
-    tags = {
-    Environment = "dev"
-    Terraform   = "true"
-    }
-    }
+  instance_class = "db.serverless"
+  instances = {
+    one = {}
+    two = {}
+  }
+}
