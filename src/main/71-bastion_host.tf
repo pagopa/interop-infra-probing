@@ -10,7 +10,7 @@ module "ec2_instance" {
   associate_public_ip_address = true
   monitoring                  = true
   subnet_id                   = module.vpc.public_subnets[0]
-  vpc_security_group_ids      = [aws_security_group.ssh_access.id]
+  vpc_security_group_ids      = [aws_security_group.bastion_host_ssh_access.id]
 }
 
 resource "aws_security_group" "bastion_host_ssh_access" {
