@@ -5,23 +5,43 @@ module "ec2_instance" {
   name = "bastion-host-${var.env}"
 
   ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "t3.micro"
+  instance_type               = var.bastion_host_instance_type
   key_name                    = data.aws_key_pair.this.key_name
   associate_public_ip_address = true
   monitoring                  = true
   subnet_id                   = module.vpc.public_subnets[0]
+  vpc_security_group_ids      = [aws_security_group.ssh_access.id]
+}
 
+resource "aws_security_group" "ssh_access" {
+  name   = "allow-ssh-${var.env}"
+  vpc_id = module.vpc.vpc_id
+  ingress {
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 data "aws_ami" "amazon_linux" {
   most_recent = false
   filter {
     name   = "name"
-    values = ["amzn2-ami-kernel-5.10-hvm-2.0.20230207.0-x86_64-gp2"]
+    values = [var.bastion_host_ami]
   }
 }
 
+
 data "aws_key_pair" "this" {
-  key_name           = "interop-probing-bh-dev"
+  key_name           = var.bastion_host_key_pair_name
   include_public_key = true
 }
