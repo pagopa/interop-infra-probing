@@ -12,8 +12,8 @@ bastion_host_ami = "amzn2-ami-kernel-5.10-hvm-2.0.20230207.0-x86_64-gp2"
 bastion_host_instance_type = "t3.micro"
 bastion_host_key_pair_name = "interop-probing-bh-dev"
 
-database_min_capacity = 2
-database_max_capacity = 10
+operational_database_name = "probing-operational-db"
+
 
 tags = {
   CreatedBy   = "Terraform"

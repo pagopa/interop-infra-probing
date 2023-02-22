@@ -13,8 +13,8 @@ module "ec2_instance" {
   vpc_security_group_ids      = [aws_security_group.ssh_access.id]
 }
 
-resource "aws_security_group" "ssh_access" {
-  name   = "allow-ssh-${var.env}"
+resource "aws_security_group" "bastion_host_ssh_access" {
+  name   = "bastion-host-${var.app_name}-ssh-access-${var.env}"
   vpc_id = module.vpc.vpc_id
   ingress {
     cidr_blocks = [

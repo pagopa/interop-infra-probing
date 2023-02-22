@@ -49,16 +49,11 @@ variable "bastion_host_key_pair_name" {
   description = "Bastion host key pair name"
 }
 
-variable "database_min_capacity" {
-  type        = number
-  description = "Database autoscaling minimum capacity"
-}
 
-variable "database_max_capacity" {
-  type        = number
-  description = "Database autoscaling maximum capacity"
+variable "operational_database_name" {
+  type        = string
+  description = "Operational database name"
 }
-
 
 variable "tags" {
   type = map(any)

@@ -1,11 +1,15 @@
-module "aurora_postgresql_v2" {
+module "aurora" {
   source = "terraform-aws-modules/rds-aurora/aws"
 
   name              = "${var.app_name}-operational-database-${var.env}"
   engine            = "aurora-postgresql"
-  engine_mode       = "provisioned"
   engine_version    = "14.6"
+  engine_mode       = "serverless"
+  instance_class    = "db.serverless"
   storage_encrypted = true
+
+  create_db_subnet_group = true
+  db_subnet_group_name   = "${var.app_name}-aurora-${var.env}"
 
   vpc_id                          = module.vpc.vpc_id
   subnets                         = module.vpc.database_subnets
@@ -15,19 +19,18 @@ module "aurora_postgresql_v2" {
   db_cluster_parameter_group_name = "${var.app_name}-operational-database-${var.env}"
   deletion_protection             = true
 
-  monitoring_interval = 60
+  apply_immediately   = true
+  skip_final_snapshot = false
 
-  apply_immediately   = false
-  skip_final_snapshot = true
+}
 
-  serverlessv2_scaling_configuration = {
-    min_capacity = var.database_min_capacity
-    max_capacity = var.database_min_capacity
-  }
+resource "aws_secretsmanager_secret" "database_aurora_master_password" {
+  name = "/${var.app_name}/${var.env}/operational-database/master_password"
+}
 
-  instance_class = "db.serverless"
-  instances = {
-    one = {}
-    two = {}
-  }
+resource "aws_secretsmanager_secret_version" "database_aurora_master_password" {
+  secret_id = aws_secretsmanager_secret.example.id
+  secret_string = jsonencode({
+    master_password = module.aurora.cluster_master_password
+  })
 }
