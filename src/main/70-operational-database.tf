@@ -21,10 +21,10 @@ module "aurora" {
   database_name                   = var.operational_database_name
   apply_immediately               = true
   skip_final_snapshot             = false
-  
+
   scaling_configuration = {
-    min_capacity             = var.database_scaling_min_capacity
-    max_capacity             = var.database_scaling_max_capacity
+    min_capacity = var.database_scaling_min_capacity
+    max_capacity = var.database_scaling_max_capacity
   }
 
 }
