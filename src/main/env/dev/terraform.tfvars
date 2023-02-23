@@ -13,8 +13,8 @@ bastion_host_instance_type = "t3.micro"
 bastion_host_key_pair_name = "interop-probing-bh-dev"
 
 operational_database_name = "probing-operational-db"
-
-
+database_scaling_min_capacity = 2
+database_scaling_max_capacity = 10
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"
