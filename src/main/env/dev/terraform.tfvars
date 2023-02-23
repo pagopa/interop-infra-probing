@@ -12,7 +12,8 @@ bastion_host_ami = "amzn2-ami-kernel-5.10-hvm-2.0.20230207.0-x86_64-gp2"
 bastion_host_instance_type = "t3.micro"
 bastion_host_key_pair_name = "interop-probing-bh-dev"
 
-operational_database_name = "probing-operational-db"
+operational_database_name = "eservice-operational"
+
 database_scaling_min_capacity = 2
 database_scaling_max_capacity = 10
 tags = {
