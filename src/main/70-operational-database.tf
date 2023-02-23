@@ -14,7 +14,6 @@ module "aurora" {
   vpc_id                          = module.vpc.vpc_id
   subnets                         = module.vpc.database_subnets
   create_security_group           = true
-  allowed_cidr_blocks             = module.vpc.private_subnets_cidr_blocks
   allowed_security_groups         = [aws_security_group.bastion_host_ssh_access.id]
   db_cluster_parameter_group_name = "${var.app_name}-operational-database-${var.env}"
   master_username                 = "root"
