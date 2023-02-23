@@ -55,6 +55,16 @@ variable "operational_database_name" {
   description = "Operational database name"
 }
 
+variable "database_scaling_min_capacity" {
+    type        = number
+  description = "Operational database scaling configuration minimum capacity"
+}
+variable "database_scaling_max_capacity" {
+    type        = number
+  description =  "Operational database scaling configuration maximum capacity"
+}
+
+
 variable "tags" {
   type = map(any)
   default = {

@@ -17,10 +17,16 @@ module "aurora" {
   allowed_cidr_blocks             = module.vpc.private_subnets_cidr_blocks
   allowed_security_groups         = [aws_security_group.bastion_host_ssh_access.id]
   db_cluster_parameter_group_name = "${var.app_name}-operational-database-${var.env}"
+  master_username                 = "root"
   deletion_protection             = true
   database_name                   = var.operational_database_name
   apply_immediately               = true
   skip_final_snapshot             = false
+  
+  scaling_configuration = {
+    min_capacity             = var.database_scaling_min_capacity
+    max_capacity             = var.database_scaling_max_capacity
+  }
 
 }
 
