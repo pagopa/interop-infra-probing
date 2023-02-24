@@ -3,7 +3,7 @@ module "aurora" {
 
   name              = "${var.app_name}-operational-database-${var.env}"
   engine            = "aurora-postgresql"
-  engine_version    = "14.6"
+  engine_version    = "11.16"
   engine_mode       = "serverless"
   storage_encrypted = true
 
