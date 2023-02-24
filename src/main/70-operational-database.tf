@@ -5,7 +5,6 @@ module "aurora" {
   engine            = "aurora-postgresql"
   engine_version    = "14.6"
   engine_mode       = "serverless"
-  instance_class    = "db.serverless"
   storage_encrypted = true
 
   create_db_subnet_group = true
