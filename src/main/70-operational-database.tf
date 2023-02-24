@@ -19,9 +19,12 @@ module "aurora" {
   create_db_parameter_group         = true
   create_db_cluster_parameter_group = true
   db_parameter_group_name           = "${var.app_name}-aurora-db-postgres14-parameter-group-${var.env}"
+  db_parameter_group_family         = "aurora-postgresql14"
+  db_cluster_parameter_group_family = "aurora-postgresql14"
   db_cluster_parameter_group_name   = "${var.app_name}-aurora-postgres14-cluster-parameter-group-${var.env}"
-  apply_immediately                 = true
-  skip_final_snapshot               = false
+
+  apply_immediately   = true
+  skip_final_snapshot = false
 
   serverlessv2_scaling_configuration = {
     min_capacity = var.database_scaling_min_capacity
