@@ -17,15 +17,20 @@ resource "aws_iam_policy" "additional" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.10.0"
+  version = "19.10.0"
 
   cluster_name    = "${var.app_name}-eks-${var.env}"
-  cluster_version = var.kubernetes_version
+  cluster_version = "1.24"
 
   cluster_addons = {
-    kube-proxy = {}
-    vpc-cni    = {}
+    kube-proxy = {
+      addon_version = "v1.24.9-eksbuild.1"
+    }
+    vpc-cni = {
+      addon_version = "v1.12.2-eksbuild.1"
+    }
     coredns = {
+      addon_version = "v1.9.3-eksbuild.2"
       configuration_values = jsonencode({
         computeType = "Fargate"
       })
@@ -37,7 +42,7 @@ module "eks" {
   control_plane_subnet_ids = [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]]
 
   # Fargate profiles use the cluster primary security group so these are not utilized
-  create_cluster_security_group = false
+  create_cluster_security_group = true
   create_node_security_group    = false
 
   fargate_profile_defaults = {
