@@ -16,11 +16,10 @@ module "aurora" {
   deletion_protection     = true
   database_name           = var.operational_database_name
 
-  db_parameter_group_name         = aws_db_parameter_group.postgresql14_db_pg.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.postgresql14_cluster_pg.id
-
-  apply_immediately   = true
-  skip_final_snapshot = false
+  db_parameter_group_name         = "${var.app_name}-aurora-db-postgres14-parameter-group-${var.env}"
+  db_cluster_parameter_group_name = "${var.app_name}-aurora-postgres14-cluster-parameter-group-${var.env}"
+  apply_immediately               = true
+  skip_final_snapshot             = false
 
   serverlessv2_scaling_configuration = {
     min_capacity = var.database_scaling_min_capacity
@@ -37,18 +36,6 @@ module "aurora" {
 data "aws_rds_engine_version" "postgresql" {
   engine  = "aurora-postgresql"
   version = "14.6"
-}
-
-resource "aws_db_parameter_group" "postgresql14_db_pg" {
-  name        = "${var.app_name}-aurora-db-postgres14-parameter-group-${var.env}"
-  family      = "aurora-postgresql14"
-  description = "${var.app_name} Aurora DB Parameter group"
-}
-
-resource "aws_rds_cluster_parameter_group" "postgresql14_cluster_pg" {
-  name        = "${var.app_name}-aurora-postgres14-cluster-parameter-group-${var.env}"
-  family      = "aurora-postgresql14"
-  description = "${var.app_name} Aurora DB Cluster Parameter group"
 }
 
 resource "aws_secretsmanager_secret" "database_aurora_master_password" {
