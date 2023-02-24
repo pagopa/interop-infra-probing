@@ -1,4 +1,4 @@
-module "sqs" {
+module "sqs_registry_queue" {
   source  = "terraform-aws-modules/sqs/aws"
   version = "4.0.1"
 
@@ -6,7 +6,7 @@ module "sqs" {
   fifo_queue = true
 }
 
-module "sqs" {
+module "sqs_polling_queue" {
   source  = "terraform-aws-modules/sqs/aws"
   version = "4.0.1"
 
@@ -15,7 +15,7 @@ module "sqs" {
 }
 
 
-module "sqs" {
+module "sqs_polling_result_queue" {
   source  = "terraform-aws-modules/sqs/aws"
   version = "4.0.1"
 
@@ -24,7 +24,7 @@ module "sqs" {
 }
 
 
-module "sqs" {
+module "sqs_telemetry_result_queue" {
   source  = "terraform-aws-modules/sqs/aws"
   version = "4.0.1"
 
