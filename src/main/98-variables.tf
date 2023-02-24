@@ -34,6 +34,42 @@ variable "app_public_subnets" {
   description = "Application VPC public subnets"
 }
 
+variable "bastion_host_ami" {
+  type        = string
+  description = "Bastion host AMI"
+}
+
+variable "bastion_host_instance_type" {
+  type        = string
+  description = "Bastion host instance type"
+}
+
+variable "bastion_host_key_pair_name" {
+  type        = string
+  description = "Bastion host key pair name"
+}
+
+
+variable "operational_database_name" {
+  type        = string
+  description = "Operational database name"
+}
+
+variable "operational_database_name_master_user" {
+  type        = string
+  description = "Operational database master username"
+}
+
+variable "database_scaling_min_capacity" {
+  type        = number
+  description = "Operational database scaling configuration minimum capacity"
+}
+variable "database_scaling_max_capacity" {
+  type        = number
+  description = "Operational database scaling configuration maximum capacity"
+}
+
+
 variable "tags" {
   type = map(any)
   default = {
