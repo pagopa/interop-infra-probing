@@ -49,6 +49,10 @@ variable "bastion_host_key_pair_name" {
   description = "Bastion host key pair name"
 }
 
+variable "analytics_database_name" {
+  type        = string
+  description = "Analytics database name"
+}
 
 variable "operational_database_name" {
   type        = string

@@ -17,3 +17,25 @@ module "endpoints" {
   }
 
 }
+
+#SEPARATE BECAUSE NOT FOUND WITH MODULE
+resource "aws_vpc_endpoint" "timestream_ingest" {
+  vpc_id            = module.vpc.vpc_id
+  service_name      = "com.amazonaws.${var.aws_region}.timestream.ingest-cell1"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [module.vpc.default_security_group_id]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "timestream_query" {
+  vpc_id            = module.vpc.vpc_id
+  service_name      = "com.amazonaws.${var.aws_region}.timestream.query-cell-1"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [module.vpc.default_security_group_id]
+
+  private_dns_enabled = true
+}
+
