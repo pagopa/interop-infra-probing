@@ -11,7 +11,7 @@ module "aurora" {
   vpc_id                  = module.vpc.vpc_id
   subnets                 = module.vpc.database_subnets
   create_security_group   = true
-  allowed_security_groups = [aws_security_group.bastion_host_ssh_access.id]
+  allowed_security_groups = [aws_security_group.bastion_host_ssh_access.id, module.eks.cluster_security_group_id]
   master_username         = var.operational_database_name_master_user
   deletion_protection     = true
   database_name           = var.operational_database_name
