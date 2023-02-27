@@ -20,17 +20,18 @@ module "eks" {
   version = "19.10.0"
 
   cluster_name    = "${var.app_name}-eks-${var.env}"
-  cluster_version = "1.24"
+  cluster_version = var.kubernetes_version
 
   cluster_addons = {
     kube-proxy = {
-      addon_version = "v1.24.9-eksbuild.1"
+      addon_version = var.kubernetes_addons_versions.kube-proxy
     }
     vpc-cni = {
-      addon_version = "v1.12.2-eksbuild.1"
+      addon_version = var.kubernetes_addons_versions.vpc-cni
     }
     coredns = {
-      addon_version = "v1.9.3-eksbuild.2"
+      addon_version = var.kubernetes_addons_versions.coredns
+
       configuration_values = jsonencode({
         computeType = "Fargate"
       })

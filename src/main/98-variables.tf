@@ -74,6 +74,10 @@ variable "database_scaling_max_capacity" {
   description = "Operational database scaling configuration maximum capacity"
 }
 
+variable "kubernetes_addons_versions" {
+  type        = map(any)
+  description = "Kuberntes addons version"
+}
 
 variable "tags" {
   type = map(any)
