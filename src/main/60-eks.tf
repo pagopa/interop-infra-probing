@@ -1,20 +1,3 @@
-resource "aws_iam_policy" "additional" {
-  name = "${var.app_name}-fargate-additional"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:Describe*",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
-  })
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.10.0"
@@ -45,12 +28,6 @@ module "eks" {
   # Fargate profiles use the cluster primary security group so these are not utilized
   create_cluster_security_group = true
   create_node_security_group    = false
-
-  fargate_profile_defaults = {
-    iam_role_additional_policies = {
-      additional = aws_iam_policy.additional.arn
-    }
-  }
 
   fargate_profiles = merge(
     {
