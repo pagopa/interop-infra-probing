@@ -37,6 +37,8 @@ module "eks" {
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
+  kms_key_enable_default_policy = true
+
   cluster_addons = {
     kube-proxy = {
       addon_version     = var.kubernetes_addons_versions.kube-proxy
