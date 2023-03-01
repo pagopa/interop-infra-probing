@@ -4,4 +4,3 @@
 %{ for group in k8s_groups ~}
     - ${group}
 %{ endfor ~}
-
