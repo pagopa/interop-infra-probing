@@ -55,12 +55,24 @@ jobs:
         id: fmt
         run: terraform fmt -check
 
-      - name: Terraform Init
-        id: init
+      - name: Terraform Init (main)
+        id: init_main
         run: |
           ./terraform.sh init ${{ matrix.environment }}
 
-      - name: Terraform Plan
-        id: plan
+      - name: Terraform Plan (main)
+        id: plan_main
+        run: |
+          ./terraform.sh plan ${{ matrix.environment }}
+
+      - name: Terraform Init (K8s)
+        id: init_k8s
+        working-directory: src/main/k8s
+        run: |
+          ./terraform.sh init ${{ matrix.environment }}
+
+      - name: Terraform Plan (K8s)
+        id: plan_k8s
+        working-directory: src/main/k8s
         run: |
           ./terraform.sh plan ${{ matrix.environment }}
