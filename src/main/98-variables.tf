@@ -14,9 +14,9 @@ variable "env" {
   description = "Environment name"
 }
 
-variable "interop_probing_bucket_name" {
+variable "interop_probing_bucket_arn" {
   type        = string
-  description = "Name of existing bucket name for probing list"
+  description = "ARN of existing bucket name for probing list"
 }
 
 variable "database_subnets" {

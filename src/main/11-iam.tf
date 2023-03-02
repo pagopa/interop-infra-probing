@@ -10,8 +10,8 @@ data "aws_iam_policy_document" "registry_reader_policy" {
     ]
 
     resources = [
-      data.aws_s3_bucket.interop_probing_bucket.arn,
-      "${data.aws_s3_bucket.interop_probing_bucket.arn}/*",
+      var.interop_probing_bucket_arn,
+      "${var.interop_probing_bucket_arn}/*",
     ]
   }
 
