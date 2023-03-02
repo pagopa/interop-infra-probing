@@ -1,5 +1,5 @@
 module "registry_reader_role" {
-  source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "registryReaderRole"
 
@@ -13,7 +13,7 @@ module "registry_reader_role" {
     }
   }
 
-  role_path = "/infra/eks/pods/"
+  role_path        = "/infra/eks/pods/"
   role_description = "Role for Read from probing bucket and write on SQS queue"
 
   role_policy_arns = {
