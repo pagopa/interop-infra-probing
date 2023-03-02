@@ -9,6 +9,7 @@ kubernetes_addons_versions = {
   coredns =  "v1.9.3-eksbuild.2"
 }
 
+interop_probing_bucket_name = "interop-probing-eservices-dev"
 
 database_subnets = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
 eks_control_plane_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
