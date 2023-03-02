@@ -84,8 +84,14 @@ jobs:
             role-to-assume: ${{ secrets.IAM_ROLE }}
             aws-region: ${{ env.AWS_REGION }}
 
-        - name: Apply
+        - name: Apply (main)
           uses: ./.github/workflows/apply
           with:
             env: ${{ matrix.environment }}
             working-directory: src/main
+
+        - name: Apply (K8s)
+          uses: ./.github/workflows/apply
+          with:
+            env: ${{ matrix.environment }}
+            working-directory: src/main/k8s
