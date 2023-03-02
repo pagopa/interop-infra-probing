@@ -1,3 +1,15 @@
+module "sqs_sg" {
+  source = "terraform-aws-modules/security-group/aws"
+
+  name        = "sqs"
+  description = "Security group for SQS VPC Endpoint"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks = var.eks_workload_subnets
+  ingress_rules       = ["https-443-tcp"]
+
+}
+
 module "endpoints" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
 
@@ -12,30 +24,56 @@ module "endpoints" {
     sqs = {
       service             = "sqs"
       private_dns_enabled = true
-      security_group_ids  = [module.vpc.default_security_group_id]
+      security_group_ids  = [module.sqs_sg.security_group_id]
     }
   }
 
 }
 
 #SEPARATE BECAUSE NOT FOUND WITH MODULE
+
+module "timestream_ingest_sg" {
+  source = "terraform-aws-modules/security-group/aws"
+
+  name        = "timestream-ingest"
+  description = "Security group for timestream ingest VPC Endpoint"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks = var.eks_workload_subnets
+  ingress_rules       = ["https-443-tcp"]
+
+}
 resource "aws_vpc_endpoint" "timestream_ingest" {
   vpc_id            = module.vpc.vpc_id
   service_name      = "com.amazonaws.${var.aws_region}.timestream.ingest-cell1"
   vpc_endpoint_type = "Interface"
 
-  security_group_ids = [module.vpc.default_security_group_id]
+  security_group_ids = module.timestream_ingest_sg.security_group_id
 
   private_dns_enabled = true
+  subnet_ids          = module.vpc.public_subnets
 }
 
+
+module "timestream_query_sg" {
+  source = "terraform-aws-modules/security-group/aws"
+
+  name        = "timestream-query"
+  description = "Security group for timestream query VPC Endpoint"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks = var.eks_workload_subnets
+  ingress_rules       = ["https-443-tcp"]
+
+}
 resource "aws_vpc_endpoint" "timestream_query" {
   vpc_id            = module.vpc.vpc_id
   service_name      = "com.amazonaws.${var.aws_region}.timestream.query-cell-1"
   vpc_endpoint_type = "Interface"
 
-  security_group_ids = [module.vpc.default_security_group_id]
+  security_group_ids = [module.timestream_query_sg.security_group_id]
 
   private_dns_enabled = true
+  subnet_ids          = module.vpc.public_subnets
 }
 
