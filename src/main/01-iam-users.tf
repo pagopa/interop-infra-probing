@@ -15,6 +15,8 @@ data "aws_dynamodb_table" "terraform_lock" {
 }
 
 resource "aws_iam_policy" "user_mfa" {
+  count = var.env == "dev" ? 1 : 0
+
   name = "UserMFASelfService"
 
   policy = <<-EOT
@@ -110,33 +112,45 @@ resource "aws_iam_policy" "user_mfa" {
 }
 
 resource "aws_iam_group" "external_developers" {
+  count = var.env == "dev" ? 1 : 0
+
   name = "ExternalDevelopers"
   path = "/externals/"
 }
 
 resource "aws_iam_group_policy_attachment" "read_only" {
-  group      = aws_iam_group.external_developers.name
+  count = var.env == "dev" ? 1 : 0
+
+  group      = aws_iam_group.external_developers[0].name
   policy_arn = data.aws_iam_policy.read_only.arn
 }
 
 resource "aws_iam_group_policy_attachment" "iam_user_password" {
-  group      = aws_iam_group.external_developers.name
+  count = var.env == "dev" ? 1 : 0
+
+  group      = aws_iam_group.external_developers[0].name
   policy_arn = data.aws_iam_policy.iam_user_password.arn
 }
 
 resource "aws_iam_group_policy_attachment" "secrets_manager_read_write" {
-  group      = aws_iam_group.external_developers.name
+  count = var.env == "dev" ? 1 : 0
+
+  group      = aws_iam_group.external_developers[0].name
   policy_arn = data.aws_iam_policy.secrets_manager_read_write.arn
 }
 
 resource "aws_iam_group_policy_attachment" "user_mfa" {
-  group      = aws_iam_group.external_developers.name
-  policy_arn = aws_iam_policy.user_mfa.arn
+  count = var.env == "dev" ? 1 : 0
+
+  group      = aws_iam_group.external_developers[0].name
+  policy_arn = aws_iam_policy.user_mfa[0].arn
 }
 
 resource "aws_iam_group_policy" "terraform_lock" {
+  count = var.env == "dev" ? 1 : 0
+
   name  = "TerraformLock"
-  group = aws_iam_group.external_developers.name
+  group = aws_iam_group.external_developers[0].name
 
   policy = jsonencode({
     Version = "2012-10-17"
