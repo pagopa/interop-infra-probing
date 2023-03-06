@@ -14,11 +14,11 @@ locals {
       k8s_groups   = ["system:masters"]
   })
 
-  read_only_users_mapping = [for user in data.aws_iam_user.read_only : templatefile("./templates/aws-auth-user.tpl",
+  admin_users_mapping = [for user in data.aws_iam_user.admin: templatefile("./templates/aws-auth-user.tpl",
     {
       user_arn     = user.arn
       k8s_username = user.user_name
-      k8s_groups   = ["view"]
+      k8s_groups   = ["system:masters"]
   })]
 }
 
@@ -28,8 +28,8 @@ data "aws_iam_role" "fargate_profiles" {
   name = each.key
 }
 
-data "aws_iam_user" "read_only" {
-  for_each = toset(var.iam_users_read_only)
+data "aws_iam_user" "admin" {
+  for_each = toset(var.iam_users_k8s_admin)
 
   user_name = each.key
 }
@@ -42,6 +42,6 @@ resource "kubernetes_config_map_v1" "aws_auth" {
 
   data = {
     mapRoles = join("", concat(local.fargate_profiles_mapping, [local.sso_full_admin_mapping]))
-    mapUsers = length(local.read_only_users_mapping) > 0 ? join("", local.read_only_users_mapping) : null
+    mapUsers = length(local.admin_users_mapping) > 0 ? join("", local.admin_users_mapping) : null
   }
 }
