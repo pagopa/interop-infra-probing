@@ -83,7 +83,7 @@ module "timestream_query_sg" {
 }
 resource "aws_vpc_endpoint" "timestream_query" {
   vpc_id            = module.vpc.vpc_id
-  service_name      = "com.amazonaws.${var.aws_region}.timestream.query-cell-1"
+  service_name      = "com.amazonaws.${var.aws_region}.timestream.query-cell1"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [module.timestream_query_sg.security_group_id]
