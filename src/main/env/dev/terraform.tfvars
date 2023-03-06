@@ -23,6 +23,8 @@ bastion_host_key_pair_name = "interop-probing-bh-dev"
 operational_database_name = "interop_probing_operational"
 operational_database_name_master_user = "root"
 
+analytics_database_name = "interop_probing_telemetry"
+
 database_scaling_min_capacity = 2
 database_scaling_max_capacity = 10
 tags = {
