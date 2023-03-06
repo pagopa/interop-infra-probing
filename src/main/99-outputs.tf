@@ -5,5 +5,5 @@ output "aurora_master_password_secret" {
 
 output "bucket_reader_role_arn" {
   value       = module.registry_reader_role.iam_role_arn
-  description = "Role arn of the probing bucket reader podRole"
+  description = "ARN of the probing bucket reader pod role"
 }
