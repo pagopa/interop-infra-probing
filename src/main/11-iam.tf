@@ -19,13 +19,7 @@ data "aws_iam_policy_document" "registry_reader_policy" {
     sid    = "readWriteOnProbingQueue"
     effect = "Allow"
     actions = [
-      "sqs:DeleteMessage",
-      "sqs:GetQueueUrl",
-      "sqs:ListDeadLetterSourceQueues",
-      "sqs:ReceiveMessage",
-      "sqs:SendMessage",
-      "sqs:GetQueueAttributes",
-      "sqs:ListQueueTags"
+      "sqs:SendMessage"
     ]
 
     resources = [
