@@ -58,7 +58,7 @@ resource "aws_vpc_endpoint" "timestream_ingest" {
   service_name      = "com.amazonaws.${var.aws_region}.timestream.ingest-cell1"
   vpc_endpoint_type = "Interface"
 
-  security_group_ids = module.timestream_ingest_sg.security_group_id
+  security_group_ids = [module.timestream_ingest_sg.security_group_id]
 
   private_dns_enabled = true
   subnet_ids          = data.aws_subnets.workload.ids
