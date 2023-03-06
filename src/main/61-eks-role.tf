@@ -3,13 +3,10 @@ module "registry_reader_role" {
 
   role_name = "registryReaderRole"
 
-  attach_vpc_cni_policy = true
-  vpc_cni_enable_ipv4   = true
-
   oidc_providers = {
     main = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["dev-registry-reader:registry-reader"]
+      namespace_service_accounts = ["${var.env}:registry-reader"]
     }
   }
 

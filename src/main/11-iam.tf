@@ -19,10 +19,13 @@ data "aws_iam_policy_document" "registry_reader_policy" {
     sid    = "readWriteOnProbingQueue"
     effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:ListBucketVersions",
-      "s3:ListBucket",
-      "s3:GetObjectVersion"
+      "sqs:DeleteMessage",
+      "sqs:GetQueueUrl",
+      "sqs:ListDeadLetterSourceQueues",
+      "sqs:ReceiveMessage",
+      "sqs:SendMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:ListQueueTags"
     ]
 
     resources = [
@@ -30,16 +33,6 @@ data "aws_iam_policy_document" "registry_reader_policy" {
     ]
   }
 
-  statement {
-    sid    = "listQueues"
-    effect = "Allow"
-    actions = [
-      "sqs:ListQueues"
-    ]
-    resources = [
-      "*"
-    ]
-  }
 
 }
 
