@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "registry_reader_policy" {
   }
 
   statement {
-    sid    = "readWriteOnProbingQueue"
+    sid    = "ReadWriteOnProbingQueue"
     effect = "Allow"
     actions = [
       "sqs:SendMessage"
