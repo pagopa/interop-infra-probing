@@ -10,7 +10,7 @@ module "registry_reader_role" {
     }
   }
 
-  role_path        = "/infra/eks/pods/"
+  role_path        = "/application/eks/pods/"
   role_description = "Role for Read from probing bucket and write on SQS queue"
 
   role_policy_arns = {
