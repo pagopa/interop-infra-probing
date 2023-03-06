@@ -36,8 +36,8 @@ variable "sso_full_admin_role_name" {
   description = "Name of the SSO 'FullAdmin' role"
 }
 
-variable "iam_users_read_only" {
+variable "iam_users_k8s_admin" {
   type = list(string)
-  description = "IAM users to be granted read-only access in the cluster"
+  description = "IAM users to be granted admin access in the cluster"
   default = []
 }
