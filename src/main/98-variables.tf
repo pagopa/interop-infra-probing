@@ -8,6 +8,11 @@ variable "app_name" {
   description = "App name."
 }
 
+variable "be_prefix" {
+  type        = string
+  description = "Backend name prefix"
+}
+
 variable "env" {
   type        = string
   default     = "dev"

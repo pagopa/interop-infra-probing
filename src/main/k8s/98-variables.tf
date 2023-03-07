@@ -21,6 +21,11 @@ variable "tags" {
   }
 }
 
+variable "be_prefix" {
+  description = "Name prefix used by backend apps"
+  type        = string
+}
+
 variable "eks_cluster_name" {
   type        = string
   description = "Name of the EKS cluster"
@@ -37,7 +42,7 @@ variable "sso_full_admin_role_name" {
 }
 
 variable "iam_users_k8s_admin" {
-  type = list(string)
+  type        = list(string)
   description = "IAM users to be granted admin access in the cluster"
-  default = []
+  default     = []
 }

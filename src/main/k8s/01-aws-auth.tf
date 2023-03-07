@@ -14,7 +14,7 @@ locals {
       k8s_groups   = ["system:masters"]
   })
 
-  admin_users_mapping = [for user in data.aws_iam_user.admin: templatefile("./templates/aws-auth-user.tpl",
+  admin_users_mapping = [for user in data.aws_iam_user.admin : templatefile("./templates/aws-auth-user.tpl",
     {
       user_arn     = user.arn
       k8s_username = user.user_name
