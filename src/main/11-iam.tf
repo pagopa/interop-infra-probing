@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "registry_reader_policy" {
 }
 
 resource "aws_iam_policy" "registry_reader_policy" {
-  name   = "${var.app_name}-be-registry-reader-${var.env}"
+  name   = "${var.be_prefix}-registry-reader-${var.env}"
   path   = "/application/eks/pods/"
   policy = data.aws_iam_policy_document.registry_reader_policy.json
 }

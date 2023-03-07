@@ -1,7 +1,7 @@
 module "registry_reader_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name = "${var.app_name}-registry-reader-${var.env}"
+  role_name = "${var.be_prefix}-registry-reader-${var.env}"
 
   oidc_providers = {
     main = {
