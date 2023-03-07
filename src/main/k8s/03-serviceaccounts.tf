@@ -12,7 +12,7 @@ resource "kubernetes_service_account_v1" "registry_reader" {
     }
 
     labels = {
-      "app.kubernetes.io/name" : format("%s-eservice-registry-reader", var.be_prefix)
+      "app.kubernetes.io/name" = format("%s-eservice-registry-reader", var.be_prefix)
     }
   }
 }
