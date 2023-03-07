@@ -187,7 +187,21 @@ resource "aws_iam_group_policy" "timestream_development" {
           aws_timestreamwrite_database.analytics_database.arn,
           "${aws_timestreamwrite_database.analytics_database.arn}/table/*"
         ]
-      }
+      },
+      {
+        Sid    = "Timestream"
+        Effect = "Allow"
+        Action = [
+          "timestream:DescribeEndpoints",
+          "timestream:SelectValues",
+          "timestream:CancelQuery"
+        ]
+        Resource = [
+
+          "*"
+        ]
+      },
+
     ]
   })
 }
