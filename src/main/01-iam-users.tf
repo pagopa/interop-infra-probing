@@ -111,7 +111,6 @@ resource "aws_iam_policy" "user_mfa" {
   EOT
 }
 
-
 resource "aws_iam_group" "external_developers" {
   count = var.env == "dev" ? 1 : 0
 
