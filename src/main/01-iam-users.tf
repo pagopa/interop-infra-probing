@@ -167,3 +167,27 @@ resource "aws_iam_group_policy" "terraform_lock" {
     ]
   })
 }
+
+resource "aws_iam_group_policy" "timestream_development" {
+  count = var.env == "dev" ? 1 : 0
+
+  name  = "TimestreamDevelopment"
+  group = aws_iam_group.external_developers[0].name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "TimestreamActions"
+        Effect = "Allow"
+        Action = [
+          "timestream:*"
+        ]
+        Resource = [
+          aws_timestreamwrite_database.analytics_database.arn,
+          "${aws_timestreamwrite_database.analytics_database.arn}/table/*"
+        ]
+      }
+    ]
+  })
+}
