@@ -6,7 +6,7 @@ module "registry_reader_role" {
   oidc_providers = {
     main = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.env}:registry-reader"]
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-eservice-registry-reader"]
     }
   }
 
