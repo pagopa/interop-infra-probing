@@ -43,8 +43,9 @@ jobs:
 
       - name: Read terraform version
         id: read-version
+        working-directory: src/
         run: |
-          echo "TERRAFORM_VERSION=`cat ../.terraform-version`" >> $GITHUB_ENV
+          echo "TERRAFORM_VERSION=`cat ./.terraform-version`" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
