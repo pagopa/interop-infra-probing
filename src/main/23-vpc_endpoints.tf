@@ -1,19 +1,25 @@
-# module "sqs_endpoint_sg" {
-#   source = "terraform-aws-modules/security-group/aws"
-#
-#   name        = "sqs"
-#   description = "Security group for SQS VPC Endpoint"
-#   vpc_id      = module.vpc.vpc_id
-#
-#   # ingress_with_source_security_group_id = [
-#   #   {
-#   #     rule                     = "https-443-tcp"
-#   #     source_security_group_id = module.eks.cluster_security_group_id
-#   #   },
-#   # ]
-#   ingress_rules = ["https-443-tcp"]
-#
-# }
+resource "aws_security_group" "sqs_endpoint" {
+  name        = "${var.app_name}-sqs-vpce-sg-${var.env}"
+  description = "Security group for SQS VPC Endpoint"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    description     = "TLS from VPC"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [module.eks.cluster_security_group_id]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+}
 
 module "timestream_ingest_sg" {
   source = "terraform-aws-modules/security-group/aws"
@@ -64,7 +70,7 @@ module "endpoints" {
     sqs = {
       service             = "sqs"
       private_dns_enabled = true
-      security_group_ids  = [module.vpc.default_security_group_id]
+      security_group_ids  = [aws_security_group.sqs_endpoint.id]
       subnet_ids          = data.aws_subnets.workload.ids
     },
     timestream_ingest = {
