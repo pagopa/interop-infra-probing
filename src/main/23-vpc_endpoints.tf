@@ -63,18 +63,21 @@ module "endpoints" {
     },
     sqs = {
       service             = "sqs"
-      private_dns_enabled = false
+      private_dns_enabled = true
       security_group_ids  = [module.sqs_sg.security_group_id]
+      subnet_ids          = data.aws_subnets.workload.ids
     },
     timestream_ingest = {
       service_name        = "com.amazonaws.${var.aws_region}.timestream.ingest-cell1"
-      private_dns_enabled = false
+      private_dns_enabled = true
       security_group_ids  = [module.timestream_ingest_sg.security_group_id]
+      subnet_ids          = data.aws_subnets.workload.ids
     },
     timestream_query = {
       service_name        = "com.amazonaws.${var.aws_region}.timestream.query-cell1"
-      private_dns_enabled = false
+      private_dns_enabled = true
       security_group_ids  = [module.timestream_query_sg.security_group_id]
+      subnet_ids          = data.aws_subnets.workload.ids
     }
   }
 
