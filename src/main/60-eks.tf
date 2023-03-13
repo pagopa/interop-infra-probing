@@ -42,17 +42,7 @@ module "eks" {
 
   create_cluster_security_group = true
   create_node_security_group    = false
-  cluster_security_group_additional_rules = {
 
-    egress_sqs = {
-      description              = "Nodes on ephemeral ports"
-      protocol                 = "-1"
-      from_port                = 0
-      to_port                  = 0
-      type                     = "egress"
-      source_security_group_id = aws_security_group.sqs_endpoint.id
-    }
-  }
   fargate_profile_defaults = {
     timeouts = {
       create = "20m"
