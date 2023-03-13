@@ -60,7 +60,7 @@ jobs:
       - name: Apply (K8s)
         uses: ./.github/workflows/apply
         with:
-          env: ${{ matrix.environment }}
+          env: ${{ inputs.environment }}
           working-directory: src/main/k8s
 
   merge-trigger:
