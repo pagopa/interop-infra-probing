@@ -8,15 +8,14 @@ resource "aws_security_group" "sqs_endpoint" {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    security_groups = [module.eks.cluster_security_group_id]
+    security_groups = [module.eks.cluster_security_group_id,aws_security_group.bastion_host_ssh_access.id]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
 }
