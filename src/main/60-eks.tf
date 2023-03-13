@@ -42,7 +42,33 @@ module "eks" {
 
   create_cluster_security_group = true
   create_node_security_group    = false
+  cluster_security_group_additional_rules = {
+    egress_timestream_query = {
+      description              = "Nodes on ephemeral ports"
+      protocol                 = "tcp"
+      from_port                = 443
+      to_port                  = 443
+      type                     = "egress"
+      source_security_group_id = module.timestream_ingest_sg.security_group_id
+    }
 
+    egress_timestream_ingest = {
+      description              = "Nodes on ephemeral ports"
+      protocol                 = "tcp"
+      from_port                = 443
+      to_port                  = 443
+      type                     = "egress"
+      source_security_group_id = module.timestream_ingest_sg.security_group_id
+    }
+    egress_sqs = {
+      description              = "Nodes on ephemeral ports"
+      protocol                 = "tcp"
+      from_port                = 443
+      to_port                  = 443
+      type                     = "egress"
+      source_security_group_id = aws_security_group.sqs_endpoint.id
+    }
+  }
   fargate_profile_defaults = {
     timeouts = {
       create = "20m"
