@@ -21,7 +21,7 @@ resource "aws_security_group" "sqs_endpoint" {
 }
 
 resource "aws_security_group" "timestream_ingest_sg" {
-  name        = "${var.app_name}-timestream_ingest-sg-${var.env}"
+  name        = "${var.app_name}-timestream-ingest-sg-${var.env}"
   description = "Security group for Timestream ingest VPC Endpoint"
   vpc_id      = module.vpc.vpc_id
 
@@ -43,7 +43,7 @@ resource "aws_security_group" "timestream_ingest_sg" {
 }
 
 resource "aws_security_group" "timestream_query_sg" {
-  name        = "${var.app_name}-timestream_query-vpce-sg-${var.env}"
+  name        = "${var.app_name}-timestream-query-vpce-sg-${var.env}"
   description = "Security group for Timestream Query VPC Endpoint"
   vpc_id      = module.vpc.vpc_id
 
