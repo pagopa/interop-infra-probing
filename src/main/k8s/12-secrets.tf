@@ -4,7 +4,7 @@ locals {
   aurora_interop_be_api_user_credentials = jsondecode(data.aws_secretsmanager_secret_version.aurora_interop_be_api_user_credentials.secret_string)
 }
 
-resource "kubernetes_secret" "aurora_flyway_user_credentials_secret_id" {
+resource "kubernetes_secret_v1" "aurora_flyway_user_credentials_secret_id" {
   metadata {
     name = "aurora-flyway-user-credentials"
   }
@@ -17,7 +17,7 @@ resource "kubernetes_secret" "aurora_flyway_user_credentials_secret_id" {
   }
 }
 
-resource "kubernetes_secret" "aurora_interop_be_api_user_credentials_secret_id" {
+resource "kubernetes_secret_v1" "aurora_interop_be_api_user_credentials_secret_id" {
   metadata {
     name = "aurora-interop-be-api-user-credentials"
   }
