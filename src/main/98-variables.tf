@@ -8,10 +8,20 @@ variable "app_name" {
   description = "App name."
 }
 
+variable "be_prefix" {
+  type        = string
+  description = "Backend name prefix"
+}
+
 variable "env" {
   type        = string
   default     = "dev"
   description = "Environment name"
+}
+
+variable "interop_probing_bucket_arn" {
+  type        = string
+  description = "ARN of existing bucket name for probing list"
 }
 
 variable "database_subnets" {
@@ -34,6 +44,11 @@ variable "app_public_subnets" {
   description = "Application VPC public subnets"
 }
 
+variable "kubernetes_version" {
+  type        = string
+  description = "Kubernetes version to use"
+}
+
 variable "bastion_host_ami" {
   type        = string
   description = "Bastion host AMI"
@@ -49,6 +64,10 @@ variable "bastion_host_key_pair_name" {
   description = "Bastion host key pair name"
 }
 
+variable "analytics_database_name" {
+  type        = string
+  description = "Analytics database name"
+}
 
 variable "operational_database_name" {
   type        = string
@@ -69,6 +88,10 @@ variable "database_scaling_max_capacity" {
   description = "Operational database scaling configuration maximum capacity"
 }
 
+variable "kubernetes_addons_versions" {
+  type        = map(any)
+  description = "Kuberntes addons version"
+}
 
 variable "tags" {
   type = map(any)
