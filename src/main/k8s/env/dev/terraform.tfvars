@@ -15,4 +15,4 @@ fargate_profiles_roles_names  = ["SystemProfile-20230228142846109700000003", "Ap
 sso_full_admin_role_name      = "AWSReservedSSO_FullAdmin_43e33324db7f1652"
 iam_users_k8s_admin           = ["alessio.creo", "alessandro.colella", "giuseppe.porro", "giuseppe.dellorusso"]
 enable_fluentbit_process_logs = false
-log_retention_days            = 180
+container_logs_retention_days            = 180
