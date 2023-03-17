@@ -1,12 +1,12 @@
 
 locals {
-  aurora_flyway_user_credentials         = jsondecode(data.aws_secretsmanager_secret_version.aurora_flyway_user_credentials.secret_string)
-  aurora_interop_be_api_user_credentials = jsondecode(data.aws_secretsmanager_secret_version.aurora_interop_be_api_user_credentials.secret_string)
+  aurora_flyway_user_credentials         = jsondecode(data.aws_secretsmanager_secret_version.be_probing_aurora_flyway_user_credentials.secret_string)
+  aurora_interop_be_api_user_credentials = jsondecode(data.aws_secretsmanager_secret_version.be_probing_aurora_api_user_credentials.secret_string)
 }
 
-resource "kubernetes_secret_v1" "aurora_flyway_user_credentials_secret_id" {
+resource "kubernetes_secret_v1" "be_probing_aurora_flyway_user_credentials_secret_id" {
   metadata {
-    name = "aurora-flyway-user-credentials"
+    name = "${var.be_prefix}-aurora-flyway-user-credentials"
   }
 
   type = "Opaque"
@@ -17,9 +17,9 @@ resource "kubernetes_secret_v1" "aurora_flyway_user_credentials_secret_id" {
   }
 }
 
-resource "kubernetes_secret_v1" "aurora_interop_be_api_user_credentials_secret_id" {
+resource "kubernetes_secret_v1" "be_probing_aurora_api_user_credentials_secret_id" {
   metadata {
-    name = "aurora-interop-be-api-user-credentials"
+    name = "${var.be_prefix}-aurora-interop-be-api-user-credentials"
   }
   type = "Opaque"
 
