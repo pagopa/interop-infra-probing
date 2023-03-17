@@ -16,3 +16,22 @@ resource "kubernetes_service_account_v1" "registry_reader" {
     }
   }
 }
+
+data "aws_iam_role" "registry_updater" {
+  name = format("%s-registry-updater-%s", var.be_prefix, var.env)
+}
+
+resource "kubernetes_service_account_v1" "registry_updater" {
+  metadata {
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    name      = format("%s-eservice-updater-reader", var.be_prefix)
+
+    annotations = {
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.registry_updater.arn
+    }
+
+    labels = {
+      "app.kubernetes.io/name" = format("%s-eservice-updater-reader", var.be_prefix)
+    }
+  }
+}
