@@ -24,14 +24,14 @@ data "aws_iam_role" "registry_updater" {
 resource "kubernetes_service_account_v1" "registry_updater" {
   metadata {
     namespace = kubernetes_namespace_v1.env.metadata[0].name
-    name      = format("%s-eservice-updater-reader", var.be_prefix)
+    name      = format("%s-eservice-registry-updater", var.be_prefix)
 
     annotations = {
       "eks.amazonaws.com/role-arn" = data.aws_iam_role.registry_updater.arn
     }
 
     labels = {
-      "app.kubernetes.io/name" = format("%s-eservice-updater-reader", var.be_prefix)
+      "app.kubernetes.io/name" = format("%s-eservice-registry-updater", var.be_prefix)
     }
   }
 }
