@@ -1,6 +1,7 @@
 locals {
   system_namespaces      = ["kube-system"]
   application_namespaces = [format("%s*", var.env), "default"]
+  observability_namespaces = ["aws-observability"]
 }
 
 
@@ -60,9 +61,16 @@ module "eks" {
       name      = "ApplicationProfile"
       selectors = [for ns in local.application_namespaces : { namespace = ns }]
     }
+
+    observability = {
+      name      = "ObservabilityProfile"
+      selectors = [for ns in local.observability_namespaces : { namespace = ns }]
+    }
   }
 
   cluster_enabled_log_types              = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cloudwatch_log_group_retention_in_days = var.env == "prod" ? 365 : 90
 }
+
+
 
