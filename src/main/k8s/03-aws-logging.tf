@@ -1,4 +1,4 @@
-module "eks_falback_log_group" {
+module "eks_fallback_log_group" {
   source  = "terraform-aws-modules/cloudwatch/aws//modules/log-group"
   version = "~> 3.0"
 
