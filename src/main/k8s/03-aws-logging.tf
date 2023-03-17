@@ -1,3 +1,11 @@
+module "eks_fallback_log_group" {
+  source  = "terraform-aws-modules/cloudwatch/aws//modules/log-group"
+  version = "~> 3.0"
+
+  name              = "/aws/eks/${data.aws_eks_cluster.this.name}/fallback"
+  retention_in_days = var.container_logs_retention_days
+}
+
 resource "kubernetes_config_map_v1" "aws_logging" {
   metadata {
     name      = "aws-logging"
