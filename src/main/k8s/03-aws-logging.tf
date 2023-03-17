@@ -65,7 +65,7 @@ resource "kubernetes_config_map_v1" "aws_logging" {
           Match                    kube.*
           region                   ${var.aws_region}
           auto_create_group        true
-          log_retention_days       180
+          log_retention_days       ${var.log_retention_days}
           log_group_name           /aws/eks/${data.aws_eks_cluster.this.name}/other
           log_stream_name          $(kubernetes['pod_name'])
           default_log_group_name   /aws/eks/${data.aws_eks_cluster.this.name}/fallback
@@ -75,7 +75,7 @@ resource "kubernetes_config_map_v1" "aws_logging" {
           Match                    application.*
           region                   ${var.aws_region}
           auto_create_group        true
-          log_retention_days       180
+          log_retention_days       ${var.log_retention_days}
           log_group_name           /aws/eks/${data.aws_eks_cluster.this.name}/application
           log_stream_name          $(tag[2])
           default_log_group_name   /aws/eks/${data.aws_eks_cluster.this.name}/fallback

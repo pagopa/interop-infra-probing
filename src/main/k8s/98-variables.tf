@@ -52,3 +52,9 @@ variable "enable_fluentbit_process_logs" {
   description = "Enables FluentBit process logs to help with debugging. WARNING: produces A LOT of logs and could significantly increase CloudWatch costs"
   default     = false
 }
+
+variable "log_retention_days" {
+  type = number
+  description = "Set the retention period in days for logs"
+  default = 180
+}
