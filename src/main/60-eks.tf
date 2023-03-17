@@ -1,6 +1,6 @@
 locals {
-  system_namespaces      = ["kube-system"]
-  application_namespaces = [format("%s*", var.env), "default"]
+  system_namespaces        = ["kube-system"]
+  application_namespaces   = [format("%s*", var.env), "default"]
   observability_namespaces = ["aws-observability"]
 }
 
