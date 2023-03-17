@@ -53,8 +53,7 @@ variable "enable_fluentbit_process_logs" {
   default     = false
 }
 
-variable "log_retention_days" {
+variable "container_logs_retention_days" {
   type        = number
-  description = "Set the retention period in days for logs"
-  default     = 180
+  description = "Set the retention period in days for container logs"
 }
