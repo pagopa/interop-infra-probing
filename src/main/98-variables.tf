@@ -19,6 +19,11 @@ variable "env" {
   description = "Environment name"
 }
 
+variable "sso_admin_role_name" {
+  type        = string
+  description = "Name of the SSO admin role"
+}
+
 variable "interop_probing_bucket_arn" {
   type        = string
   description = "ARN of existing bucket name for probing list"

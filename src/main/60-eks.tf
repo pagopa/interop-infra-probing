@@ -36,7 +36,11 @@ module "eks" {
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
-  kms_key_enable_default_policy = true
+  kms_key_enable_default_policy = false
+  kms_key_owners = [
+    data.aws_iam_role.github_iac.arn,
+    data.aws_iam_role.sso_admin.arn
+  ]
 
   cluster_addons = {
     kube-proxy = {

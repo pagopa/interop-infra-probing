@@ -19,3 +19,11 @@ provider "aws" {
 }
 
 data "aws_caller_identity" "current" {}
+
+data "aws_iam_role" "github_iac" {
+  name = "GitHubActionIACRole"
+}
+
+data "aws_iam_role" "sso_admin" {
+  name = var.sso_admin_role_name
+}
