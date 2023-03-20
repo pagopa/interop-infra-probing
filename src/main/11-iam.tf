@@ -38,10 +38,11 @@ resource "aws_iam_policy" "registry_reader_policy" {
 
 data "aws_iam_policy_document" "registry_updater_policy" {
   statement {
-    sid    = "ReadFromRegistryQueue"
+    sid    = "ReadAndDeleteMsgFromRegistryQueue"
     effect = "Allow"
     actions = [
-      "sqs:ReceiveMessage"
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage"
     ]
 
     resources = [
