@@ -1,5 +1,6 @@
 module "fe_cdn" {
   source = "terraform-aws-modules/cloudfront/aws"
+  version = "3.2.1"
 
   comment             = "${var.app_name} CDN"
   enabled             = true
