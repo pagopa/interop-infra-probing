@@ -1,0 +1,39 @@
+module "fe_cdn" {
+  source = "terraform-aws-modules/cloudfront/aws"
+
+  comment             = "${var.app_name} CDN"
+  enabled             = true
+  is_ipv6_enabled     = true
+  price_class         = "PriceClass_All"
+  retain_on_delete    = false
+  wait_for_deployment = false
+
+  origin = {
+
+    s3_oac = {
+      domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
+      origin_access_control = "s3_oac"
+    }
+  }
+
+  create_origin_access_control = true
+  origin_access_control = {
+    s3_oac = {
+      description      = "CloudFront access to S3"
+      origin_type      = "s3"
+      signing_behavior = "always"
+      signing_protocol = "sigv4"
+    }
+  }
+
+  default_cache_behavior = {
+    target_origin_id       = "something"
+    viewer_protocol_policy = "redirect-to-https"
+
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    cached_methods  = ["GET", "HEAD"]
+    compress        = true
+    query_string    = true
+  }
+
+}
