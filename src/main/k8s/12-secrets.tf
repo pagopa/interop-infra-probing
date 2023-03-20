@@ -5,7 +5,8 @@ locals {
 
 resource "kubernetes_secret_v1" "be_probing_aurora_flyway_user_credentials_secret_id" {
   metadata {
-    name = "${var.be_prefix}-aurora-flyway-user-credentials"
+    name      = "${var.be_prefix}-aurora-flyway-user-credentials"
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
   }
 
   type = "Opaque"
@@ -18,8 +19,10 @@ resource "kubernetes_secret_v1" "be_probing_aurora_flyway_user_credentials_secre
 
 resource "kubernetes_secret_v1" "be_probing_aurora_api_user_credentials_secret_id" {
   metadata {
-    name = "${var.be_prefix}-api-aurora-user-credentials"
+    name      = "${var.be_prefix}-api-aurora-user-credentials"
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
   }
+
   type = "Opaque"
 
   data = {
