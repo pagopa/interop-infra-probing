@@ -1,9 +1,30 @@
 locals {
-  system_namespaces      = ["kube-system"]
-  application_namespaces = [format("%s*", var.env), "default"]
+  system_namespaces        = ["kube-system"]
+  application_namespaces   = [format("%s*", var.env), "default"]
+  observability_namespaces = ["aws-observability"]
 }
 
+resource "aws_iam_policy" "fargate_profile_logging" {
+  name = "EksFargateProfileLogging"
 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents",
+          "logs:putRetentionPolicy",
+          "logs:DeleteRetentionPolicy"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -44,6 +65,10 @@ module "eks" {
   create_node_security_group    = false
 
   fargate_profile_defaults = {
+    iam_role_additional_policies = {
+      fargate_logging = aws_iam_policy.fargate_profile_logging.arn
+    }
+
     timeouts = {
       create = "20m"
       delete = "20m"
@@ -60,9 +85,16 @@ module "eks" {
       name      = "ApplicationProfile"
       selectors = [for ns in local.application_namespaces : { namespace = ns }]
     }
+
+    observability = {
+      name      = "ObservabilityProfile"
+      selectors = [for ns in local.observability_namespaces : { namespace = ns }]
+    }
   }
 
   cluster_enabled_log_types              = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cloudwatch_log_group_retention_in_days = var.env == "prod" ? 365 : 90
 }
+
+
 

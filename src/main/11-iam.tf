@@ -27,11 +27,33 @@ data "aws_iam_policy_document" "registry_reader_policy" {
     ]
   }
 
-
 }
 
 resource "aws_iam_policy" "registry_reader_policy" {
   name   = "${var.be_prefix}-registry-reader-${var.env}"
   path   = "/application/eks/pods/"
   policy = data.aws_iam_policy_document.registry_reader_policy.json
+}
+
+
+data "aws_iam_policy_document" "registry_updater_policy" {
+  statement {
+    sid    = "ReadFromRegistryQueue"
+    effect = "Allow"
+    actions = [
+      "sqs:ReceiveMessage"
+    ]
+
+    resources = [
+      module.sqs_registry_queue.queue_arn
+    ]
+  }
+
+
+}
+
+resource "aws_iam_policy" "registry_updater_policy" {
+  name   = "${var.be_prefix}-registry-updater-${var.env}"
+  path   = "/application/eks/pods/"
+  policy = data.aws_iam_policy_document.registry_updater_policy.json
 }
