@@ -27,7 +27,7 @@ module "fe_cdn" {
   }
 
   default_cache_behavior = {
-    target_origin_id       = "something"
+    target_origin_id       = "s3_oac"
     viewer_protocol_policy = "redirect-to-https"
 
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
