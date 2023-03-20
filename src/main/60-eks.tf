@@ -4,7 +4,27 @@ locals {
   observability_namespaces = ["aws-observability"]
 }
 
+resource "aws_iam_policy" "fargate_profile_logging" {
+  name = "EksFargateProfileLogging"
 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents",
+          "logs:putRetentionPolicy",
+          "logs:DeleteRetentionPolicy"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -45,6 +65,10 @@ module "eks" {
   create_node_security_group    = false
 
   fargate_profile_defaults = {
+    iam_role_additional_policies = {
+      fargate_logging = aws_iam_policy.fargate_profile_logging.arn
+    }
+
     timeouts = {
       create = "20m"
       delete = "20m"
