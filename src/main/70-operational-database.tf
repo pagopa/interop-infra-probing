@@ -42,16 +42,3 @@ data "aws_rds_engine_version" "postgresql" {
   engine  = "aurora-postgresql"
   version = "14.6"
 }
-
-resource "aws_secretsmanager_secret" "database_aurora_master_password" {
-  name = "/${var.app_name}/${var.env}/operational-database/master_password"
-}
-
-resource "aws_secretsmanager_secret_version" "database_aurora_master_password" {
-  secret_id = aws_secretsmanager_secret.database_aurora_master_password.id
-  secret_string = jsonencode({
-    master_username = var.operational_database_name_master_user,
-    master_password = module.aurora.cluster_master_password
-  })
-}
-
