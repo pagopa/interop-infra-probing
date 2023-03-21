@@ -40,8 +40,7 @@ module "fe_s3_bucket" {
 
   acl = "private"
   versioning = {
-    status     = true
-    mfa_delete = false
+    status = false
   }
 
 }

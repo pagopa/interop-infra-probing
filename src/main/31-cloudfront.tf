@@ -11,15 +11,15 @@ module "fe_cdn" {
 
   origin = {
 
-    s3_oac = {
+    fe_hosting_oac = {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
-      origin_access_control = "s3_oac"
+      origin_access_control = "fe_hosting_oac"
     }
   }
 
   create_origin_access_control = true
   origin_access_control = {
-    s3_oac = {
+    fe_hosting_oac = {
       description      = "CloudFront access to S3"
       origin_type      = "s3"
       signing_behavior = "always"
@@ -28,7 +28,7 @@ module "fe_cdn" {
   }
 
   default_cache_behavior = {
-    target_origin_id       = "s3_oac"
+    target_origin_id       = "fe_hosting_oac"
     viewer_protocol_policy = "redirect-to-https"
 
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
