@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "frontend_deploy_permission" {
 
 
 
-resource "aws_iam_policy" "registry_updater_policy" {
+resource "aws_iam_policy" "frontend_deploy_permission" {
   name   = "${var.be_prefix}-frontend-deploy-permission-${var.env}"
   path   = "/infra/github/pipelines/"
   policy = data.aws_iam_policy_document.frontend_deploy_permission.json
