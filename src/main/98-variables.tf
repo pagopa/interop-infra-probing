@@ -29,6 +29,12 @@ variable "interop_probing_bucket_arn" {
   description = "ARN of existing bucket name for probing list"
 }
 
+variable "frontend_github_repo" {
+  type        = string
+  description = "Name of the probing frontend Github repo (format: 'organization/repo-name')"
+  default     = "pagopa/interop-fe-probing"
+}
+
 variable "database_subnets" {
   type        = list(string)
   description = "Database dedicated private subnets"
