@@ -9,6 +9,8 @@ module "fe_cdn" {
   retain_on_delete    = false
   wait_for_deployment = false
 
+  default_root_object = "index.html"
+
   origin = {
     fe_hosting_oac = {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
