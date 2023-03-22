@@ -1,4 +1,28 @@
-data "aws_iam_policy_document" "frontend_deploy_permission" {
+data "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
+}
+
+data "aws_iam_policy_document" "github_frontend_assume" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+
+      values = [var.frontend_github_repo]
+    }
+  }
+
+}
+
+data "aws_iam_policy_document" "frontend_deploy" {
   statement {
     sid    = "CreateInvalidation"
     effect = "Allow"
@@ -35,23 +59,21 @@ data "aws_iam_policy_document" "frontend_deploy_permission" {
       module.fe_s3_bucket.s3_bucket_arn
     ]
   }
-
-
 }
-
-
-
 
 resource "aws_iam_policy" "frontend_deploy_permission" {
-  name   = "${var.be_prefix}-frontend-deploy-permission-${var.env}"
+  name   = "${var.be_prefix}-frontend-deploy-${var.env}"
   path   = "/infra/github/pipelines/"
-  policy = data.aws_iam_policy_document.frontend_deploy_permission.json
+  policy = data.aws_iam_policy_document.frontend_deploy.json
 }
 
+resource "aws_iam_role" "frontend_github_pipeline" {
+  name = "${var.be_prefix}-frontend-deploy-${var.env}"
 
-resource "aws_iam_role" "frontend_github_pipeline_role" {
-  name = "${var.be_prefix}-frontend-deploy-role-${var.env}"
+  assume_role_policy = data.aws_iam_policy_document.github_frontend_assume.json
+
   managed_policy_arns = [
     aws_iam_policy.frontend_deploy_permission.arn
   ]
+
 }

@@ -10,7 +10,6 @@ module "fe_cdn" {
   wait_for_deployment = false
 
   origin = {
-
     fe_hosting_oac = {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
       origin_access_control = "fe_hosting_oac"
@@ -36,5 +35,4 @@ module "fe_cdn" {
     compress        = true
     query_string    = true
   }
-
 }
