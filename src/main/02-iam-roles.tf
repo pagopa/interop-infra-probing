@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "github_frontend_assume" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
 
-      values = [var.frontend_github_repo]
+      values = [format("repo:%s:*", var.frontend_github_repo)]
     }
   }
 
