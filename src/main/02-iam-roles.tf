@@ -47,3 +47,11 @@ resource "aws_iam_policy" "frontend_deploy_permission" {
   path   = "/infra/github/pipelines/"
   policy = data.aws_iam_policy_document.frontend_deploy_permission.json
 }
+
+
+resource "aws_iam_role" "frontend_github_pipeline_role" {
+  name = "${var.be_prefix}-frontend-deploy-role-${var.env}"
+  managed_policy_arns = [
+    aws_iam_policy.frontend_deploy_permission.arn
+  ]
+}
