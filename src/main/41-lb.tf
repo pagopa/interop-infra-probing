@@ -27,7 +27,11 @@ resource "aws_lb_target_group" "alb" {
   vpc_id      = module.vpc.vpc_id
 }
 
-
+resource "aws_lb_target_group_attachment" "test" {
+  target_group_arn = aws_lb_target_group.alb.arn
+  target_id        = aws_lb.alb_eks.id
+  port             = 80
+}
 
 resource "aws_lb" "alb_eks" {
   name               = "${var.app_name}-alb-${var.env}"
