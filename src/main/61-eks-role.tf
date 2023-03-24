@@ -37,3 +37,23 @@ module "registry_updater_role" {
     registry_reader_policy = aws_iam_policy.registry_updater_policy.arn
   }
 }
+
+module "aws_load_balancer_controller_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "aws-load-balancer-controller"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
+    }
+  }
+
+  role_path        = "/infra/eks/pods/"
+  role_description = "Role for AWS Load Balancer Controller"
+
+  role_policy_arns = {
+    registry_reader_policy = data.aws_iam_policy.aws_load_balancer_controller_iam_policy.arn
+  }
+}
