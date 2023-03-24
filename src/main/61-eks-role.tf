@@ -54,6 +54,6 @@ module "aws_load_balancer_controller_role" {
   role_description = "Role for AWS Load Balancer Controller"
 
   role_policy_arns = {
-    registry_reader_policy = data.aws_iam_policy.aws_load_balancer_controller_iam_policy.arn
+    registry_reader_policy = aws_iam_policy.aws_load_balancer_controller_iam_policy.arn
   }
 }
