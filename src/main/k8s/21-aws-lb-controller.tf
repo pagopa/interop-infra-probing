@@ -1,5 +1,5 @@
 
-resource "helm_release" "aws_load_baalcer_controller" {
+resource "helm_release" "aws_load_balancer_controller" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
   chart      = "eks/aws-load-balancer-controller"
@@ -13,7 +13,7 @@ resource "helm_release" "aws_load_baalcer_controller" {
 
   set {
     name  = "vpcId"
-    value = data.aws_eks_cluster.this.vpc_config.vpc_id
+    value = data.aws_eks_cluster.this.vpc_config[0].vpc_id
   }
 
 
