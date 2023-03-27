@@ -101,4 +101,9 @@ module "eks" {
 }
 
 
+resource "aws_ec2_tag" "alb_subnet_tag" {
+  resource_id = data.aws_subnets.workload.id
+  key         = "kubernetes.io/role/internal-elb"
+  value       = "1"
+}
 
