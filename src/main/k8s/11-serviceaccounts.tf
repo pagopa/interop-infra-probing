@@ -35,3 +35,22 @@ resource "kubernetes_service_account_v1" "registry_updater" {
     }
   }
 }
+
+data "aws_iam_role" "aws_load_balancer_controller" {
+  name = "aws-load-balancer-controller"
+}
+
+resource "kubernetes_service_account_v1" "aws_load_balancer_controller" {
+  metadata {
+    namespace = "kube-system"
+    name      = "aws-load-balancer-controller"
+
+    annotations = {
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.aws_load_balancer_controller.arn
+    }
+
+    labels = {
+      "app.kubernetes.io/name" = "aws-load-balancer-controller"
+    }
+  }
+}
