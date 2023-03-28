@@ -30,6 +30,9 @@ analytics_database_name = "interop_probing_telemetry"
 
 database_scaling_min_capacity = 2
 database_scaling_max_capacity = 10
+
+eks_alb_arn = "arn:aws:elasticloadbalancing:eu-central-1:774300547186:loadbalancer/app/k8s-interopprobingalb-708bae2ba7/8e4e30f06b483292"
+
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"

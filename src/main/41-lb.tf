@@ -1,3 +1,7 @@
+data "aws_lb" "alb_eks" {
+  arn = var.eks_alb_arn
+}
+
 resource "aws_lb" "nlb" {
   name               = "${var.app_name}-nlb-${var.env}"
   internal           = true
@@ -27,29 +31,8 @@ resource "aws_lb_target_group" "alb" {
   vpc_id      = module.vpc.vpc_id
 }
 
-resource "aws_lb_target_group_attachment" "test" {
+resource "aws_lb_target_group_attachment" "alb" {
   target_group_arn = aws_lb_target_group.alb.arn
-  target_id        = aws_lb.alb_eks.id
+  target_id        = data.aws_lb.alb_eks.id
   port             = 80
-}
-
-resource "aws_lb" "alb_eks" {
-  name               = "${var.app_name}-alb-${var.env}"
-  internal           = true
-  load_balancer_type = "application"
-  subnets            = data.aws_subnets.workload.ids
-
-  enable_deletion_protection       = true
-  enable_cross_zone_load_balancing = true
-}
-
-
-resource "aws_lb_listener" "alb_eks" {
-  load_balancer_arn = aws_lb.alb_eks.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type = "forward"
-  }
 }

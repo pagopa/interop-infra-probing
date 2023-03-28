@@ -104,6 +104,11 @@ variable "kubernetes_addons_versions" {
   description = "Kuberntes addons version"
 }
 
+variable "eks_alb_arn" {
+  type        = string
+  description = "ARN of the EKS ALB"
+}
+
 variable "tags" {
   type = map(any)
   default = {
