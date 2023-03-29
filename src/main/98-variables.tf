@@ -104,9 +104,9 @@ variable "kubernetes_addons_versions" {
   description = "Kuberntes addons version"
 }
 
-variable "eks_alb_arn" {
+variable "alb_ingress_group" {
   type        = string
-  description = "ARN of the EKS ALB"
+  description = "Name of the ALB ingress group"
 }
 
 variable "tags" {
