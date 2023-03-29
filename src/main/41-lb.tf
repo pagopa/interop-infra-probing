@@ -1,6 +1,18 @@
-data "aws_lb" "alb_eks" {
-  arn = var.eks_alb_arn
+resource "aws_lb" "alb_eks" {
+  name               = "${var.app_name}-alb-${var.env}"
+  internal           = true
+  load_balancer_type = "application"
+  subnets            = data.aws_subnets.workload.ids
+
+  enable_deletion_protection       = true
+  enable_cross_zone_load_balancing = true
+  tags = {
+    "elbv2.k8s.aws/cluster"    = module.eks.cluster_name
+    "ingress.k8s.aws/resource" = "LoadBalancer"
+    "ingress.k8s.aws/stack"    = var.alb_ingress_group
+  }
 }
+
 
 resource "aws_lb" "nlb" {
   name               = "${var.app_name}-nlb-${var.env}"
@@ -33,6 +45,6 @@ resource "aws_lb_target_group" "alb" {
 
 resource "aws_lb_target_group_attachment" "alb" {
   target_group_arn = aws_lb_target_group.alb.arn
-  target_id        = data.aws_lb.alb_eks.id
+  target_id        = aws_lb.alb_eks.id
   port             = 80
 }
