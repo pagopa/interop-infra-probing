@@ -19,8 +19,8 @@ resource "aws_lb_listener" "alb_eks" {
   }
 
   tags = {
-    elbv2.k8s.aws / cluster    = "interop-probing-eks-dev"
-    ingress.k8s.aws / resource = "LoadBalancer"
-    ingress.k8s.aws / stack    = "interop-probing-alb"
+    "elbv2.k8s.aws/cluster"    = "interop-probing-eks-dev"
+    "ingress.k8s.aws/resource" = "LoadBalancer"
+    "ingress.k8s.aws/stack"    = "interop-probing-alb"
   }
 }
