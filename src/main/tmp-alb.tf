@@ -6,18 +6,6 @@ resource "aws_lb" "alb_eks" {
 
   enable_deletion_protection       = true
   enable_cross_zone_load_balancing = true
-}
-
-
-resource "aws_lb_listener" "alb_eks" {
-  load_balancer_arn = aws_lb.alb_eks.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type = "forward"
-  }
-
   tags = {
     "elbv2.k8s.aws/cluster"    = "interop-probing-eks-dev"
     "ingress.k8s.aws/resource" = "LoadBalancer"
