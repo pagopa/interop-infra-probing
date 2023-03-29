@@ -16,6 +16,9 @@ provider "aws" {
   default_tags {
     tags = var.tags
   }
+  ignore_tags {
+    key_prefixes = ["kubernetes.io/"]
+  }
 }
 
 data "aws_caller_identity" "current" {}
