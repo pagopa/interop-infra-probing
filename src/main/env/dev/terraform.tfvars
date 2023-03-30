@@ -32,7 +32,7 @@ database_scaling_min_capacity = 2
 database_scaling_max_capacity = 10
 
 alb_ingress_group = "interop-probing-alb"
-api_version = "v1"
+api_version       = "v1"
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"
