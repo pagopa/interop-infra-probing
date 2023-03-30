@@ -87,7 +87,7 @@ paths:
                 errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please try again later.'}]
       x-amazon-apigateway-integration:
         uri: "http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateState"
-        httpMethod: "GET"
+        httpMethod: "POST"
         connectionType: "VPC_LINK"
         connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"       
    '/eservices/{eserviceId}/versions/{versionId}/probing/updateState':
@@ -153,7 +153,7 @@ paths:
                 errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please try again later.'}]    
       x-amazon-apigateway-integration:
         uri: "http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState"
-        httpMethod: "GET"
+        httpMethod: "POST"
         connectionType: "VPC_LINK"
         connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"               
    '/eservices/{eserviceId}/versions/{versionId}/updateFrequency':
@@ -219,7 +219,7 @@ paths:
                 errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please try again later.'}]
       x-amazon-apigateway-integration:
         uri: "http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateFrequency"
-        httpMethod: "GET"
+        httpMethod: "POST"
         connectionType: "VPC_LINK"
         connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"  
 components:
