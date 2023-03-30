@@ -38,7 +38,7 @@ resource "aws_api_gateway_method_settings" "settings" {
 
   settings {
     metrics_enabled    = true
-    logging_level      = "ERROR"
+    logging_level      = "NONE"
     data_trace_enabled = true
   }
 }
