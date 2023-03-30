@@ -109,6 +109,12 @@ variable "alb_ingress_group" {
   description = "Name of the ALB ingress group"
 }
 
+variable "api_version" {
+  type        = string
+  description = "Version of the API definition in openapi"
+}
+
+
 variable "tags" {
   type = map(any)
   default = {
