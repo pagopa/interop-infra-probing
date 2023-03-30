@@ -12,9 +12,6 @@ info:
   license:
     name: Interop's licence
     url: 'https://to-define/'
-servers:
-- url: 'https://to-define/'
-  description: Development environment
 tags:
   - name: EServices
     description: >-
