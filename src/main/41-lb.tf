@@ -39,22 +39,6 @@ resource "aws_lb_listener" "nlb_to_alb" {
   }
 }
 
-resource "aws_lb_listener_rule" "nlb_to_alb" {
-  listener_arn = aws_lb_listener.nlb_to_alb.arn
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.alb.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/"]
-    }
-  }
-}
-
-
 
 resource "aws_lb_target_group_attachment" "alb" {
   target_group_arn = aws_lb_target_group.alb.arn
