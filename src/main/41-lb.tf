@@ -12,8 +12,8 @@ resource "aws_lb" "nlb" {
 resource "aws_lb_target_group" "alb" {
   name        = "${var.app_name}-alb-tg-${var.env}"
   port        = 80
-  protocol    = "HTTP"
-  target_type = "instance"
+  protocol    = "TCP"
+  target_type = "alb"
 
 
   health_check {
@@ -31,7 +31,7 @@ resource "aws_lb_target_group" "alb" {
 resource "aws_lb_listener" "nlb_to_alb" {
   load_balancer_arn = aws_lb.nlb.arn
   port              = "80"
-  protocol          = "HTTP"
+  protocol          = "TCP"
 
   default_action {
     type             = "forward"
