@@ -89,6 +89,7 @@ paths:
         uri: "http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateState"
         httpMethod: "POST"
         connectionType: "VPC_LINK"
+        type: "http_proxy"
         connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"       
    '/eservices/{eserviceId}/versions/{versionId}/probing/updateState':
     post:
@@ -155,7 +156,8 @@ paths:
         uri: "http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState"
         httpMethod: "POST"
         connectionType: "VPC_LINK"
-        connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"               
+        connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"
+        type: "http_proxy"              
    '/eservices/{eserviceId}/versions/{versionId}/updateFrequency':
     post:
       summary: Updates the frequency and the time interval of an e-service's polling process.
@@ -221,7 +223,8 @@ paths:
         uri: "http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateFrequency"
         httpMethod: "POST"
         connectionType: "VPC_LINK"
-        connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"  
+        connectionId: "${stageVariables.aws_api_gateway_vpc_link_backend_id}"
+        type: "http_proxy"  
 components:
   schemas:
     ChangeProbingStateRequest:
