@@ -155,7 +155,7 @@ paths:
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'
-        requestParameters:
+        RequestParameters:
            integration.request.path.eserviceId: 'method.request.path.eserviceId'
            integration.request.path.versionId: 'method.request.path.versionId'
    '/eservices/{eserviceId}/versions/{versionId}/updateFrequency':
