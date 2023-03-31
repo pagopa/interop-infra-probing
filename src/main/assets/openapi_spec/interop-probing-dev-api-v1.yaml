@@ -150,12 +150,12 @@ paths:
                 traceId: 'string'
                 errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please try again later.'}]    
       x-amazon-apigateway-integration:
-        uri: 'http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState'
+        uri: 'http://${stageVariables.aws_lb_nlb_dns_name}:80/eservices/{eserviceId}/versions/{versionId}/probing/updateState'
         httpMethod: 'POST'
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'
-        RequestParameters:
+        requestParameters:
            integration.request.path.eserviceId: 'method.request.path.eserviceId'
            integration.request.path.versionId: 'method.request.path.versionId'
    '/eservices/{eserviceId}/versions/{versionId}/updateFrequency':
