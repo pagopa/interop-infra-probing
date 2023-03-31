@@ -87,7 +87,19 @@ paths:
         httpMethod: 'POST'
         connectionType: 'VPC_LINK'
         type: 'http_proxy'
-        connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'   
+        connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
+        parameters:
+        - name: "eserviceId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "versionId"
+          in: "path"
+          required: true
+          type: "string"
+        requestParameters:
+           integration.request.path.eserviceId: 'method.request.path.eserviceId'
+           integration.request.path.versionId: 'method.request.path.versionId'
    '/eservices/{eserviceId}/versions/{versionId}/probing/updateState':
     post:
       summary: Activates or deactivates the probing polling process for an e-service.
@@ -150,7 +162,7 @@ paths:
                 traceId: 'string'
                 errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please try again later.'}]    
       x-amazon-apigateway-integration:
-        uri: 'http://interop-probing-nlb-dev-58a0786e6e7609ca.elb.eu-central-1.amazonaws.com/eservices/{eserviceId}/versions/{versionId}/probing/updateState'
+        uri: 'http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState'
         httpMethod: 'POST'
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
@@ -234,6 +246,18 @@ paths:
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'
+        parameters:
+        - name: "eserviceId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "versionId"
+          in: "path"
+          required: true
+          type: "string"
+        requestParameters:
+           integration.request.path.eserviceId: 'method.request.path.eserviceId'
+           integration.request.path.versionId: 'method.request.path.versionId'
 components:
   schemas:
     ChangeProbingStateRequest:
