@@ -26,8 +26,8 @@ resource "aws_api_gateway_stage" "stage" {
   stage_name           = var.env
   xray_tracing_enabled = true
   variables = {
-    aws_lb_nlb_dns_name                 = aws_lb.nlb.dns_name
-    aws_api_gateway_vpc_link_backend_id = aws_api_gateway_vpc_link.backend.id
+    aws_lb_nlb_dns_name                 = trimspace(aws_lb.nlb.dns_name)
+    aws_api_gateway_vpc_link_backend_id = trimspace(aws_api_gateway_vpc_link.backend.id)
   }
 }
 
