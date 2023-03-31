@@ -154,7 +154,10 @@ paths:
         httpMethod: 'POST'
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
-        type: 'http_proxy'       
+        type: 'http_proxy'
+        requestParameters:
+           integration.request.path.eserviceId: 'method.request.path.eserviceId'
+           integration.request.path.versionId: 'method.request.path.versionId'
    '/eservices/{eserviceId}/versions/{versionId}/updateFrequency':
     post:
       summary: Updates the frequency and the time interval of an e-service's polling process.
