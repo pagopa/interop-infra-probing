@@ -88,15 +88,6 @@ paths:
         connectionType: 'VPC_LINK'
         type: 'http_proxy'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
-        parameters:
-        - name: "eserviceId"
-          in: "path"
-          required: true
-          type: "string"
-        - name: "versionId"
-          in: "path"
-          required: true
-          type: "string"
         requestParameters:
            integration.request.path.eserviceId: 'method.request.path.eserviceId'
            integration.request.path.versionId: 'method.request.path.versionId'
@@ -167,15 +158,6 @@ paths:
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'
-        parameters:
-        - name: "eserviceId"
-          in: "path"
-          required: true
-          type: "string"
-        - name: "versionId"
-          in: "path"
-          required: true
-          type: "string"
         requestParameters:
            integration.request.path.eserviceId: 'method.request.path.eserviceId'
            integration.request.path.versionId: 'method.request.path.versionId'
@@ -246,15 +228,6 @@ paths:
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'
-        parameters:
-        - name: "eserviceId"
-          in: "path"
-          required: true
-          type: "string"
-        - name: "versionId"
-          in: "path"
-          required: true
-          type: "string"
         requestParameters:
            integration.request.path.eserviceId: 'method.request.path.eserviceId'
            integration.request.path.versionId: 'method.request.path.versionId'
