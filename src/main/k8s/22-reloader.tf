@@ -1,5 +1,5 @@
 resource "helm_release" "reloader" {
-  name       = "stakater/reloader"
+  name       = "reloader"
   repository = "https://stakater.github.io/stakater-charts"
   chart      = "reloader"
   version    = "1.0.18"
