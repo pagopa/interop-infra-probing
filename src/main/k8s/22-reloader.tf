@@ -6,7 +6,7 @@ resource "helm_release" "reloader" {
   namespace  = var.env
 
   set {
-    name  = "reloader.watchGlobally=false"
+    name  = "reloader.watchGlobally"
     value = "false"
   }
 }
