@@ -30,6 +30,11 @@ analytics_database_name = "interop_probing_telemetry"
 
 database_scaling_min_capacity = 2
 database_scaling_max_capacity = 10
+
+alb_ingress_group = "interop-probing-alb"
+api_version       = "v1"
+
+openapi_spec_path = "./assets/openapi_spec/interop-probing-dev-api-v1.yaml"
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"

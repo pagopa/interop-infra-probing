@@ -104,6 +104,21 @@ variable "kubernetes_addons_versions" {
   description = "Kuberntes addons version"
 }
 
+variable "alb_ingress_group" {
+  type        = string
+  description = "Name of the ALB ingress group"
+}
+
+variable "api_version" {
+  type        = string
+  description = "Version of the API definition in openapi"
+}
+
+variable "openapi_spec_path" {
+  type        = string
+  description = "The relative path in the repo for open api specification"
+}
+
 variable "tags" {
   type = map(any)
   default = {
