@@ -114,11 +114,6 @@ variable "api_version" {
   description = "Version of the API definition in openapi"
 }
 
-variable "api_version" {
-  type        = string
-  description = "Version of the API definition in openapi"
-}
-
 variable "openapi_spec_path" {
   type        = string
   description = "The relative path in the repo for open api specification"

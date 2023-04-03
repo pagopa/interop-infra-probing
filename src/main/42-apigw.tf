@@ -1,5 +1,5 @@
 locals {
-  openapi_spec = "${path.module}/assets/openapi_spec/${var.app_name}-${var.env}-api-${var.api_version}.yaml"
+  openapi_spec = var.openapi_spec_path
 }
 
 resource "aws_api_gateway_rest_api" "apigw" {
