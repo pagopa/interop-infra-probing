@@ -1,3 +1,7 @@
+resource "aws_api_gateway_api_key" "cloudfront" {
+  name = "${var.app_name}-cloudfront-${var.env}"
+}
+
 module "fe_cdn" {
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "3.2.1"
@@ -15,6 +19,24 @@ module "fe_cdn" {
     fe_hosting_oac = {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
       origin_access_control = "fe_hosting_oac"
+    }
+
+    apigw = {
+      origin_id   = var.api_gateway_origin_id
+      domain_name = "${aws_api_gateway_rest_api.apigw.id}.execute-api.${var.aws_region}.amazonaws.com"
+      origin_path = "/${aws_api_gateway_stage.stage.stage_name}"
+
+      custom_header = [{
+        name  = "x-api-key"
+        value = aws_api_gateway_api_key.cloudfront.value
+      }]
+
+      custom_origin_config = {
+        origin_protocol_policy = "https-only"
+        origin_ssl_protocols   = ["TLSv1"]
+        http_port              = 80
+        https_port             = 443
+      }
     }
   }
 

@@ -119,6 +119,11 @@ variable "openapi_spec_path" {
   description = "The relative path in the repo for open api specification"
 }
 
+variable "api_gateway_origin_id" {
+  type        = string
+  description = "API gateway origin identification"
+}
+
 variable "tags" {
   type = map(any)
   default = {
