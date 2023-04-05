@@ -3,7 +3,7 @@ resource "helm_release" "reloader" {
   repository = "https://stakater.github.io/stakater-charts"
   chart      = "reloader"
   version    = "1.0.18"
-  namespace  = var.env
+  namespace  = kubernetes_namespace_v1.env.metadata[0].name
 
   set {
     name  = "reloader.watchGlobally"
