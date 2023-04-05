@@ -23,8 +23,7 @@ module "fe_cdn" {
 
     apigw = {
       origin_id   = "apigw"
-      domain_name = "${aws_api_gateway_rest_api.apigw.id}.execute-api.${var.aws_region}.amazonaws.com"
-      origin_path = "/${aws_api_gateway_stage.stage.stage_name}"
+      domain_name = aws_api_gateway_stage.stage.invoke_url
 
       custom_header = [{
         name  = "x-api-key"
@@ -59,4 +58,16 @@ module "fe_cdn" {
     compress        = true
     query_string    = true
   }
+  ordered_cache_behavior = [
+    {
+      path_pattern           = "/*"
+      target_origin_id       = "apigw"
+      viewer_protocol_policy = "redirect-to-https"
+
+      allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+      cached_methods  = ["GET", "HEAD"]
+      compress        = true
+      query_string    = true
+    }
+  ]
 }
