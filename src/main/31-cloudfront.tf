@@ -22,7 +22,7 @@ module "fe_cdn" {
     }
 
     apigw = {
-      origin_id   = var.api_gateway_origin_id
+      origin_id   = "apigw"
       domain_name = "${aws_api_gateway_rest_api.apigw.id}.execute-api.${var.aws_region}.amazonaws.com"
       origin_path = "/${aws_api_gateway_stage.stage.stage_name}"
 
