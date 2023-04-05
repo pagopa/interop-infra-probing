@@ -33,7 +33,7 @@ module "fe_cdn" {
 
       custom_origin_config = {
         origin_protocol_policy = "https-only"
-        origin_ssl_protocols   = ["TLSv1"]
+        origin_ssl_protocols   = ["TLSv1.2"]
         http_port              = 80
         https_port             = 443
       }
