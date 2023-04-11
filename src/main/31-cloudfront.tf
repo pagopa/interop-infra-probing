@@ -3,15 +3,15 @@ resource "aws_api_gateway_api_key" "cloudfront" {
 }
 
 data "aws_cloudfront_cache_policy" "caching_disabled" {
-  name = "CachingDisabled"
+  name = "Managed-CachingDisabled"
 }
 
 data "aws_cloudfront_cache_policy" "caching_optimized" {
-  name = "CachingOptimized"
+  name = "Managed-CachingOptimized"
 }
 
 data "aws_cloudfront_origin_request_policy" "all_viewer" {
-  name = "AllViewer"
+  name = "Managed-AllViewer"
 }
 
 module "fe_cdn" {
