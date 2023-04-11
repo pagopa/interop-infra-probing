@@ -35,7 +35,7 @@ module "fe_cdn" {
 
     apigw = {
       origin_id   = "apigw"
-      origin_path = "/${var.env}"
+      origin_path = "/${aws_api_gateway_stage.stage.stage_name}"
       #domain_name = trimprefix(aws_api_gateway_stage.stage.invoke_url, "https://")
       domain_name = "${aws_api_gateway_rest_api.apigw.id}.execute-api.${var.aws_region}.amazonaws.com"
       custom_header = [{
