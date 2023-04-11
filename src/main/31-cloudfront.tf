@@ -35,7 +35,7 @@ module "fe_cdn" {
 
     apigw = {
       origin_id   = "apigw"
-      domain_name = aws_api_gateway_stage.stage.invoke_url
+      domain_name = trimprefix(aws_api_gateway_stage.stage.invoke_url, "https://")
 
       custom_header = [{
         name  = "x-api-key"
