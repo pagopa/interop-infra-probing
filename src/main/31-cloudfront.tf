@@ -3,11 +3,15 @@ resource "aws_api_gateway_api_key" "cloudfront" {
 }
 
 data "aws_cloudfront_cache_policy" "caching_disabled" {
-  id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+  name = "CachingDisabled"
+}
+
+data "aws_cloudfront_cache_policy" "caching_optimized" {
+  name = "CachingOptimized"
 }
 
 data "aws_cloudfront_origin_request_policy" "all_viewer" {
-  id = "216adef6-5c7f-47e4-b989-5492eafa07d3"
+  name = "AllViewer"
 }
 
 module "fe_cdn" {
@@ -61,20 +65,19 @@ module "fe_cdn" {
     target_origin_id       = "fe_hosting_oac"
     viewer_protocol_policy = "redirect-to-https"
 
-    allowed_methods          = ["GET", "HEAD", "OPTIONS"]
-    cached_methods           = ["GET", "HEAD"]
-    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
-    compress                 = true
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    cached_methods  = ["GET", "HEAD"]
+    cache_policy_id = data.aws_cloudfront_cache_policy.caching_optimized.id
   }
   ordered_cache_behavior = [
     {
-      path_pattern           = "/eservices/*"
-      target_origin_id       = "apigw"
-      viewer_protocol_policy = "redirect-to-https"
-      cache_policy_id        = data.aws_cloudfront_cache_policy.caching_disabled.id
-
-      allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-      compress        = true
+      path_pattern             = "/eservices/*"
+      target_origin_id         = "apigw"
+      viewer_protocol_policy   = "redirect-to-https"
+      cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
+      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+      allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+      compress                 = true
     }
   ]
 }
