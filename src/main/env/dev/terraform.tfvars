@@ -35,7 +35,6 @@ alb_ingress_group = "interop-probing-alb"
 api_version       = "v1"
 
 openapi_spec_path     = "./assets/openapi_spec/interop-probing-dev-api-v1.yaml"
-api_gateway_origin_id = "api"
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"
