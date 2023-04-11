@@ -78,7 +78,7 @@ module "fe_cdn" {
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
       origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
       allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-      compress                 = trueì
+      compress                 = true
       use_forwarded_values     = false
     },
     {
