@@ -65,10 +65,10 @@ module "fe_cdn" {
   default_cache_behavior = {
     target_origin_id       = "fe_hosting_oac"
     viewer_protocol_policy = "redirect-to-https"
-
-    allowed_methods = ["GET", "HEAD", "OPTIONS"]
-    cached_methods  = ["GET", "HEAD"]
-    cache_policy_id = data.aws_cloudfront_cache_policy.caching_optimized.id
+    use_forwarded_values   = false
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
+    cache_policy_id        = data.aws_cloudfront_cache_policy.caching_optimized.id
   }
   ordered_cache_behavior = [
     {
@@ -79,6 +79,7 @@ module "fe_cdn" {
       origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
       allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
       compress                 = true
+      use_forwarded_values     = false
     },
     {
       path_pattern             = "/producers/*"
@@ -88,6 +89,7 @@ module "fe_cdn" {
       origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
       allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
       compress                 = true
+      use_forwarded_values     = false
     }
   ]
 }
