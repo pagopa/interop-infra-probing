@@ -91,3 +91,21 @@ resource "aws_iam_role_policy" "cloudwatch" {
 resource "aws_api_gateway_account" "apigw_account" {
   cloudwatch_role_arn = aws_iam_role.cloudwatch.arn
 }
+
+resource "aws_api_gateway_usage_plan" "main" {
+  name = "${var.app_name}-usage-plan-${var.env}"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.apigw.id
+    stage  = aws_api_gateway_stage.stage.stage_name
+  }
+
+}
+
+
+resource "aws_api_gateway_usage_plan_key" "main" {
+  key_id        = aws_api_gateway_api_key.cloudfront.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.main.id
+}
+
