@@ -37,10 +37,10 @@ module "fe_cdn" {
       origin_id   = "apigw"
       origin_path = "/${aws_api_gateway_stage.stage.stage_name}"
       domain_name = "${aws_api_gateway_rest_api.apigw.id}.execute-api.${var.aws_region}.amazonaws.com"
-      # custom_header = [{
-      #   name  = "x-api-key"
-      #   value = aws_api_gateway_api_key.cloudfront.value
-      # }]
+      custom_header = [{
+        name  = "x-api-key"
+        value = aws_api_gateway_api_key.cloudfront.value
+      }]
 
       custom_origin_config = {
         origin_protocol_policy = "https-only"
@@ -72,7 +72,7 @@ module "fe_cdn" {
   }
   ordered_cache_behavior = [
     {
-      path_pattern             = "monitoring/*"
+      path_pattern             = "monitoring"
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
@@ -82,7 +82,7 @@ module "fe_cdn" {
       use_forwarded_values     = false
     },
     {
-      path_pattern             = "eservices/*"
+      path_pattern             = "eservices"
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
@@ -92,7 +92,7 @@ module "fe_cdn" {
       use_forwarded_values     = false
     },
     {
-      path_pattern             = "producers/*"
+      path_pattern             = "producers"
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
