@@ -72,7 +72,7 @@ module "fe_cdn" {
   }
   ordered_cache_behavior = [
     {
-      path_pattern             = "monitoring/eservices"
+      path_pattern             = "/eservices/*"
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
@@ -82,7 +82,7 @@ module "fe_cdn" {
       use_forwarded_values     = false
     },
     {
-      path_pattern             = "monitoring/producers"
+      path_pattern             = "/producers/*"
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
