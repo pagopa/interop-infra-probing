@@ -14,6 +14,11 @@ data "aws_cloudfront_origin_request_policy" "all_viewer" {
   name = "Managed-AllViewer"
 }
 
+
+data "aws_cloudfront_origin_request_policy" "all_viewer_except_host_header" {
+  name = "Managed-AllViewerExceptHostHeader"
+}
+
 module "fe_cdn" {
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "3.2.1"
@@ -76,7 +81,7 @@ module "fe_cdn" {
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
-      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host_header.id
       allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
       compress                 = true
       use_forwarded_values     = false
@@ -86,7 +91,7 @@ module "fe_cdn" {
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
-      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+      origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host_header.id
       allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
       compress                 = true
       use_forwarded_values     = false
