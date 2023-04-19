@@ -37,10 +37,10 @@ module "fe_cdn" {
       origin_id   = "apigw"
       origin_path = "/${aws_api_gateway_stage.stage.stage_name}"
       domain_name = "${aws_api_gateway_rest_api.apigw.id}.execute-api.${var.aws_region}.amazonaws.com"
-      custom_header = [{
-        name  = "x-api-key"
-        value = aws_api_gateway_api_key.cloudfront.value
-      }]
+      # custom_header = [{
+      #   name  = "x-api-key"
+      #   value = aws_api_gateway_api_key.cloudfront.value
+      # }]
 
       custom_origin_config = {
         origin_protocol_policy = "https-only"
