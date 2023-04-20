@@ -318,13 +318,6 @@ paths:
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'
-        requestParameters:
-           integration.request.querystring.producerName: 'method.request.querystring.producerName'
-           integration.request.querystring.limit: 'method.request.querystring.limit' 
-           integration.request.querystring.offset: 'method.request.querystring.offset' 
-           integration.request.querystring.eserviceName: 'method.request.querystring.eserviceName' 
-           integration.request.querystring.versionNumber: 'method.request.querystring.versionNumber' 
-           integration.request.querystring.state: 'method.request.querystring.state' 
                 
    '/producers':
     get:
@@ -378,8 +371,6 @@ paths:
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'
-        requestParameters:
-           integration.request.querystring.producerName: 'method.request.querystring.producerName'
 
 components:
   schemas:
