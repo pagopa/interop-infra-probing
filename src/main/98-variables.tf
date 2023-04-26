@@ -119,6 +119,16 @@ variable "openapi_spec_path" {
   description = "The relative path in the repo for open api specification"
 }
 
+variable "timestream_table_magnetic_store_retention_period_in_days" {
+  type        = number
+  description = "How long data stays in magnetic store in days"
+}
+
+variable "timestream_table_memory_store_retention_period_in_hours" {
+  type        = number
+  description = "How long data stays in memory store in hours"
+}
+
 variable "tags" {
   type = map(any)
   default = {
