@@ -58,3 +58,26 @@ resource "aws_iam_policy" "registry_updater_policy" {
   path   = "/application/eks/pods/"
   policy = data.aws_iam_policy_document.registry_updater_policy.json
 }
+
+
+data "aws_iam_policy_document" "scheduler_policy" {
+  statement {
+    sid    = "WriteOnPollingQueue"
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage"
+    ]
+
+    resources = [
+      module.sqs_polling_queue.queue_arn
+    ]
+  }
+
+
+}
+
+resource "aws_iam_policy" "scheduler_policy" {
+  name   = "${var.be_prefix}-scheduler-${var.env}"
+  path   = "/application/eks/pods/"
+  policy = data.aws_iam_policy_document.scheduler_policy.json
+}

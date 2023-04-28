@@ -36,6 +36,25 @@ resource "kubernetes_service_account_v1" "registry_updater" {
   }
 }
 
+data "aws_iam_role" "scheduler" {
+  name = format("%s-scheduler-%s", var.be_prefix, var.env)
+}
+
+resource "kubernetes_service_account_v1" "registry_updater" {
+  metadata {
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    name      = format("%s-scheduler", var.be_prefix)
+
+    annotations = {
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.scheduler.arn
+    }
+
+    labels = {
+      "app.kubernetes.io/name" = format("%s-scheduler", var.be_prefix)
+    }
+  }
+}
+
 data "aws_iam_role" "aws_load_balancer_controller" {
   name = "aws-load-balancer-controller"
 }
