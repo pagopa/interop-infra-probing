@@ -201,6 +201,21 @@ resource "aws_iam_group_policy" "timestream_development" {
           "*"
         ]
       },
+      {
+        Sid    = "SQSeservice_telemetry_result_queue"
+        Effect = "Allow"
+        Action = [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
+          "sqs:GetQueueUrl"
+        ]
+        Resource = [
+
+          module.sqs_telemetry_result_queue.queue_arn
+        ]
+      },
 
     ]
   })
