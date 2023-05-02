@@ -81,3 +81,55 @@ resource "aws_iam_policy" "scheduler_policy" {
   path   = "/application/eks/pods/"
   policy = data.aws_iam_policy_document.scheduler_policy.json
 }
+
+
+data "aws_iam_policy_document" "telemetry_writer_policy" {
+  statement {
+    sid    = "ReadAndDeleteFromTelemetryResultQueue"
+    effect = "Allow"
+    actions = [
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage"
+    ]
+
+    resources = [
+      module.sqs_telemetry_result_queue.queue_arn
+    ]
+  }
+
+  statement {
+    sid    = "ListTimestreamDatabases"
+    effect = "Allow"
+    actions = [
+      "timestream:ListDatabases",
+      "timestream:SelectValues"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+
+  statement {
+    sid    = "WriteOnTimestreamTable"
+    effect = "Allow"
+    actions = [
+      "timestream:WriteRecords",
+      "timestream:ListTables",
+      "timestream:Select",
+      "timestream:UpdateTable"
+    ]
+
+    resources = [
+      aws_timestreamwrite_table.probing_telemetry.arn
+    ]
+  }
+
+
+}
+
+resource "aws_iam_policy" "telemetry_writer_policy" {
+  name   = "${var.be_prefix}-telemetry-writer-${var.env}"
+  path   = "/application/eks/pods/"
+  policy = data.aws_iam_policy_document.telemetry_writer_policy.json
+}

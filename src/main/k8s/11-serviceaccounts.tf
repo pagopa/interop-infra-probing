@@ -55,6 +55,25 @@ resource "kubernetes_service_account_v1" "scheduler" {
   }
 }
 
+data "aws_iam_role" "telemetry-writer" {
+  name = format("%s-telemetry-writer-%s", var.be_prefix, var.env)
+}
+
+resource "kubernetes_service_account_v1" "telemetry-writer" {
+  metadata {
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    name      = format("%s-telemetry-writer", var.be_prefix)
+
+    annotations = {
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.telemetry-writer.arn
+    }
+
+    labels = {
+      "app.kubernetes.io/name" = format("%s-telemetry-writer", var.be_prefix)
+    }
+  }
+}
+
 data "aws_iam_role" "aws_load_balancer_controller" {
   name = "aws-load-balancer-controller"
 }
