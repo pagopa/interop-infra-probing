@@ -104,7 +104,8 @@ data "aws_iam_policy_document" "telemetry_writer_policy" {
     effect = "Allow"
     actions = [
       "timestream:ListDatabases",
-      "timestream:SelectValues"
+      "timestream:SelectValues",
+      "timestream:DescribeEndpoints"
     ]
 
     resources = [
