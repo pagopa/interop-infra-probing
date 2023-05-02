@@ -89,7 +89,9 @@ data "aws_iam_policy_document" "telemetry_writer_policy" {
     effect = "Allow"
     actions = [
       "sqs:ReceiveMessage",
-      "sqs:DeleteMessage"
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
     ]
 
     resources = [
