@@ -202,7 +202,7 @@ resource "aws_iam_group_policy" "timestream_development" {
         ]
       },
       {
-        Sid    = "SQSeservice_telemetry_result_queue"
+        Sid    = "SQSeservicetelemetryresultqueue"
         Effect = "Allow"
         Action = [
           "sqs:SendMessage",
