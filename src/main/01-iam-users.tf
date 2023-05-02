@@ -213,9 +213,9 @@ resource "aws_iam_group_policy" "timestream_development" {
         ]
         Resource = [
 
-          module.sqs_telemetry_result_queue.queue_arn
+          "${module.sqs_telemetry_result_queue.queue_arn}"
         ]
-      },
+      }
 
     ]
   })
