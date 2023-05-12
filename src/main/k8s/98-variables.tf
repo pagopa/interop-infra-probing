@@ -47,7 +47,7 @@ variable "infra_repo_role_name" {
 }
 
 variable "k8s_repo_role_name" {
-  type = string
+  type        = string
   description = "Name of the role used by the K8s repo to deploy K8s manifests"
 }
 
