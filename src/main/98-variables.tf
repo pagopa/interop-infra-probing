@@ -35,6 +35,12 @@ variable "frontend_github_repo" {
   default     = "pagopa/interop-fe-probing"
 }
 
+variable "k8s_github_repo" {
+  type        = string
+  description = "Name of the probing K8s Github repo (format: 'organization/repo-name')"
+  default     = "pagopa/interop-probing-k8s"
+}
+
 variable "database_subnets" {
   type        = list(string)
   description = "Database dedicated private subnets"
