@@ -317,16 +317,30 @@ paths:
         httpMethod: 'GET'
         connectionType: 'VPC_LINK'
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
-        type: 'http_proxy'
-                
+        type: 'http_proxy'                
    '/producers':
-    get:
+      get:
       summary: Retrive e-services producers
       description: Retrive e-services producers 
       tags:
         - Read
       operationId: getEservicesProducers
       parameters:
+        - name: limit
+          in: query
+          required: true
+          description: the e-service's page limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          required: true
+          description: the page's offset
+          schema:
+            type: integer
+            minimum: 0
         - name: producerName
           in: query
           required: false
@@ -364,7 +378,7 @@ paths:
                 title: 'Internal Server Error'
                 detail: 'There is a problem processing the request on the server.'
                 traceId: 'string'
-                errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please ry again later.'}]                
+                errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please ry again later.'}]                    
       x-amazon-apigateway-integration:
         uri: 'http://${stageVariables.aws_lb_nlb_dns_name}/producers'
         httpMethod: 'GET'
