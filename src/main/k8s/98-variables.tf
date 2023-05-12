@@ -41,6 +41,16 @@ variable "sso_full_admin_role_name" {
   description = "Name of the SSO 'FullAdmin' role"
 }
 
+variable "infra_repo_role_name" {
+  type        = string
+  description = "Name of the role used by the infra repo to deploy"
+}
+
+variable "k8s_repo_role_name" {
+  type = string
+  description = "Name of the role used by the K8s repo to deploy K8s manifests"
+}
+
 variable "iam_users_k8s_admin" {
   type        = list(string)
   description = "IAM users to be granted admin access in the cluster"
