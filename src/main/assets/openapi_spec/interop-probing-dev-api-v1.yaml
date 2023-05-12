@@ -319,66 +319,66 @@ paths:
         connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
         type: 'http_proxy'                
    '/producers':
-      get:
-      summary: Retrive e-services producers
-      description: Retrive e-services producers 
-      tags:
-        - Read
-      operationId: getEservicesProducers
-      parameters:
-        - name: limit
-          in: query
-          required: true
-          description: the e-service's page limit
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-        - name: offset
-          in: query
-          required: true
-          description: the page's offset
-          schema:
-            type: integer
-            minimum: 0
-        - name: producerName
-          in: query
-          required: false
-          description: the e-service's producer name
-          schema:
-            type: string
-            format: string
-      responses:
-        '200':
-          description: >-
-            The search for the list of producers has been performed successfully
-          content:
-            application/json:
-              schema:
-               type: array
-               items:
-                $ref: '#/components/schemas/SearchProducerNameResponse'
-        '400':
-          description: >-
-            The provided input data is invalid
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        '500':                  
-          description: >-
-            A managed error has occured during the request elaboration
-          content:                        
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-              example:
-                type: string
-                status: 500 
-                title: 'Internal Server Error'
-                detail: 'There is a problem processing the request on the server.'
-                traceId: 'string'
-                errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please ry again later.'}]                    
+    get:
+    summary: Retrive e-services producers
+    description: Retrive e-services producers 
+    tags:
+      - Read
+    operationId: getEservicesProducers
+    parameters:
+      - name: limit
+        in: query
+        required: true
+        description: the e-service's page limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: offset
+        in: query
+        required: true
+        description: the page's offset
+        schema:
+          type: integer
+          minimum: 0
+      - name: producerName
+        in: query
+        required: false
+        description: the e-service's producer name
+        schema:
+          type: string
+          format: string
+    responses:
+      '200':
+        description: >-
+          The search for the list of producers has been performed successfully
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+              $ref: '#/components/schemas/SearchProducerNameResponse'
+      '400':
+        description: >-
+          The provided input data is invalid
+        content:
+          application/problem+json:
+            schema:
+              $ref: '#/components/schemas/Problem'
+      '500':                  
+        description: >-
+          A managed error has occured during the request elaboration
+        content:                        
+          application/problem+json:
+            schema:
+              $ref: '#/components/schemas/Problem'
+            example:
+              type: string
+              status: 500 
+              title: 'Internal Server Error'
+              detail: 'There is a problem processing the request on the server.'
+              traceId: 'string'
+              errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please ry again later.'}]                    
       x-amazon-apigateway-integration:
         uri: 'http://${stageVariables.aws_lb_nlb_dns_name}/producers'
         httpMethod: 'GET'
