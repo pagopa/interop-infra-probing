@@ -13,3 +13,7 @@ output "frontend_deploy_role_arn" {
   description = "ARN of the role for frontend github pipeline"
 }
 
+output "probing_public_hosted_zone_ns" {
+  value       = aws_route53_zone.probing_public.name_servers
+  description = "NS values for the probing public hosted zone in this environment"
+}
