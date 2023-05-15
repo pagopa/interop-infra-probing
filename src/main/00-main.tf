@@ -13,11 +13,21 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+
   default_tags {
     tags = var.tags
   }
   ignore_tags {
     key_prefixes = ["kubernetes.io/"]
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us_east_1"
+
+  default_tags {
+    tags = var.tags
   }
 }
 

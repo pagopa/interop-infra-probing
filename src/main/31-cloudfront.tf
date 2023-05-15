@@ -27,6 +27,17 @@ module "fe_cdn" {
 
   default_root_object = "index.html"
 
+  aliases = [
+    var.probing_env_domain_name,
+    "www.${var.probing_env_domain_name}"
+  ]
+
+  viewer_certificate = {
+    acm_certificate_arn      = aws_acm_certificate.probing_distribution.arn
+    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method       = "sni-only"
+  }
+
   origin = {
     fe_hosting_oac = {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
