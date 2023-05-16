@@ -21,6 +21,110 @@ tags:
       Operations on probing settings
 
 paths:
+   '/eservices/mainData/{eserviceRecordId}':
+    get:
+      summary: Retrive e-service main data
+      description: Retrive e-service main data 
+      tags:
+        - Read
+      operationId: getEserviceMainData
+      parameters:
+        - name: eserviceRecordId
+          in: path
+          required: true
+          description: the e-service's record id
+          schema:
+           type: integer
+           format: int64
+      responses:
+        '200':
+          description: >-
+            The main data of the service got successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MainDataEserviceResponse'
+        '400':
+          description: >-
+            The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':                  
+          description: >-
+            A managed error has occured during the request elaboration
+          content:                        
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: string
+                status: 500 
+                title: 'Internal Server Error'
+                detail: 'There is a problem processing the request on the server.'
+                traceId: 'string'
+                errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please ry again later.'}]   
+      x-amazon-apigateway-integration:
+        uri: 'http://${stageVariables.aws_lb_nlb_dns_name}/eservices/mainData/{eserviceRecordId}'
+        httpMethod: 'POST'
+        connectionType: 'VPC_LINK'
+        type: 'http_proxy'
+        connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
+        requestParameters:
+           integration.request.path.eserviceRecordId: 'method.request.path.eserviceRecordId'
+   '/eservices/probingData/{eserviceRecordId}':
+    get:
+      summary: Retrive e-service probing data
+      description: Retrive e-service probing data 
+      tags:
+        - Read
+      operationId: getEserviceProbingData
+      parameters:
+        - name: eserviceRecordId
+          in: path
+          required: true
+          description: the e-service's record id
+          schema:
+           type: integer
+           format: int64
+      responses:
+        '200':
+          description: >-
+            The probing data of the service got successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProbingDataEserviceResponse'
+        '400':
+          description: >-
+            The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':                  
+          description: >-
+            A managed error has occured during the request elaboration
+          content:                        
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: string
+                status: 500 
+                title: 'Internal Server Error'
+                detail: 'There is a problem processing the request on the server.'
+                traceId: 'string'
+                errors: [{'code':'000-1234', 'detail':'The server is currently down for maintenance. Please ry again later.'}]   
+      x-amazon-apigateway-integration:
+        uri: 'http://${stageVariables.aws_lb_nlb_dns_name}/eservices/probingData/{eserviceRecordId}'
+        httpMethod: 'POST'
+        connectionType: 'VPC_LINK'
+        type: 'http_proxy'
+        connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
+        requestParameters:
+           integration.request.path.eserviceRecordId: 'method.request.path.eserviceRecordId'
    '/eservices/{eserviceId}/versions/{versionId}/updateState':
     post:
       summary: Updates the state of an e-service.
@@ -374,6 +478,35 @@ paths:
 
 components:
   schemas:
+    MainDataEserviceResponse:
+      type: object
+      properties:
+        eserviceName:
+          title: Service name
+          type: string
+        versionNumber:
+          title: the e-service's version
+          type: integer
+        producerName:
+          title: Service producer name
+          type: string
+
+    ProbingDataEserviceResponse:
+      type: object
+      properties:
+        probingEnabled:
+          title: probing activated
+          type: boolean
+        state:
+          $ref: '#/components/schemas/EserviceStateFE'
+        responseReceived:
+          title: last response date
+          type: string
+          format: date-time
+        eserviceActive:
+          title: eservice active
+          type: boolean
+
     ChangeProbingStateRequest:
       type: object
       required:
