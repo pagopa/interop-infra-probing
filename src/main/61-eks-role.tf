@@ -78,6 +78,26 @@ module "telemetry_writer_role" {
   }
 }
 
+module "caller_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "${var.be_prefix}-caller-${var.env}"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-caller"]
+    }
+  }
+
+  role_path        = "/application/eks/pods/"
+  role_description = "Role for reading and writing from SQSs queue"
+
+  role_policy_arns = {
+    caller_policy = aws_iam_policy.caller_policy.arn
+  }
+}
+
 module "aws_load_balancer_controller_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 

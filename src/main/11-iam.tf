@@ -136,3 +136,42 @@ resource "aws_iam_policy" "telemetry_writer_policy" {
   path   = "/application/eks/pods/"
   policy = data.aws_iam_policy_document.telemetry_writer_policy.json
 }
+
+
+data "aws_iam_policy_document" "caller_policy" {
+  statement {
+    sid    = "ReadAndDeleteMsgFromPollQueue"
+    effect = "Allow"
+    actions = [
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
+    ]
+
+    resources = [
+      module.sqs_polling_queue.queue_arn
+    ]
+  }
+
+  statement {
+    sid    = "WriteMsgToQueues"
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage"
+    ]
+
+    resources = [
+      module.sqs_polling_result_queue.queue_arn,
+      module.sqs_telemetry_result_queue.queue_arn
+    ]
+  }
+
+
+}
+
+resource "aws_iam_policy" "caller_policy" {
+  name   = "${var.be_prefix}-caller-${var.env}"
+  path   = "/application/eks/pods/"
+  policy = data.aws_iam_policy_document.caller_policy.json
+}
