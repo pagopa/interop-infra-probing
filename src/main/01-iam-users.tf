@@ -209,7 +209,8 @@ resource "aws_iam_group_policy" "timestream_development" {
           "sqs:ReceiveMessage",
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes",
-          "sqs:GetQueueUrl"
+          "sqs:GetQueueUrl",
+          "sqs:PurgeQueue"
         ]
         Resource = [
 
