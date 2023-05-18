@@ -3,7 +3,6 @@ resource "aws_cognito_user_pool" "user_pool" {
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
 
-<<<<<<< HEAD
   lambda_config {
     custom_message = aws_lambda_function.cognito_messaging.arn
   }
@@ -18,14 +17,11 @@ resource "aws_cognito_user_pool" "user_pool" {
       priority = 2
     }
   }
-=======
->>>>>>> 272a7a2 (feat: Init user pool)
   verification_message_template {
     default_email_option = "CONFIRM_WITH_CODE"
     email_message        = "{####} Insert html"
     email_subject        = "Confirmation subject"
   }
-<<<<<<< HEAD
 }
 
 resource "aws_cognito_user_group" "admins" {
@@ -43,6 +39,4 @@ resource "aws_cognito_user_pool_client" "client" {
 
   user_pool_id    = aws_cognito_user_pool.user_pool.id
   generate_secret = false
-=======
->>>>>>> 272a7a2 (feat: Init user pool)
 }
