@@ -136,7 +136,7 @@ variable "timestream_table_memory_store_retention_period_in_hours" {
 }
 
 variable "probing_env_domain_name" {
-  type = string
+  type        = string
   description = "Base domain for the probing project in this environment (e.g. foo.dev.bar.com)"
 }
 
