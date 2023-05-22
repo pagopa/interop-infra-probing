@@ -219,6 +219,16 @@ resource "aws_iam_group_policy" "timestream_development" {
           "${module.sqs_polling_result_queue.queue_arn}",
           "${module.sqs_telemetry_result_queue.queue_arn}"
         ]
+      },
+      {
+        Sid    = "KMSDecrypt"
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt"
+        ]
+        Resource = [
+          "${aws_kms_key.jwt_sign_key.arn}"
+        ]
       }
 
     ]
