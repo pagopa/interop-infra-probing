@@ -19,3 +19,13 @@ resource "aws_cognito_user_pool" "user_pool" {
     email_subject        = "Confirmation subject"
   }
 }
+
+resource "aws_cognito_user_group" "admin" {
+  name         = "admin"
+  user_pool_id = aws_cognito_user_pool.user_pool.id
+}
+
+resource "aws_cognito_user_group" "user" {
+  name         = "user"
+  user_pool_id = aws_cognito_user_pool.user_pool.id
+}
