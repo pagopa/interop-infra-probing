@@ -21,11 +21,18 @@ resource "aws_cognito_user_pool" "user_pool" {
 }
 
 resource "aws_cognito_user_group" "admin" {
-  name         = "admin"
+  name         = "${var.app_name}-admin-group-${var.env}"
   user_pool_id = aws_cognito_user_pool.user_pool.id
 }
 
 resource "aws_cognito_user_group" "user" {
-  name         = "user"
+  name         = "${var.app_name}-user-group-${var.env}"
   user_pool_id = aws_cognito_user_pool.user_pool.id
+}
+
+resource "aws_cognito_user_pool_client" "client" {
+  name = "${var.app_name}-fe-client-${var.env}"
+
+  user_pool_id    = aws_cognito_user_pool.user_pool.id
+  generate_secret = false
 }
