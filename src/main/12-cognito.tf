@@ -3,9 +3,12 @@ resource "aws_cognito_user_pool" "user_pool" {
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
 
+<<<<<<< HEAD
   lambda_config {
     custom_message = aws_lambda_function.cognito_messaging.arn
   }
+=======
+>>>>>>> b741aa0 (fix: Align cognito)
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
