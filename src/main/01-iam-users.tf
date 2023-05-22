@@ -224,7 +224,9 @@ resource "aws_iam_group_policy" "timestream_development" {
         Sid    = "KMSDecrypt"
         Effect = "Allow"
         Action = [
-          "kms:Decrypt"
+          "kms:Decrypt",
+          "kms:Sign",
+          "kms:Verify"
         ]
         Resource = [
           "${aws_kms_key.jwt_sign_key.arn}"
