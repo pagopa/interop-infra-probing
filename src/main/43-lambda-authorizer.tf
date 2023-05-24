@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "invocation_assume_role" {
     effect = "Allow"
 
     principals {
-      type       = "Service"
+      type        = "Service"
       identifiers = ["apigateway.amazonaws.com"]
     }
 
@@ -58,15 +58,15 @@ resource "aws_iam_role" "lambda_authorizer_execution_role" {
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_dir = "${path.module}/assets/lambda_authorizer"
+  source_dir  = "${path.module}/assets/lambda_authorizer"
   output_path = "lambda_authorizer.zip"
 }
 
 resource "aws_lambda_function" "authorizer" {
-  filename      = "lambda_authorizer.zip"
-  function_name = "${var.app_name}-apigw-lambda-authorizer-${var.env}"
-  role          = aws_iam_role.lambda_authorizer_execution_role.arn
-  handler       = "lambda_authorizer.handler"
+  filename         = "lambda_authorizer.zip"
+  function_name    = "${var.app_name}-apigw-lambda-authorizer-${var.env}"
+  role             = aws_iam_role.lambda_authorizer_execution_role.arn
+  handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.lambda.output_base64sha256
-  runtime = "nodejs16.x"
+  runtime          = "nodejs16.x"
 }
