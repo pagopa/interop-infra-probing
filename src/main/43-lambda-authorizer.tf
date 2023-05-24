@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "invocation_assume_role" {
     effect = "Allow"
 
     principals {
-      type       = "Service"
+      type        = "Service"
       identifiers = ["apigateway.amazonaws.com"]
     }
 
