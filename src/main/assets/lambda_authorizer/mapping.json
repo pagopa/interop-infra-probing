@@ -1,0 +1,8 @@
+{
+  "admins": {
+    "/authtest": ["GET"]
+  },
+  "users": {
+    "/api": ["POST"]
+  }
+}
