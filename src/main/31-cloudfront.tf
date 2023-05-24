@@ -82,7 +82,7 @@ module "fe_cdn" {
     cache_policy_id      = data.aws_cloudfront_cache_policy.caching_optimized.id
   }
   ordered_cache_behavior = [
-        {
+    {
       path_pattern             = "/eservices"
       target_origin_id         = "apigw"
       viewer_protocol_policy   = "redirect-to-https"
