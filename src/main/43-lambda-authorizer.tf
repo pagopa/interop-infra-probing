@@ -1,4 +1,4 @@
-resource "aws_api_gateway_authorizer" "demo" {
+resource "aws_api_gateway_authorizer" "cognito_authorizer" {
   name                   = "lambda-authorizer-${var.env}"
   rest_api_id            = aws_api_gateway_rest_api.apigw.id
   authorizer_uri         = aws_lambda_function.authorizer.invoke_arn
