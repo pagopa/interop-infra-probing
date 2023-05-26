@@ -536,7 +536,12 @@ paths:
                 detail: 'There is a problem processing the request on the server.'
                 traceId: 'string'
                 errors: [ { 'code': '000-1234', 'detail': 'The server is currently down for maintenance. Please try again later.' } ]
-
+      x-amazon-apigateway-integration:
+        uri: 'http://${stageVariables.aws_lb_nlb_dns_name}/eservices/statistics'
+        httpMethod: 'GET'
+        connectionType: 'VPC_LINK'
+        connectionId: '${stageVariables.aws_api_gateway_vpc_link_backend_id}'
+        type: 'http_proxy'
 
 
 components:
