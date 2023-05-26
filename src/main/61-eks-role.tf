@@ -118,6 +118,26 @@ module "response_updater_role" {
   }
 }
 
+module "statistics_api_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "${var.be_prefix}-statistics-api-${var.env}"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-statistics-api"]
+    }
+  }
+
+  role_path        = "/application/eks/pods/"
+  role_description = "Role for reading from timestream DB"
+
+  role_policy_arns = {
+    statistics_api_policy = aws_iam_policy.statistics_api_policy.arn
+  }
+}
+
 module "aws_load_balancer_controller_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
