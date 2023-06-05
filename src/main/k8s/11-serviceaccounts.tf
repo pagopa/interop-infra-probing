@@ -55,17 +55,17 @@ resource "kubernetes_service_account_v1" "scheduler" {
   }
 }
 
-data "aws_iam_role" "telemetry-writer" {
+data "aws_iam_role" "telemetry_writer" {
   name = format("%s-telemetry-writer-%s", var.be_prefix, var.env)
 }
 
-resource "kubernetes_service_account_v1" "telemetry-writer" {
+resource "kubernetes_service_account_v1" "telemetry_writer" {
   metadata {
     namespace = kubernetes_namespace_v1.env.metadata[0].name
     name      = format("%s-telemetry-writer", var.be_prefix)
 
     annotations = {
-      "eks.amazonaws.com/role-arn" = data.aws_iam_role.telemetry-writer.arn
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.telemetry_writer.arn
     }
 
     labels = {
@@ -127,6 +127,17 @@ resource "kubernetes_service_account_v1" "statistics_api" {
 
     labels = {
       "app.kubernetes.io/name" = format("%s-statistics-api", var.be_prefix)
+    }
+  }
+}
+
+resource "kubernetes_service_account_v1" "probing_api" {
+  metadata {
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    name      = format("%s-probing-api", var.be_prefix)
+
+    labels = {
+      "app.kubernetes.io/name" = format("%s-probing-api", var.be_prefix)
     }
   }
 }
