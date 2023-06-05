@@ -1,6 +1,6 @@
 module "registry_reader_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-registry-reader-${var.env}"
 
@@ -21,7 +21,7 @@ module "registry_reader_role" {
 
 module "registry_updater_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-registry-updater-${var.env}"
 
@@ -42,7 +42,7 @@ module "registry_updater_role" {
 
 module "scheduler_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-scheduler-${var.env}"
 
@@ -63,7 +63,7 @@ module "scheduler_role" {
 
 module "telemetry_writer_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-telemetry-writer-${var.env}"
 
@@ -84,7 +84,7 @@ module "telemetry_writer_role" {
 
 module "caller_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-caller-${var.env}"
 
@@ -105,7 +105,7 @@ module "caller_role" {
 
 module "response_updater_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-response-updater-${var.env}"
 
@@ -126,7 +126,7 @@ module "response_updater_role" {
 
 module "statistics_api_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-statistics-api-${var.env}"
 
@@ -147,7 +147,7 @@ module "statistics_api_role" {
 
 module "aws_load_balancer_controller_role" {
   version = "5.18.0"
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "aws-load-balancer-controller"
 
