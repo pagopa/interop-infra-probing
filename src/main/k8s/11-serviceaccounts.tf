@@ -134,10 +134,10 @@ resource "kubernetes_service_account_v1" "statistics_api" {
 resource "kubernetes_service_account_v1" "probing_api" {
   metadata {
     namespace = kubernetes_namespace_v1.env.metadata[0].name
-    name      = format("%s-probing-api", var.be_prefix)
+    name      = format("%s-api", var.be_prefix)
 
     labels = {
-      "app.kubernetes.io/name" = format("%s-probing-api", var.be_prefix)
+      "app.kubernetes.io/name" = format("%s-api", var.be_prefix)
     }
   }
 }
