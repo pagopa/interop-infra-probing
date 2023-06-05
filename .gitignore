@@ -26,3 +26,6 @@ override.tf.json
 # .terraformrc
 # terraform.rc
 *zip
+
+.terraform.lock.hcl
+k8s/.terraform.lock.hcl
