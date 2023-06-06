@@ -62,6 +62,11 @@ data "archive_file" "lambda" {
   output_path = "lambda_authorizer.zip"
 }
 
+data "local_file" "role_mapping" {
+  filename = "${path.module}/assets/lambda_authorizer/cognito_role_mapping-${var.env}.json"
+}
+
+
 resource "aws_lambda_function" "authorizer" {
   filename         = "lambda_authorizer.zip"
   function_name    = "${var.app_name}-apigw-lambda-authorizer-${var.env}"
@@ -69,4 +74,10 @@ resource "aws_lambda_function" "authorizer" {
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.lambda.output_base64sha256
   runtime          = "nodejs16.x"
+  environment {
+    variables = {
+      ENV = var.env
+      ROLE_MAPPING = data.local_file.role_mapping.content
+    }
+  }
 }
