@@ -257,24 +257,24 @@ data "aws_iam_policy_document" "probing_api_policy" {
     sid    = "XRayIntegration"
     effect = "Allow"
     actions = [
-				"xray:GetGroups",
-				"xray:GetSamplingStatisticSummaries",
-				"xray:PutTelemetryRecords",
-				"xray:GetTraceGraph",
-				"xray:GetServiceGraph",
-				"xray:GetInsightImpactGraph",
-				"xray:GetInsightSummaries",
-				"xray:GetSamplingTargets",
-				"xray:PutTraceSegments",
-				"xray:BatchGetTraces",
-				"xray:BatchGetTraceSummaryById",
-				"xray:GetTimeSeriesServiceStatistics",
-				"xray:GetEncryptionConfig",
-				"xray:GetSamplingRules",
-				"xray:GetInsight",
-				"xray:GetDistinctTraceGraphs",
-				"xray:GetInsightEvents",
-				"xray:GetTraceSummaries"
+      "xray:GetGroups",
+      "xray:GetSamplingStatisticSummaries",
+      "xray:PutTelemetryRecords",
+      "xray:GetTraceGraph",
+      "xray:GetServiceGraph",
+      "xray:GetInsightImpactGraph",
+      "xray:GetInsightSummaries",
+      "xray:GetSamplingTargets",
+      "xray:PutTraceSegments",
+      "xray:BatchGetTraces",
+      "xray:BatchGetTraceSummaryById",
+      "xray:GetTimeSeriesServiceStatistics",
+      "xray:GetEncryptionConfig",
+      "xray:GetSamplingRules",
+      "xray:GetInsight",
+      "xray:GetDistinctTraceGraphs",
+      "xray:GetInsightEvents",
+      "xray:GetTraceSummaries"
     ]
 
     resources = [
@@ -297,24 +297,24 @@ data "aws_iam_policy_document" "operations_policy" {
     sid    = "XRayIntegration"
     effect = "Allow"
     actions = [
-				"xray:GetGroups",
-				"xray:GetSamplingStatisticSummaries",
-				"xray:PutTelemetryRecords",
-				"xray:GetTraceGraph",
-				"xray:GetServiceGraph",
-				"xray:GetInsightImpactGraph",
-				"xray:GetInsightSummaries",
-				"xray:GetSamplingTargets",
-				"xray:PutTraceSegments",
-				"xray:BatchGetTraces",
-				"xray:BatchGetTraceSummaryById",
-				"xray:GetTimeSeriesServiceStatistics",
-				"xray:GetEncryptionConfig",
-				"xray:GetSamplingRules",
-				"xray:GetInsight",
-				"xray:GetDistinctTraceGraphs",
-				"xray:GetInsightEvents",
-				"xray:GetTraceSummaries"
+      "xray:GetGroups",
+      "xray:GetSamplingStatisticSummaries",
+      "xray:PutTelemetryRecords",
+      "xray:GetTraceGraph",
+      "xray:GetServiceGraph",
+      "xray:GetInsightImpactGraph",
+      "xray:GetInsightSummaries",
+      "xray:GetSamplingTargets",
+      "xray:PutTraceSegments",
+      "xray:BatchGetTraces",
+      "xray:BatchGetTraceSummaryById",
+      "xray:GetTimeSeriesServiceStatistics",
+      "xray:GetEncryptionConfig",
+      "xray:GetSamplingRules",
+      "xray:GetInsight",
+      "xray:GetDistinctTraceGraphs",
+      "xray:GetInsightEvents",
+      "xray:GetTraceSummaries"
     ]
 
     resources = [
