@@ -76,7 +76,7 @@ resource "aws_lambda_function" "authorizer" {
   runtime          = "nodejs16.x"
   environment {
     variables = {
-      ENV = var.env
+      ENV          = var.env
       ROLE_MAPPING = data.local_file.role_mapping.content
     }
   }
