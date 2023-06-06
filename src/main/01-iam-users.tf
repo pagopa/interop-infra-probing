@@ -168,10 +168,10 @@ resource "aws_iam_group_policy" "terraform_lock" {
   })
 }
 
-resource "aws_iam_group_policy" "timestream_development" {
+resource "aws_iam_group_policy" "local_development" {
   count = var.env == "dev" ? 1 : 0
 
-  name  = "TimestreamDevelopment"
+  name  = "LocalDevelopment"
   group = aws_iam_group.external_developers[0].name
 
   policy = jsonencode({
@@ -230,6 +230,34 @@ resource "aws_iam_group_policy" "timestream_development" {
         ]
         Resource = [
           "${aws_kms_key.jwt_sign_key.arn}"
+        ]
+      },
+      {
+        Sid    = "XRayIntegration"
+        Effect = "Allow"
+        Action = [
+          "xray:GetGroups",
+          "xray:GetSamplingStatisticSummaries",
+          "xray:PutTelemetryRecords",
+          "xray:GetTraceGraph",
+          "xray:GetServiceGraph",
+          "xray:GetInsightImpactGraph",
+          "xray:GetInsightSummaries",
+          "xray:GetSamplingTargets",
+          "xray:PutTraceSegments",
+          "xray:BatchGetTraces",
+          "xray:BatchGetTraceSummaryById",
+          "xray:GetTimeSeriesServiceStatistics",
+          "xray:GetEncryptionConfig",
+          "xray:GetSamplingRules",
+          "xray:GetInsight",
+          "xray:GetDistinctTraceGraphs",
+          "xray:GetInsightEvents",
+          "xray:GetTraceSummaries"
+        ]
+
+        Resource = [
+          "*"
         ]
       }
 
