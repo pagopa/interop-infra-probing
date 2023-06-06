@@ -131,17 +131,39 @@ resource "kubernetes_service_account_v1" "statistics_api" {
   }
 }
 
+data "aws_iam_role" "probing_api" {
+  name = format("%s-api-%s", var.be_prefix, var.env)
+}
+
 resource "kubernetes_service_account_v1" "probing_api" {
   metadata {
     namespace = kubernetes_namespace_v1.env.metadata[0].name
     name      = format("%s-api", var.be_prefix)
-
+    annotations = {
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.probing_api.arn
+    }
     labels = {
       "app.kubernetes.io/name" = format("%s-api", var.be_prefix)
     }
   }
 }
 
+data "aws_iam_role" "operations" {
+  name = format("%s-operations-%s", var.be_prefix, var.env)
+}
+
+resource "kubernetes_service_account_v1" "operations" {
+  metadata {
+    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    name      = format("%s-operations", var.be_prefix)
+    annotations = {
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.operations.arn
+    }
+    labels = {
+      "app.kubernetes.io/name" = format("%s-operations", var.be_prefix)
+    }
+  }
+}
 data "aws_iam_role" "aws_load_balancer_controller" {
   name = "aws-load-balancer-controller"
 }

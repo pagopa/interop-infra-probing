@@ -75,7 +75,7 @@ module "telemetry_writer_role" {
   }
 
   role_path        = "/application/eks/pods/"
-  role_description = "Role for reading from telemetry SQS queue and writ to Timestream"
+  role_description = "Role for reading from telemetry SQS queue and write to Timestream"
 
   role_policy_arns = {
     telemetry_writer_policy = aws_iam_policy.telemetry_writer_policy.arn
@@ -142,6 +142,48 @@ module "statistics_api_role" {
 
   role_policy_arns = {
     statistics_api_policy = aws_iam_policy.statistics_api_policy.arn
+  }
+}
+
+module "probing_api_role" {
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "${var.be_prefix}-probing-api-${var.env}"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-probing-api"]
+    }
+  }
+
+  role_path        = "/application/eks/pods/"
+  role_description = "Role for probing-api microservice"
+
+  role_policy_arns = {
+    probing_api_policy = aws_iam_policy.probing_api_policy.arn
+  }
+}
+
+module "operations_role" {
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "${var.be_prefix}-operations-${var.env}"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-operations"]
+    }
+  }
+
+  role_path        = "/application/eks/pods/"
+  role_description = "Role for operations microservice"
+
+  role_policy_arns = {
+    operations_policy = aws_iam_policy.operations_policy.arn
   }
 }
 
