@@ -149,12 +149,12 @@ module "probing_api_role" {
   version = "5.18.0"
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name = "${var.be_prefix}-probing-api-${var.env}"
+  role_name = "${var.be_prefix}-api-${var.env}"
 
   oidc_providers = {
     main = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["${var.env}:${var.be_prefix}-probing-api"]
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-api"]
     }
   }
 
