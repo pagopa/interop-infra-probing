@@ -13,7 +13,6 @@ data "aws_iam_policy_document" "congito_messaging_assume_role" {
 
 resource "aws_iam_role" "lambda_cognito_messaging_execution_role" {
   name               = "${var.app_name}-cognito-messaging-invocation-policy-${var.env}"
-  assume_role_policy = data.aws_iam_policy_document.congito_messaging_assume_role.json
 }
 
 data "archive_file" "lambda_cognito_messaging" {

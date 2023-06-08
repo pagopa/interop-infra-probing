@@ -3,12 +3,10 @@ resource "aws_cognito_user_pool" "user_pool" {
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
 
-<<<<<<< HEAD
   lambda_config {
     custom_message = aws_lambda_function.cognito_messaging.arn
   }
-=======
->>>>>>> b741aa0 (fix: Align cognito)
+
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
@@ -26,7 +24,6 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 }
 
-<<<<<<< HEAD
 resource "aws_cognito_user_group" "admins" {
   name         = "admins"
   user_pool_id = aws_cognito_user_pool.user_pool.id
@@ -43,14 +40,3 @@ resource "aws_cognito_user_pool_client" "client" {
   user_pool_id    = aws_cognito_user_pool.user_pool.id
   generate_secret = false
 }
-=======
-resource "aws_cognito_user_group" "admin" {
-  name         = "admin"
-  user_pool_id = aws_cognito_user_pool.user_pool.id
-}
-
-resource "aws_cognito_user_group" "user" {
-  name         = "user"
-  user_pool_id = aws_cognito_user_pool.user_pool.id
-}
->>>>>>> 91be53b (feat: Add user group to cognito user pool)
