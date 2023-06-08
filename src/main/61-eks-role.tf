@@ -1,5 +1,6 @@
 module "registry_reader_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-registry-reader-${var.env}"
 
@@ -19,7 +20,8 @@ module "registry_reader_role" {
 }
 
 module "registry_updater_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-registry-updater-${var.env}"
 
@@ -39,7 +41,8 @@ module "registry_updater_role" {
 }
 
 module "scheduler_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-scheduler-${var.env}"
 
@@ -59,7 +62,8 @@ module "scheduler_role" {
 }
 
 module "telemetry_writer_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-telemetry-writer-${var.env}"
 
@@ -79,7 +83,8 @@ module "telemetry_writer_role" {
 }
 
 module "caller_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-caller-${var.env}"
 
@@ -99,7 +104,8 @@ module "caller_role" {
 }
 
 module "response_updater_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "${var.be_prefix}-response-updater-${var.env}"
 
@@ -118,8 +124,30 @@ module "response_updater_role" {
   }
 }
 
+module "statistics_api_role" {
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "${var.be_prefix}-statistics-api-${var.env}"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-statistics-api"]
+    }
+  }
+
+  role_path        = "/application/eks/pods/"
+  role_description = "Role for reading from timestream DB"
+
+  role_policy_arns = {
+    statistics_api_policy = aws_iam_policy.statistics_api_policy.arn
+  }
+}
+
 module "aws_load_balancer_controller_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "aws-load-balancer-controller"
 

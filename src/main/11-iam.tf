@@ -167,7 +167,13 @@ data "aws_iam_policy_document" "caller_policy" {
     ]
   }
 
+  statement {
+    sid     = "Sign"
+    effect  = "Allow"
+    actions = ["kms:Sign"]
 
+    resources = [aws_kms_key.jwt_sign_key.arn]
+  }
 }
 
 resource "aws_iam_policy" "caller_policy" {
@@ -201,3 +207,47 @@ resource "aws_iam_policy" "response_updater_policy" {
   path   = "/application/eks/pods/"
   policy = data.aws_iam_policy_document.response_updater_policy.json
 }
+
+
+data "aws_iam_policy_document" "statistics_api_policy" {
+
+  statement {
+    sid    = "ListTimestreamDatabases"
+    effect = "Allow"
+    actions = [
+      "timestream:ListDatabases",
+      "timestream:SelectValues",
+      "timestream:DescribeEndpoints",
+      "timestream:ListTables",
+      "timestream:CancelQuery",
+      "timesteam:DescribeDatabase"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+
+  statement {
+    sid    = "ReadFromTimestreamTable"
+    effect = "Allow"
+    actions = [
+      "timestream:DescribeTable",
+      "timestream:Select",
+      "timestream:ListMeasures"
+    ]
+
+    resources = [
+      aws_timestreamwrite_table.probing_telemetry.arn
+    ]
+  }
+
+
+}
+
+resource "aws_iam_policy" "statistics_api_policy" {
+  name   = "${var.be_prefix}-statistics-api-${var.env}"
+  path   = "/application/eks/pods/"
+  policy = data.aws_iam_policy_document.statistics_api_policy.json
+}
+
