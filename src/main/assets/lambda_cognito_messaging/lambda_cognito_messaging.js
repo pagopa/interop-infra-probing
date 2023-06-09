@@ -1,7 +1,8 @@
 const _ = require('lodash.template');
+const fs = require('fs')
 exports.handler = async (event) => {
     if (event.triggerSource === "CustomMessage_ForgotPassword") {
-      const message = _(process.env.RESET_PASSWORD_HTML_CONTENT, {fe_url: process.env.FE_URL, reset_password_route: process.env.RESET_PASSOWORD_ROUTE, reset_code: event.request.codeParameter,username:event.request.usernameParameter});
+      const message = _(fs.readFileSync('email_templates/resetPassword.html'), {fe_url: process.env.FE_URL, reset_password_route: process.env.RESET_PASSOWORD_ROUTE, reset_code: event.request.codeParameter,username:event.request.usernameParameter});
       event.response.emailMessage = message;
       event.response.emailSubject = "Ripristino Password";
     } else   if (event.triggerSource === "CustomMessage_AdminCreateUser") {
