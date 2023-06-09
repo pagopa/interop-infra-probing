@@ -1,4 +1,4 @@
-const handler = async (event) => {
+export const handler = async (event) => {
     if (event.triggerSource === "CustomMessage_ForgotPassword") {
       const message = `Your code is ${event.request.codeParameter}.`;
       event.response.emailMessage = message;
@@ -10,7 +10,4 @@ const handler = async (event) => {
       event.response.emailSubject = "Welcome to the service";
     }
     return event;
-  };
-  
-  export { handler };
-  
+};  
