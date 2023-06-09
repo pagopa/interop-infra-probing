@@ -1,7 +1,7 @@
 
 const authMapping = JSON.parse(process.env.ROLE_MAPPING)
 
-export const handler =  function(event, context, callback) {
+exports.handler =  function(event, context, callback) {
 
     console.log("Getting payload")
     var encodedPayload = event.headers.Authorization.split(' ')[1].split('.')[1];
