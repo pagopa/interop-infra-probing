@@ -28,4 +28,8 @@ override.tf.json
 *zip
 
 .terraform.lock.hcl
+<<<<<<< HEAD
 k8s/.terraform.lock.hcl
+=======
+k8s/.terraform.lock.hcl
+>>>>>>> 08065dd87fe214c8ec435e25b3957589ad8f02ac
