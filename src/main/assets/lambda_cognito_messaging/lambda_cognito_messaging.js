@@ -1,4 +1,4 @@
-const _ = require('lodash/template');
+const _ = require('lodash.template');
 exports.handler = async (event) => {
     if (event.triggerSource === "CustomMessage_ForgotPassword") {
       const message = _.template(process.env.RESET_PASSWORD_HTML_CONTENT, {fe_url: process.env.FE_URL, reset_password_route: process.env.RESET_PASSOWORD_ROUTE, reset_code: event.request.codeParameter,username:event.request.usernameParameter});
