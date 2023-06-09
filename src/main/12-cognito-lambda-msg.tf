@@ -46,7 +46,6 @@ resource "aws_lambda_function" "cognito_messaging" {
       ENV                         = var.env
       FE_URL                      = "https://dobt3s7fduobl.cloudfront.net"
       RESET_PASSOWORD_ROUTE       = "/ripristino-password"
-      RESET_PASSWORD_HTML_CONTENT = data.local_file.reset_password_template.content
 
     }
   }
