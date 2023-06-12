@@ -11,9 +11,6 @@ resource "aws_cognito_user_pool" "user_pool" {
     email_message = data.local_file.verification_message_template.content
   }
 
-  password_policy {
-    temporary_password_validity_days = 1
-  }
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
