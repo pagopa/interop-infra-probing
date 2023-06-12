@@ -1,12 +1,15 @@
+data "local_file" "verification_message_template" {
+  filename = "${path.module}/assets/email_templates/resetPassword.html"
+}
 resource "aws_cognito_user_pool" "user_pool" {
   name                = "${var.app_name}-user-pool-${var.env}"
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
 
-  lambda_config {
-    custom_message = aws_lambda_function.cognito_messaging.arn
+  verification_message_template {
+    email_subject = "Ripristino password"
+    email_message = data.local_file.verification_message_template.content
   }
-
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
