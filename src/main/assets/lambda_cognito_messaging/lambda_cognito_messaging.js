@@ -2,7 +2,6 @@ const _ = require('lodash.template');
 const fs = require('fs')
 exports.handler = async (event) => {
     if (event.triggerSource === "CustomMessage_ForgotPassword") {
-      //const message = _(fs.readFileSync('email_templates/forgotPasswordMailTemplate.html'), {fe_url: process.env.FE_URL, reset_password_route: process.env.RESET_PASSOWORD_ROUTE, reset_code: event.request.codeParameter,username:event.request.usernameParameter});
       const message = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
       <head>
@@ -164,7 +163,7 @@ exports.handler = async (event) => {
             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
               
         <div style="word-wrap: break-word;">
-          <p >è stato chiesto un ripristino della password per questa utenza sul </p>
+          <p >è stato chiesto un ripristino della password per questa utenza sul </p>
       <p>portale di monitoraggio e-service di <strong>PDND Interoperabilità</strong>. <span style="color: #0073e6; line-height: 30.6px;"><a rel="noopener" href="${process.env.FE_URL}${process.env.RESET_PASSOWORD_ROUTE}#code=${event.request.codeParameter}&username=${event.request.usernameParameter}" target="_blank" style="color: #0073e6;">Clicca qui</a></span></p>
       <p>per inserire la nuova password e completare la procedura.</p>
       <br />
