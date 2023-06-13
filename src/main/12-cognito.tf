@@ -1,6 +1,3 @@
-data "local_file" "verification_message_template" {
-  filename = "${path.module}/assets/email_templates/resetPassword.html"
-}
 resource "aws_cognito_user_pool" "user_pool" {
   name                = "${var.app_name}-user-pool-${var.env}"
   deletion_protection = "ACTIVE"
