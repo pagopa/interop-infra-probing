@@ -31,9 +31,6 @@ data "archive_file" "lambda_cognito_messaging" {
   output_path = "lambda_cognito_messaging.zip"
 }
 
-data "local_file" "reset_password_template" {
-  filename = "${path.module}/assets/lambda_cognito_messaging/email_templates/resetPassword.html"
-}
 resource "aws_lambda_function" "cognito_messaging" {
   filename         = "lambda_cognito_messaging.zip"
   function_name    = "${var.app_name}-lambda-cognito-messaging-${var.env}"
@@ -46,7 +43,7 @@ resource "aws_lambda_function" "cognito_messaging" {
       ENV                   = var.env
       FE_URL                = "https://dobt3s7fduobl.cloudfront.net"
       RESET_PASSOWORD_ROUTE = "/ripristino-password"
-
+      LOGIN_ROUTE           = "/login"
     }
   }
 }
