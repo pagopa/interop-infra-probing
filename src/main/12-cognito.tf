@@ -6,11 +6,6 @@ resource "aws_cognito_user_pool" "user_pool" {
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
 
-  verification_message_template {
-    email_subject = "Ripristino password"
-    email_message = data.local_file.verification_message_template.content
-  }
-
   lambda_config {
     custom_message = aws_lambda_function.cognito_messaging.arn
   }
