@@ -6,8 +6,8 @@ exports.handler = async (event) => {
       event.response.emailMessage = message;
       event.response.emailSubject = "Ripristino Password";
     } else   if (event.triggerSource === "CustomMessage_AdminCreateUser") {
-      const message = _(fs.readFileSync('email_templates/forgotPasswordMailTemplate.html'), {fe_url: process.env.FE_URL, reset_password_route: process.env.LOGIN_ROUTE});;
-      event.response.emailMessage = message;
+      //const message = _(fs.readFileSync('email_templates/forgotPasswordMailTemplate.html'), {fe_url: process.env.FE_URL, reset_password_route: process.env.LOGIN_ROUTE});;
+      event.response.emailMessage = `Il messaggio è ${event.request.codeParameter}`;
       event.response.emailSubject = "Nuova utenza attiva";
     }
     return event;
