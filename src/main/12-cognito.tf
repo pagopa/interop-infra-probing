@@ -3,9 +3,9 @@ resource "aws_cognito_user_pool" "user_pool" {
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
 
-  # lambda_config {
-  #   custom_message = aws_lambda_function.cognito_messaging.arn
-  # }
+  lambda_config {
+    custom_message = aws_lambda_function.cognito_messaging.arn
+  }
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
