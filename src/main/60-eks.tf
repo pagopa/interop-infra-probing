@@ -9,7 +9,7 @@ data "aws_iam_policy" "cloudwatch_agent_server" {
 }
 
 data "aws_iam_policy" "xray_daemon_write" {
-  name = " AWSXRayDaemonWriteAccess"
+  name = "AWSXRayDaemonWriteAccess"
 }
 resource "aws_iam_policy" "fargate_profile_logging" {
   name = "EksFargateProfileLogging"
