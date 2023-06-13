@@ -11,6 +11,9 @@ resource "aws_cognito_user_pool" "user_pool" {
     email_message = data.local_file.verification_message_template.content
   }
 
+  lambda_config {
+    custom_message = aws_lambda_function.cognito_messaging.arn
+  }
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
