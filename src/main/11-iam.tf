@@ -1,5 +1,5 @@
 data "aws_iam_policy_document" "registry_reader_policy" {
-    statement {
+  statement {
     sid    = "XRayIntegration"
     effect = "Allow"
     actions = [
@@ -65,7 +65,7 @@ resource "aws_iam_policy" "registry_reader_policy" {
 
 
 data "aws_iam_policy_document" "registry_updater_policy" {
-    statement {
+  statement {
     sid    = "XRayIntegration"
     effect = "Allow"
     actions = [
