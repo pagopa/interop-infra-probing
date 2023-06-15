@@ -2,8 +2,8 @@ resource "aws_xray_sampling_rule" "health_check" {
   rule_name      = "${var.app_name}-healthcheck-${var.env}"
   priority       = 1
   version        = 1
-  reservoir_size = 10
-  fixed_rate     = 0.01
+  reservoir_size = 0
+  fixed_rate     = 0
   url_path       = "/status"
   host           = "*"
   http_method    = "*"
