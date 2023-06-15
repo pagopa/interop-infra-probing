@@ -1,6 +1,6 @@
 resource "aws_xray_sampling_rule" "health_check" {
   rule_name      = "${var.app_name}-healthcheck-${var.env}"
-  priority       = 9999
+  priority       = 1
   version        = 1
   reservoir_size = 1000
   fixed_rate     = 0.01
