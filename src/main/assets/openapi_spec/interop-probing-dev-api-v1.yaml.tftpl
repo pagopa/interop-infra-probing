@@ -838,6 +838,7 @@ components:
       in: "header"
       x-amazon-apigateway-authtype: "custom"
       x-amazon-apigateway-authorizer:
+        authorizerCredentials: "${lambda_authorizer_invoke_role}"
         authorizerUri: "${external_authorizer_arn}"
         authorizerResultTtlInSeconds: 300
         identitySource: "method.request.header.Authorization"
@@ -848,6 +849,7 @@ components:
       in: "header"
       x-amazon-apigateway-authtype: "custom"
       x-amazon-apigateway-authorizer:
+        authorizerCredentials: "${lambda_authorizer_invoke_role}"
         authorizerUri: "${cognito_authorizer_arn}"
         authorizerResultTtlInSeconds: 300
         identitySource: "method.request.header.Authorization"
