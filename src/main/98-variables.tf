@@ -140,6 +140,21 @@ variable "probing_env_domain_name" {
   description = "Base domain for the probing project in this environment (e.g. foo.dev.bar.com)"
 }
 
+variable "jwks_uri" {
+  type        = string
+  description = "Well knows jwks URI for PDND call to APIGW"
+}
+
+variable "external_authorizer_arn" {
+  type        = string
+  description = "ARN of the External lambda auhtorizer"
+}
+
+variable "cognito_authorizer_arn" {
+  type        = string
+  description = "ARN of the Cognito lambda auhtorizer"
+}
+
 variable "tags" {
   type = map(any)
   default = {

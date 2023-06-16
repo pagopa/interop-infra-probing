@@ -34,12 +34,14 @@ database_scaling_max_capacity = 10
 alb_ingress_group = "interop-probing-alb"
 api_version       = "v1"
 
-openapi_spec_path                                        = "./assets/openapi_spec/interop-probing-dev-api-v1.yaml"
+openapi_spec_path                                        = "./assets/openapi_spec/interop-probing-dev-api-v1.yaml.tftpl"
 timestream_table_magnetic_store_retention_period_in_days = 73000
 timestream_table_memory_store_retention_period_in_hours  = 8766
 
 probing_env_domain_name = "stato-eservice.dev.interop.pagopa.it"
-
+jwks_uri                = ""
+cognito_authorizer_arn  = ""
+external_authorizer_arn = ""
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"

@@ -63,11 +63,11 @@ paths:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please ry again later.
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/eservices/mainData/{eserviceRecordId}
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/mainData/{eserviceRecordId}
         httpMethod: GET
         connectionType: VPC_LINK
         type: http_proxy
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         requestParameters:
           integration.request.path.eserviceRecordId: method.request.path.eserviceRecordId
   "/eservices/probingData/{eserviceRecordId}":
@@ -114,11 +114,11 @@ paths:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please ry again later.
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/eservices/probingData/{eserviceRecordId}
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/probingData/{eserviceRecordId}
         httpMethod: GET
         connectionType: VPC_LINK
         type: http_proxy
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         requestParameters:
           integration.request.path.eserviceRecordId: method.request.path.eserviceRecordId
   "/eservices/{eserviceId}/versions/{versionId}/updateState":
@@ -180,11 +180,11 @@ paths:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateState
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateState
         httpMethod: POST
         connectionType: VPC_LINK
         type: http_proxy
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         requestParameters:
           integration.request.path.eserviceId: method.request.path.eserviceId
           integration.request.path.versionId: method.request.path.versionId
@@ -248,10 +248,10 @@ paths:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState
         httpMethod: POST
         connectionType: VPC_LINK
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         type: http_proxy
         requestParameters:
           integration.request.path.eserviceId: method.request.path.eserviceId
@@ -316,11 +316,13 @@ paths:
                 errors:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
+      security:
+      - external: []
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateFrequency
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateFrequency
         httpMethod: POST
         connectionType: VPC_LINK
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         type: http_proxy
         requestParameters:
           integration.request.path.eserviceId: method.request.path.eserviceId
@@ -406,10 +408,10 @@ paths:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/eservices
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices
         httpMethod: GET
         connectionType: VPC_LINK
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         type: http_proxy
   /producers:
     get:
@@ -470,10 +472,10 @@ paths:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please ry again later.
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/producers
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/producers
         httpMethod: GET
         connectionType: VPC_LINK
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         type: http_proxy
   "/telemetryData/eservices/{eserviceRecordId}":
     get:
@@ -525,10 +527,10 @@ paths:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
       x-amazon-apigateway-integration:
-        uri: http://${stageVariables.aws_lb_nlb_dns_name}/telemetryData/eservices/{eserviceRecordId}
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/telemetryData/eservices/{eserviceRecordId}
         httpMethod: GET
         connectionType: VPC_LINK
-        connectionId: ${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
         type: http_proxy
         requestParameters:
           integration.request.path.eserviceRecordId: method.request.path.eserviceRecordId
@@ -758,3 +760,14 @@ components:
         versionNumber:
           title: the e-service's version
           type: integer
+  securitySchemes:
+    external:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "custom"
+      x-amazon-apigateway-authorizer:
+        authorizerUri: "${external_authorizer_arn}"
+        authorizerResultTtlInSeconds: 300
+        identitySource: "method.request.header.Authorization"
+        type: "request"

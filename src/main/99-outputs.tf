@@ -22,3 +22,13 @@ output "kms_jwt_kid" {
   value       = aws_kms_key.jwt_sign_key.key_id
   description = "KID of the key for signing JWT"
 }
+
+output "external_authorizer_arn" {
+  value       = aws_api_gateway_authorizer.external_authorizer.arn
+  description = "ARN of the External lambda auhtorizer"
+}
+
+output "cognito_authorizer_arn" {
+  value       = aws_api_gateway_authorizer.external_authorizer.arn
+  description = "ARN of the Cognito lambda auhtorizer"
+}
