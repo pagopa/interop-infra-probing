@@ -1,6 +1,6 @@
 {
   "admins": {
-    "/authtest": ["GET"]
+    "/telemetryData/eservices/filtered": ["GET"]
   },
   "users": {
     "/api": ["POST"]

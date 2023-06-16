@@ -596,7 +596,7 @@ paths:
                   traceId: 'string'
                   errors: [ { 'code': '000-1234', 'detail': 'The server is currently down for maintenance. Please try again later.' } ]
         security:
-        - lambda-cognito-authorizer-dev: []
+        - cognito: []
         x-amazon-apigateway-integration:
           uri: http://$${stageVariables.aws_lb_nlb_dns_name}/telemetryData/eservices/filtered/{eserviceRecordId}
           httpMethod: GET
