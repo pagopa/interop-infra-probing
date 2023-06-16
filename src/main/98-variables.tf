@@ -145,14 +145,14 @@ variable "jwks_uri" {
   description = "Well knows jwks URI for PDND call to APIGW"
 }
 
-variable "external_authorizer_arn" {
+variable "external_authorizer_uri" {
   type        = string
-  description = "ARN of the External lambda auhtorizer"
+  description = "uri of the External lambda auhtorizer"
 }
 
-variable "cognito_authorizer_arn" {
+variable "cognito_authorizer_uri" {
   type        = string
-  description = "ARN of the Cognito lambda auhtorizer"
+  description = "uri of the Cognito lambda auhtorizer"
 }
 
 variable "tags" {

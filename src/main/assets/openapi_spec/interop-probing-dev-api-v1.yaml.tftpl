@@ -316,6 +316,8 @@ paths:
                 errors:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
+      security:
+      - external: []
       x-amazon-apigateway-integration:
         uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateFrequency
         httpMethod: POST
@@ -758,3 +760,14 @@ components:
         versionNumber:
           title: the e-service's version
           type: integer
+  securitySchemes:
+    external:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "custom"
+      x-amazon-apigateway-authorizer:
+        authorizerUri: "${external_authorizer_arn}"
+        authorizerResultTtlInSeconds: 300
+        identitySource: "method.request.header.Authorization"
+        type: "request"
