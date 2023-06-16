@@ -81,7 +81,7 @@ data "local_file" "role_mapping" {
 
 
 resource "aws_lambda_function" "cognito_authorizer" {
-  filename         = "lambda_authorizer.zip"
+  filename         = "cognito_authorizer.zip"
   function_name    = "${var.app_name}-apigw-lambda-cognito-authorizer-${var.env}"
   role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "lambda_authorizer.handler"
