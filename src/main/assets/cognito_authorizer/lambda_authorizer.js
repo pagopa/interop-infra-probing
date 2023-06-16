@@ -1,6 +1,11 @@
 
 const authMapping = JSON.parse(process.env.ROLE_MAPPING)
 
+function matchPath(mapping_path,resource,method,group) {
+    
+    return ( ( resource.includes(mapping_path) ) && (authMapping[group][mapping_path].includes(method)) ) ;
+}
+
 exports.handler =  function(event, context, callback) {
 
     console.log("Getting payload")
@@ -35,10 +40,8 @@ exports.handler =  function(event, context, callback) {
 
 
 function getAuthorization(group,resource,method) {
-    
     return ( Object.keys(authMapping).includes(group) ) && 
-           ( Object.keys(authMapping[group]).includes(resource) ) && 
-           ( authMapping[group][resource].includes(method) );
+           ( Object.keys(authMapping[group]).some( (x) => matchPath(x,resource,method,group)) );
 }
 
 
