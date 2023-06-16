@@ -1,7 +1,7 @@
 locals {
   system_namespaces        = ["kube-system"]
   application_namespaces   = [format("%s*", var.env), "default"]
-  observability_namespaces = ["aws-observability", "amazon-cloudwatch"]
+  observability_namespaces = ["aws-observability"]
 }
 
 data "aws_iam_policy" "cloudwatch_agent_server" {
@@ -77,9 +77,7 @@ module "eks" {
 
   fargate_profile_defaults = {
     iam_role_additional_policies = {
-      fargate_logging         = aws_iam_policy.fargate_profile_logging.arn
-      cloudwatch_agent_server = data.aws_iam_policy.cloudwatch_agent_server.arn
-      xray_daemon_write       = data.aws_iam_policy.xray_daemon_write.arn
+      fargate_logging = aws_iam_policy.fargate_profile_logging.arn
     }
 
     timeouts = {
