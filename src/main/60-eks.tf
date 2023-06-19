@@ -1,7 +1,7 @@
 locals {
   system_namespaces        = ["kube-system"]
   application_namespaces   = [format("%s*", var.env), "default"]
-  observability_namespaces = ["aws-observability"]
+  observability_namespaces = ["aws-observability", "opentelemetry-operator-system"]
 }
 
 data "aws_iam_policy" "cloudwatch_agent_server" {
