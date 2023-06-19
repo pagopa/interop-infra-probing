@@ -108,30 +108,30 @@ module "eks" {
   cloudwatch_log_group_retention_in_days = var.env == "prod" ? 365 : 90
 }
 
-data "aws_eks_addon_version" "adot" {
-  addon_name         = "adot"
-  kubernetes_version = var.kubernetes_version
-  most_recent        = true
-}
+# data "aws_eks_addon_version" "adot" {
+#   addon_name         = "adot"
+#   kubernetes_version = var.kubernetes_version
+#   most_recent        = true
+# }
 
-resource "aws_eks_addon" "adot" {
-  cluster_name      = module.eks.cluster_name
-  addon_name        = "adot"
-  addon_version     = data.aws_eks_addon_version.adot.version
-  resolve_conflicts = "NONE"
-  configuration_values = jsonencode({
-    collector = {
-      cloudwatch = {
-        enabled = true
-      }
-      serviceAccount = {
-        annotations = {
-          "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
-        }
-      }
-    }
-  })
-}
+# resource "aws_eks_addon" "adot" {
+#   cluster_name      = module.eks.cluster_name
+#   addon_name        = "adot"
+#   addon_version     = data.aws_eks_addon_version.adot.version
+#   resolve_conflicts = "NONE"
+#   configuration_values = jsonencode({
+#     collector = {
+#       cloudwatch = {
+#         enabled = true
+#       }
+#       serviceAccount = {
+#         annotations = {
+#           "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
+#         }
+#       }
+#     }
+#   })
+# }
 
 
 resource "aws_ec2_tag" "alb_subnet_tag" {
