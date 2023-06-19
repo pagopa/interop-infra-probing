@@ -15,7 +15,8 @@ module "registry_reader_role" {
   role_description = "Role for Read from probing bucket and write on SQS queue"
 
   role_policy_arns = {
-    registry_reader_policy = aws_iam_policy.registry_reader_policy.arn
+    registry_reader_policy  = aws_iam_policy.registry_reader_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -36,7 +37,8 @@ module "registry_updater_role" {
   role_description = "Role for Read from registry SQS queue"
 
   role_policy_arns = {
-    registry_reader_policy = aws_iam_policy.registry_updater_policy.arn
+    registry_updater_policy = aws_iam_policy.registry_updater_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -57,7 +59,8 @@ module "scheduler_role" {
   role_description = "Role for writing from polling SQS queue"
 
   role_policy_arns = {
-    scheduler_policy = aws_iam_policy.scheduler_policy.arn
+    scheduler_policy        = aws_iam_policy.scheduler_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -75,10 +78,11 @@ module "telemetry_writer_role" {
   }
 
   role_path        = "/application/eks/pods/"
-  role_description = "Role for reading from telemetry SQS queue and writ to Timestream"
+  role_description = "Role for reading from telemetry SQS queue and write to Timestream"
 
   role_policy_arns = {
     telemetry_writer_policy = aws_iam_policy.telemetry_writer_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -99,7 +103,8 @@ module "caller_role" {
   role_description = "Role for reading and writing from SQSs queue"
 
   role_policy_arns = {
-    caller_policy = aws_iam_policy.caller_policy.arn
+    caller_policy           = aws_iam_policy.caller_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -121,6 +126,7 @@ module "response_updater_role" {
 
   role_policy_arns = {
     response_updater_policy = aws_iam_policy.response_updater_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -141,7 +147,50 @@ module "statistics_api_role" {
   role_description = "Role for reading from timestream DB"
 
   role_policy_arns = {
-    statistics_api_policy = aws_iam_policy.statistics_api_policy.arn
+    statistics_api_policy   = aws_iam_policy.statistics_api_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+  }
+}
+
+module "probing_api_role" {
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "${var.be_prefix}-api-${var.env}"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-api"]
+    }
+  }
+
+  role_path        = "/application/eks/pods/"
+  role_description = "Role for probing-api microservice"
+
+  role_policy_arns = {
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+  }
+}
+
+module "operations_role" {
+  version = "5.18.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "${var.be_prefix}-operations-${var.env}"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["${var.env}:${var.be_prefix}-operations"]
+    }
+  }
+
+  role_path        = "/application/eks/pods/"
+  role_description = "Role for operations microservice"
+
+  role_policy_arns = {
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 

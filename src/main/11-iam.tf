@@ -1,3 +1,6 @@
+data "aws_iam_policy" "aws_managed_xray_daemon_write_access" {
+  name = "AWSXRayDaemonWriteAccess"
+}
 data "aws_iam_policy_document" "registry_reader_policy" {
   statement {
     sid    = "GetProbingObjects"
@@ -37,6 +40,7 @@ resource "aws_iam_policy" "registry_reader_policy" {
 
 
 data "aws_iam_policy_document" "registry_updater_policy" {
+
   statement {
     sid    = "ReadAndDeleteMsgFromRegistryQueue"
     effect = "Allow"
@@ -84,6 +88,7 @@ resource "aws_iam_policy" "scheduler_policy" {
 
 
 data "aws_iam_policy_document" "telemetry_writer_policy" {
+
   statement {
     sid    = "ReadAndDeleteFromTelemetryResultQueue"
     effect = "Allow"
@@ -139,6 +144,7 @@ resource "aws_iam_policy" "telemetry_writer_policy" {
 
 
 data "aws_iam_policy_document" "caller_policy" {
+
   statement {
     sid    = "ReadAndDeleteMsgFromPollQueue"
     effect = "Allow"
@@ -184,6 +190,7 @@ resource "aws_iam_policy" "caller_policy" {
 
 
 data "aws_iam_policy_document" "response_updater_policy" {
+
   statement {
     sid    = "ReadAndDeleteMsgFromPollQueue"
     effect = "Allow"
