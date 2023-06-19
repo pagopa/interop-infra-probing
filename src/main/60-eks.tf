@@ -118,7 +118,7 @@ resource "aws_eks_addon" "adot" {
   cluster_name      = module.eks.cluster_name
   addon_name        = "adot"
   addon_version     = data.aws_eks_addon_version.adot.version
-  resolve_conflicts = "NONE"
+  resolve_conflicts = "OVERWRITE"
   configuration_values = jsonencode({
     collector = {
       cloudwatch = {
