@@ -121,7 +121,7 @@ resource "aws_eks_addon" "adot" {
   resolve_conflicts = "NONE"
   configuration_values = jsonencode({
     collector = {
-      xray = {
+      cloudwatch = {
         enabled = true
       }
       serviceAccount = {
