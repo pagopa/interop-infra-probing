@@ -77,7 +77,7 @@ module "eks" {
           }
           serviceAccount = {
             annotations = {
-              "eks.amazonaws.com/role-arn" = module.adot.iam_role_arn
+              "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
             }
           }
         }
