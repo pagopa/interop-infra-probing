@@ -66,23 +66,23 @@ module "eks" {
         computeType = "Fargate"
       })
     }
-    adot = {
-      addon_version     = var.kubernetes_addons_versions.adot
-      resolve_conflicts = "OVERWRITE"
+    # adot = {
+    #   addon_version     = var.kubernetes_addons_versions.adot
+    #   resolve_conflicts = "OVERWRITE"
 
-      configuration_values = jsonencode({
-        collector = {
-          cloudwatch = {
-            enabled = true
-          }
-          serviceAccount = {
-            annotations = {
-              "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
-            }
-          }
-        }
-      })
-    }
+    #   configuration_values = jsonencode({
+    #     collector = {
+    #       cloudwatch = {
+    #         enabled = true
+    #       }
+    #       serviceAccount = {
+    #         annotations = {
+    #           "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
+    #         }
+    #       }
+    #     }
+    #   })
+    # }
   }
 
   vpc_id                   = module.vpc.vpc_id
