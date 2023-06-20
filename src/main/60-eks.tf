@@ -66,7 +66,20 @@ module "eks" {
         computeType = "Fargate"
       })
     }
+    adot = {
+      addon_version     = var.kubernetes_addons_versions.adot
+      resolve_conflicts = "OVERWRITE"
 
+      configuration_values = jsonencode({
+        collector = {
+          serviceAccount = {
+            annotations = {
+              "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
+            }
+          }
+        }
+      })
+    }
   }
 
   vpc_id                   = module.vpc.vpc_id
@@ -106,31 +119,6 @@ module "eks" {
 
   cluster_enabled_log_types              = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cloudwatch_log_group_retention_in_days = var.env == "prod" ? 365 : 90
-}
-
-data "aws_eks_addon_version" "adot" {
-  addon_name         = "adot"
-  kubernetes_version = var.kubernetes_version
-  most_recent        = true
-}
-
-resource "aws_eks_addon" "adot" {
-  cluster_name      = module.eks.cluster_name
-  addon_name        = "adot"
-  addon_version     = data.aws_eks_addon_version.adot.version
-  resolve_conflicts = "OVERWRITE"
-  configuration_values = jsonencode({
-    collector = {
-      cloudwatch = {
-        enabled = true
-      }
-      serviceAccount = {
-        annotations = {
-          "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
-        }
-      }
-    }
-  })
 }
 
 

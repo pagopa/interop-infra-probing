@@ -9,7 +9,7 @@ kubernetes_addons_versions = {
   kube-proxy = "v1.24.9-eksbuild.1"
   vpc-cni    = "v1.12.2-eksbuild.1"
   coredns    = "v1.9.3-eksbuild.2"
-  adot       = "v0.58.0-eksbuild.1"
+  adot       = "v0.76.1-eksbuild.1"
 }
 
 interop_probing_bucket_arn = "arn:aws:s3:::interop-probing-eservices-dev"
