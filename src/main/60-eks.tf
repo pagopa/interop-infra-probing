@@ -67,18 +67,10 @@ module "eks" {
       })
     }
     adot = {
-      addon_version     = var.kubernetes_addons_versions.adot
-      resolve_conflicts = "OVERWRITE"
+      addon_version               = var.kubernetes_addons_versions.adot
+      resolve_conflicts_on_create = "OVERWRITE"
+      resolve_conflicts_on_update = "PRESERVE"
 
-      configuration_values = jsonencode({
-        collector = {
-          serviceAccount = {
-            annotations = {
-              "eks.amazonaws.com/role-arn" = module.adot_role.iam_role_arn
-            }
-          }
-        }
-      })
     }
   }
 
