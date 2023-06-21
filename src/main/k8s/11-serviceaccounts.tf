@@ -182,3 +182,22 @@ resource "kubernetes_service_account_v1" "aws_load_balancer_controller" {
     }
   }
 }
+
+data "aws_iam_role" "xray_daemon" {
+  name = "xray-daemon"
+}
+
+resource "kubernetes_service_account_v1" "aws_load_balancer_controller" {
+  metadata {
+    namespace = "aws-observability"
+    name      = "xray-daemon"
+
+    annotations = {
+      "eks.amazonaws.com/role-arn" = data.aws_iam_role.xray_daemon.arn
+    }
+
+    labels = {
+      "app.kubernetes.io/name" = "xray-daemon"
+    }
+  }
+}

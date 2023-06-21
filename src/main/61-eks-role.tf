@@ -231,3 +231,20 @@ module "adot_role" {
     }
   }
 }
+
+module "xray_daemon_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "xray-daemon"
+
+  role_policy_arns = {
+    cloud_watch = data.aws_iam_policy.aws_managed_cloudwatch_agent_server.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["aws-observability:xray-daemon"]
+    }
+  }
+}
