@@ -227,7 +227,7 @@ module "adot_role" {
   oidc_providers = {
     main = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["opentelemetry-operator-system:aws-otel-collector"]
+      namespace_service_accounts = ["opentelemetry-operator-system:adot-collector"]
     }
   }
 }
