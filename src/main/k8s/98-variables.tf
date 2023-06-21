@@ -67,3 +67,8 @@ variable "container_logs_retention_days" {
   type        = number
   description = "Set the retention period in days for container logs"
 }
+
+variable "adot_irsa_role_arn" {
+  type        = string
+  description = "IRSA Role for ADOT"
+}

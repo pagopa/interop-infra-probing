@@ -1,16 +1,4 @@
-# resource "aws_api_gateway_authorizer" "cognito_authorizer" {
-#   name                   = "lambda-cognito-authorizer-${var.env}"
-#   rest_api_id            = aws_api_gateway_rest_api.apigw.id
-#   authorizer_uri         = aws_lambda_function.cognito_authorizer.invoke_arn
-#   authorizer_credentials = aws_iam_role.invocation_role.arn
-# }
 
-# resource "aws_api_gateway_authorizer" "external_authorizer" {
-#   name                   = "lambda-external-authorizer-${var.env}"
-#   rest_api_id            = aws_api_gateway_rest_api.apigw.id
-#   authorizer_uri         = aws_lambda_function.external_authorizer.invoke_arn
-#   authorizer_credentials = aws_iam_role.invocation_role.arn
-# }
 
 data "aws_iam_policy_document" "invocation_assume_role" {
   statement {
