@@ -1,36 +1,17 @@
-
-
-data "aws_iam_policy_document" "invocation_assume_role" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["apigateway.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
+resource "aws_lambda_permission" "lambda_auth_congnito_permission" {
+  statement_id  = "AllowAPIGWInvokeExternalAuthorizer"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.app_name}-apigw-lambda-external-authorizer-${var.env}"
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.apigw.execution_arn}/*"
 }
 
-resource "aws_iam_role" "invocation_role" {
-  name               = "${var.app_name}-apigw-auth-invocation-${var.env}"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.invocation_assume_role.json
-}
-
-data "aws_iam_policy_document" "invocation_policy" {
-  statement {
-    effect    = "Allow"
-    actions   = ["lambda:InvokeFunction"]
-    resources = [aws_lambda_function.external_authorizer.arn, aws_lambda_function.cognito_authorizer.arn]
-  }
-}
-
-resource "aws_iam_role_policy" "invocation_policy" {
-  name   = "${var.app_name}-invocation-policy-${var.env}"
-  role   = aws_iam_role.invocation_role.id
-  policy = data.aws_iam_policy_document.invocation_policy.json
+resource "aws_lambda_permission" "lambda_auth_external_permission" {
+  statement_id  = "AllowAPIGWInvokeCognitoAuthorizer"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.app_name}-apigw-lambda-cognito-authorizer-${var.env}"
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.apigw.execution_arn}/*"
 }
 
 data "aws_iam_policy_document" "assume_role" {
