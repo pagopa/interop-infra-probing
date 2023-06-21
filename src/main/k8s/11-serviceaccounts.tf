@@ -187,7 +187,7 @@ data "aws_iam_role" "xray_daemon" {
   name = "xray-daemon"
 }
 
-resource "kubernetes_service_account_v1" "aws_load_balancer_controller" {
+resource "kubernetes_service_account_v1" "xray_daemon" {
   metadata {
     namespace = "aws-observability"
     name      = "xray-daemon"
