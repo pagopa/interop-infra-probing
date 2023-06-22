@@ -25,6 +25,7 @@ spec:
       containers:
       - image: amazon/aws-xray-daemon:${xray_daemon_img_version}
         imagePullPolicy: Always
+        args: ["-o"]
         name: xray-daemon
         ports:
         - containerPort: 2000
