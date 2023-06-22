@@ -179,6 +179,8 @@ paths:
                 errors:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
+      security:
+      - external: []
       x-amazon-apigateway-integration:
         uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateState
         httpMethod: POST
@@ -247,6 +249,8 @@ paths:
                 errors:
                   - code: 000-1234
                     detail: The server is currently down for maintenance. Please try again later.
+      security:
+      - external: []      
       x-amazon-apigateway-integration:
         uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState
         httpMethod: POST
