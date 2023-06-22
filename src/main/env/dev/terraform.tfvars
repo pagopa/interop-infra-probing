@@ -9,6 +9,7 @@ kubernetes_addons_versions = {
   kube-proxy = "v1.24.9-eksbuild.1"
   vpc-cni    = "v1.12.2-eksbuild.1"
   coredns    = "v1.9.3-eksbuild.2"
+  adot       = "v0.76.1-eksbuild.1"
 }
 
 interop_probing_bucket_arn = "arn:aws:s3:::interop-probing-eservices-dev"
@@ -34,12 +35,14 @@ database_scaling_max_capacity = 10
 alb_ingress_group = "interop-probing-alb"
 api_version       = "v1"
 
-openapi_spec_path                                        = "./assets/openapi_spec/interop-probing-dev-api-v1.yaml"
+openapi_spec_path                                        = "./assets/openapi_spec/interop-probing-dev-api-v1.yaml.tftpl"
 timestream_table_magnetic_store_retention_period_in_days = 73000
 timestream_table_memory_store_retention_period_in_hours  = 8766
 
 probing_env_domain_name = "stato-eservice.dev.interop.pagopa.it"
-
+jwks_uri                = "https://dev.interop.pagopa.it/.well-known/probing-jwks.json"
+cognito_authorizer_uri  = "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:774300547186:function:interop-probing-apigw-lambda-cognito-authorizer-dev/invocations"
+external_authorizer_uri = "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:774300547186:function:interop-probing-apigw-lambda-external-authorizer-dev/invocations"
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"

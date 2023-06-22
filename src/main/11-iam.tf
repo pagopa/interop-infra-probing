@@ -1,32 +1,13 @@
-data "aws_iam_policy_document" "registry_reader_policy" {
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
+data "aws_iam_policy" "aws_managed_xray_daemon_write_access" {
+  name = "AWSXRayDaemonWriteAccess"
+}
 
-    resources = [
-      "*"
-    ]
-  }
+
+data "aws_iam_policy" "aws_managed_cloudwatch_agent_server" {
+  name = "CloudWatchAgentServerPolicy"
+}
+
+data "aws_iam_policy_document" "registry_reader_policy" {
   statement {
     sid    = "GetProbingObjects"
     effect = "Allow"
@@ -65,34 +46,7 @@ resource "aws_iam_policy" "registry_reader_policy" {
 
 
 data "aws_iam_policy_document" "registry_updater_policy" {
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
 
-    resources = [
-      "*"
-    ]
-  }
   statement {
     sid    = "ReadAndDeleteMsgFromRegistryQueue"
     effect = "Allow"
@@ -118,34 +72,6 @@ resource "aws_iam_policy" "registry_updater_policy" {
 
 data "aws_iam_policy_document" "scheduler_policy" {
   statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
-
-    resources = [
-      "*"
-    ]
-  }
-  statement {
     sid    = "WriteOnPollingQueue"
     effect = "Allow"
     actions = [
@@ -168,34 +94,7 @@ resource "aws_iam_policy" "scheduler_policy" {
 
 
 data "aws_iam_policy_document" "telemetry_writer_policy" {
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
 
-    resources = [
-      "*"
-    ]
-  }
   statement {
     sid    = "ReadAndDeleteFromTelemetryResultQueue"
     effect = "Allow"
@@ -251,34 +150,7 @@ resource "aws_iam_policy" "telemetry_writer_policy" {
 
 
 data "aws_iam_policy_document" "caller_policy" {
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
 
-    resources = [
-      "*"
-    ]
-  }
   statement {
     sid    = "ReadAndDeleteMsgFromPollQueue"
     effect = "Allow"
@@ -324,34 +196,7 @@ resource "aws_iam_policy" "caller_policy" {
 
 
 data "aws_iam_policy_document" "response_updater_policy" {
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
 
-    resources = [
-      "*"
-    ]
-  }
   statement {
     sid    = "ReadAndDeleteMsgFromPollQueue"
     effect = "Allow"
@@ -378,34 +223,7 @@ resource "aws_iam_policy" "response_updater_policy" {
 
 
 data "aws_iam_policy_document" "statistics_api_policy" {
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
 
-    resources = [
-      "*"
-    ]
-  }
   statement {
     sid    = "ListTimestreamDatabases"
     effect = "Allow"
@@ -446,82 +264,3 @@ resource "aws_iam_policy" "statistics_api_policy" {
   policy = data.aws_iam_policy_document.statistics_api_policy.json
 }
 
-data "aws_iam_policy_document" "probing_api_policy" {
-
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
-
-    resources = [
-      "*"
-    ]
-  }
-
-}
-
-resource "aws_iam_policy" "probing_api_policy" {
-  name   = "${var.be_prefix}-probing-api-${var.env}"
-  path   = "/application/eks/pods/"
-  policy = data.aws_iam_policy_document.probing_api_policy.json
-}
-
-
-data "aws_iam_policy_document" "operations_policy" {
-
-  statement {
-    sid    = "XRayIntegration"
-    effect = "Allow"
-    actions = [
-      "xray:GetGroups",
-      "xray:GetSamplingStatisticSummaries",
-      "xray:PutTelemetryRecords",
-      "xray:GetTraceGraph",
-      "xray:GetServiceGraph",
-      "xray:GetInsightImpactGraph",
-      "xray:GetInsightSummaries",
-      "xray:GetSamplingTargets",
-      "xray:PutTraceSegments",
-      "xray:BatchGetTraces",
-      "xray:BatchGetTraceSummaryById",
-      "xray:GetTimeSeriesServiceStatistics",
-      "xray:GetEncryptionConfig",
-      "xray:GetSamplingRules",
-      "xray:GetInsight",
-      "xray:GetDistinctTraceGraphs",
-      "xray:GetInsightEvents",
-      "xray:GetTraceSummaries"
-    ]
-
-    resources = [
-      "*"
-    ]
-  }
-
-
-}
-
-resource "aws_iam_policy" "operations_policy" {
-  name   = "${var.be_prefix}-operations-${var.env}"
-  path   = "/application/eks/pods/"
-  policy = data.aws_iam_policy_document.operations_policy.json
-}

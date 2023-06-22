@@ -36,7 +36,7 @@ module "registry_updater_role" {
   role_description = "Role for Read from registry SQS queue"
 
   role_policy_arns = {
-    registry_reader_policy = aws_iam_policy.registry_updater_policy.arn
+    registry_updater_policy = aws_iam_policy.registry_updater_policy.arn
   }
 }
 
@@ -58,6 +58,7 @@ module "scheduler_role" {
 
   role_policy_arns = {
     scheduler_policy = aws_iam_policy.scheduler_policy.arn
+
   }
 }
 
@@ -79,6 +80,7 @@ module "telemetry_writer_role" {
 
   role_policy_arns = {
     telemetry_writer_policy = aws_iam_policy.telemetry_writer_policy.arn
+
   }
 }
 
@@ -100,6 +102,7 @@ module "caller_role" {
 
   role_policy_arns = {
     caller_policy = aws_iam_policy.caller_policy.arn
+
   }
 }
 
@@ -121,6 +124,7 @@ module "response_updater_role" {
 
   role_policy_arns = {
     response_updater_policy = aws_iam_policy.response_updater_policy.arn
+
   }
 }
 
@@ -142,6 +146,7 @@ module "statistics_api_role" {
 
   role_policy_arns = {
     statistics_api_policy = aws_iam_policy.statistics_api_policy.arn
+
   }
 }
 
@@ -162,7 +167,7 @@ module "probing_api_role" {
   role_description = "Role for probing-api microservice"
 
   role_policy_arns = {
-    probing_api_policy = aws_iam_policy.probing_api_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -183,7 +188,7 @@ module "operations_role" {
   role_description = "Role for operations microservice"
 
   role_policy_arns = {
-    operations_policy = aws_iam_policy.operations_policy.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -204,6 +209,40 @@ module "aws_load_balancer_controller_role" {
   role_description = "Role for AWS Load Balancer Controller"
 
   role_policy_arns = {
-    registry_reader_policy = aws_iam_policy.aws_load_balancer_controller_iam_policy.arn
+    aws_load_balancer_controller_policy = aws_iam_policy.aws_load_balancer_controller_iam_policy.arn
+  }
+}
+
+module "adot_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "adot"
+
+  role_policy_arns = {
+    cloud_watch = data.aws_iam_policy.aws_managed_cloudwatch_agent_server.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["opentelemetry-operator-system:adot-collector"]
+    }
+  }
+}
+
+module "xray_daemon_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "xray-daemon"
+
+  role_policy_arns = {
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["aws-observability:xray-daemon"]
+    }
   }
 }
