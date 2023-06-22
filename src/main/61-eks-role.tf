@@ -15,8 +15,7 @@ module "registry_reader_role" {
   role_description = "Role for Read from probing bucket and write on SQS queue"
 
   role_policy_arns = {
-    registry_reader_policy  = aws_iam_policy.registry_reader_policy.arn
-    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+    registry_reader_policy = aws_iam_policy.registry_reader_policy.arn
   }
 }
 
@@ -38,7 +37,6 @@ module "registry_updater_role" {
 
   role_policy_arns = {
     registry_updater_policy = aws_iam_policy.registry_updater_policy.arn
-    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 }
 
@@ -59,8 +57,8 @@ module "scheduler_role" {
   role_description = "Role for writing from polling SQS queue"
 
   role_policy_arns = {
-    scheduler_policy        = aws_iam_policy.scheduler_policy.arn
-    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+    scheduler_policy = aws_iam_policy.scheduler_policy.arn
+
   }
 }
 
@@ -82,7 +80,7 @@ module "telemetry_writer_role" {
 
   role_policy_arns = {
     telemetry_writer_policy = aws_iam_policy.telemetry_writer_policy.arn
-    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+
   }
 }
 
@@ -103,8 +101,8 @@ module "caller_role" {
   role_description = "Role for reading and writing from SQSs queue"
 
   role_policy_arns = {
-    caller_policy           = aws_iam_policy.caller_policy.arn
-    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+    caller_policy = aws_iam_policy.caller_policy.arn
+
   }
 }
 
@@ -126,7 +124,7 @@ module "response_updater_role" {
 
   role_policy_arns = {
     response_updater_policy = aws_iam_policy.response_updater_policy.arn
-    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+
   }
 }
 
@@ -147,8 +145,8 @@ module "statistics_api_role" {
   role_description = "Role for reading from timestream DB"
 
   role_policy_arns = {
-    statistics_api_policy   = aws_iam_policy.statistics_api_policy.arn
-    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
+    statistics_api_policy = aws_iam_policy.statistics_api_policy.arn
+
   }
 }
 
@@ -238,7 +236,7 @@ module "xray_daemon_role" {
   role_name = "xray-daemon"
 
   role_policy_arns = {
-    cloud_watch = data.aws_iam_policy.aws_managed_cloudwatch_agent_server.arn
+    xray_integration_policy = data.aws_iam_policy.aws_managed_xray_daemon_write_access.arn
   }
 
   oidc_providers = {
