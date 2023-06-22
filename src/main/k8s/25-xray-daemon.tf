@@ -8,4 +8,8 @@ resource "kubernetes_manifest" "xray_daemon" {
     xray_daemon_service_account = "xray-daemon"
   }))
 
+  field_manager {
+    force_conflicts = true
+  }
+
 }

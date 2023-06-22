@@ -8,4 +8,8 @@ resource "kubernetes_manifest" "adot_collector" {
     aws_role_arn = var.adot_irsa_role_arn
   }))
 
+  field_manager {
+    force_conflicts = true
+  }
+
 }
