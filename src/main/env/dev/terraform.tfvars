@@ -3,6 +3,7 @@ env                 = "dev"
 app_name            = "interop-probing"
 be_prefix           = "interop-be-probing"
 sso_admin_role_name = "AWSReservedSSO_FullAdmin_43e33324db7f1652"
+fe_base_url         = "https://stato-eservice.dev.interop.pagopa.it"
 
 kubernetes_version = "1.24"
 kubernetes_addons_versions = {
