@@ -74,8 +74,6 @@ resource "aws_lambda_function" "external_authorizer" {
   environment {
     variables = {
       ENV = var.env
-      #JWKS_URI = var.jwks_uri
-      JWKS_URI = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.user_pool.id}/.well-known/jwks.json"
-    }
+    JWKS_URI = var.jwks_uri }
   }
 }
