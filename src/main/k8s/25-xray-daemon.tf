@@ -7,7 +7,7 @@ resource "kubernetes_manifest" "xray_daemon" {
     xray_daemon_img_version     = "3.3.7"
     xray_daemon_service_account = "xray-daemon"
   }))
-    field_manager {
+  field_manager {
     force_conflicts = true
   }
 

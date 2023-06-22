@@ -7,7 +7,7 @@ resource "kubernetes_manifest" "adot_collector" {
     aws_region   = var.aws_region
     aws_role_arn = var.adot_irsa_role_arn
   }))
-    field_manager {
+  field_manager {
     force_conflicts = true
   }
 
