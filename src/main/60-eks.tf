@@ -1,7 +1,7 @@
 locals {
   system_namespaces        = ["kube-system"]
   application_namespaces   = [format("%s*", var.env), "default"]
-  observability_namespaces = ["aws-observability"]
+  observability_namespaces = ["aws-observability", "opentelemetry-operator-system"]
 }
 
 data "aws_iam_policy" "cloudwatch_agent_server" {
@@ -66,6 +66,12 @@ module "eks" {
         computeType = "Fargate"
       })
     }
+    # adot = {
+    #   addon_version               = var.kubernetes_addons_versions.adot
+    #   resolve_conflicts_on_create = "OVERWRITE"
+    #   resolve_conflicts_on_update = "PRESERVE"
+
+    # }
   }
 
   vpc_id                   = module.vpc.vpc_id

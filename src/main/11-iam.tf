@@ -1,6 +1,12 @@
 data "aws_iam_policy" "aws_managed_xray_daemon_write_access" {
   name = "AWSXRayDaemonWriteAccess"
 }
+
+
+data "aws_iam_policy" "aws_managed_cloudwatch_agent_server" {
+  name = "CloudWatchAgentServerPolicy"
+}
+
 data "aws_iam_policy_document" "registry_reader_policy" {
   statement {
     sid    = "GetProbingObjects"

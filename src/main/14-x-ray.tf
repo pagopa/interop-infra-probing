@@ -6,7 +6,7 @@ resource "aws_xray_sampling_rule" "health_check" {
   fixed_rate     = 0
   url_path       = "/status"
   host           = "*"
-  http_method    = "*"
+  http_method    = "GET"
   service_type   = "*"
   service_name   = "*"
   resource_arn   = "*"

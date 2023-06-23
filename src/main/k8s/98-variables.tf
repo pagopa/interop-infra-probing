@@ -67,3 +67,18 @@ variable "container_logs_retention_days" {
   type        = number
   description = "Set the retention period in days for container logs"
 }
+
+variable "adot_irsa_role_arn" {
+  type        = string
+  description = "IRSA Role for ADOT"
+}
+
+variable "adot_collector_img_tag" {
+  type        = string
+  description = "ADOT collector image tag"
+}
+
+variable "metrics_server_img_tag" {
+  type        = string
+  description = "Metrcis server image tag"
+}
