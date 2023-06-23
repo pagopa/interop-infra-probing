@@ -133,7 +133,7 @@ exports.handler = async (event) => {
         <tbody>
           <tr>
             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
-      
+               <img class="css-zr5gjd" src="data:image/jpg;base64,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" alt="logo PagoPa"/>
         <h1 style="margin-bottom: 10px; word-wrap: break-word; font-size: 32px; font-weight: 700; line-height:40px;"><strong>Ripristino password</strong></h1>
       
             </td>
@@ -161,7 +161,7 @@ exports.handler = async (event) => {
             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
               
         <div style="word-wrap: break-word;">
-          <p >è stato chiesto un ripristino della password per questa utenza sul </p>
+          <p >è stato chiesto un ripristino della password per questa utenza sul </p>
       <p>portale di monitoraggio e-service di <strong>PDND Interoperabilità</strong>. <span style="color: #0073e6; line-height: 30.6px;"><a rel="noopener" href="${process.env.FE_URL}${process.env.RESET_PASSOWORD_ROUTE}#code=${event.request.codeParameter}&username=${event.request.userAttributes.email}" target="_blank" style="color: #0073e6;">Clicca qui</a></span></p>
       <p>per inserire la nuova password e completare la procedura.</p>
       <br />
@@ -230,7 +230,7 @@ exports.handler = async (event) => {
         <!--[if IE]></div><![endif]-->
       </body>
       
-      </html>
+      </html>      
       `;
       event.response.emailMessage = message;
       event.response.emailSubject = "Ripristino Password";
@@ -367,7 +367,7 @@ exports.handler = async (event) => {
         <tbody>
           <tr>
             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
-      
+               <img class="css-zr5gjd" src="data:image/jpg;base64,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" alt="logo PagoPa"/>
         <h1 style="margin-bottom: 10px; word-wrap: break-word; font-size: 32px; font-weight: 700; line-height:40px;"><strong>Nuova utenza attiva</strong></h1>
       
             </td>
@@ -393,8 +393,9 @@ exports.handler = async (event) => {
         <tbody>
           <tr>
             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
-        <!-- ${event.request.codeParameter}${event.request.usernameParameter} -->
+              
         <div style="word-wrap: break-word;">
+          <!-- ${event.request.codeParameter}${event.request.usernameParameter} -->
           <p >è stata creata una nuova utenza per te sul portale di monitoraggio e-</p>
       <p>-service di <strong>PDND Interoperabilità</strong>.  Per effettuare il primo accesso, vai</p>
       <p>alla <span style="color: #0073e6; line-height: 30.6px;"><a rel="noopener" href="${process.env.FE_URL}${process.env.LOGIN_ROUTE}" target="_blank" style="color: #0073e6;">pagina di login</a></span>, clicca su “Hai dimenticato la password? Clicca qui</p>
@@ -465,8 +466,7 @@ exports.handler = async (event) => {
         <!--[if IE]></div><![endif]-->
       </body>
       
-      </html>
-      
+      </html>      
       `;      
       event.response.emailMessage = message;
       event.response.emailSubject = "Nuova utenza attiva";
