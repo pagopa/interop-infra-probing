@@ -11,3 +11,4 @@ resource "kubernetes_manifest" "adot_collector" {
   field_manager {
     force_conflicts = true
   }
+}
