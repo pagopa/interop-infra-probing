@@ -21,7 +21,7 @@ spec:
       securityContext:
         fsGroup: 65534
       containers:
-        - image: public.ecr.aws/aws-observability/aws-otel-collector:latest
+        - image: public.ecr.aws/aws-observability/aws-otel-collector:${adot_collector_img_tag}
           name: adot-collector
           imagePullPolicy: Always
           command:

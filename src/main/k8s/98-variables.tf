@@ -72,3 +72,8 @@ variable "adot_irsa_role_arn" {
   type        = string
   description = "IRSA Role for ADOT"
 }
+
+variable "adot_collector_img_tag" {
+  type        = string
+  description = "ADOT collector image tag"
+}

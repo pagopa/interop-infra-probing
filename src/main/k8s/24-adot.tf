@@ -6,6 +6,7 @@ resource "kubernetes_manifest" "adot_collector" {
     namespace    = "opentelemetry-operator-system"
     aws_region   = var.aws_region
     aws_role_arn = var.adot_irsa_role_arn
+    adot_collector_img_tag = var.adot_collector_img_tag
   }))
   field_manager {
     force_conflicts = true
