@@ -13,4 +13,4 @@ spec:
     targetPort: 2000
   selector:
     app: xray-daemon
-  type: NodePort
+  type: ClusterIP

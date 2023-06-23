@@ -66,12 +66,12 @@ module "eks" {
         computeType = "Fargate"
       })
     }
-    adot = {
-      addon_version               = var.kubernetes_addons_versions.adot
-      resolve_conflicts_on_create = "OVERWRITE"
-      resolve_conflicts_on_update = "PRESERVE"
+    # adot = {
+    #   addon_version               = var.kubernetes_addons_versions.adot
+    #   resolve_conflicts_on_create = "OVERWRITE"
+    #   resolve_conflicts_on_update = "PRESERVE"
 
-    }
+    # }
   }
 
   vpc_id                   = module.vpc.vpc_id
