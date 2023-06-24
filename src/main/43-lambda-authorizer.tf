@@ -44,9 +44,9 @@ resource "null_resource" "external_authorizer" {
   }
 
   triggers = {
-    index = sha256(file("${path.module}/assets/external_authorizer/lambda_authorizer.js"))
+    index   = sha256(file("${path.module}/assets/external_authorizer/lambda_authorizer.js"))
     package = sha256(file("${path.module}/assets/external_authorizer/package.json"))
-    lock = sha256(file("${path.module}/assets/external_authorizer/package-lock.json"))
+    lock    = sha256(file("${path.module}/assets/external_authorizer/package-lock.json"))
   }
 }
 
@@ -54,7 +54,7 @@ data "archive_file" "external_authorizer" {
   type        = "zip"
   source_dir  = "${path.module}/assets/external_authorizer"
   output_path = "external_authorizer.zip"
-  depends_on = [ null_resource.external_authorizer ]
+  depends_on  = [null_resource.external_authorizer]
 }
 
 data "local_file" "role_mapping" {
