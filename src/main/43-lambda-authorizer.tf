@@ -38,10 +38,23 @@ data "archive_file" "cognito_authorizer" {
   output_path = "cognito_authorizer.zip"
 }
 
+resource "null_resource" "external_authorizer" {
+  provisioner "local-exec" {
+    command = "cd ${path.module}/assets/external_authorizer/ && npm install"
+  }
+
+  triggers = {
+    index = sha256(file("${path.module}/assets/external_authorizer/lambda_authorizer.js"))
+    package = sha256(file("${path.module}/assets/external_authorizer/package.json"))
+    lock = sha256(file("${path.module}/assets/external_authorizer/package-lock.json"))
+  }
+}
+
 data "archive_file" "external_authorizer" {
   type        = "zip"
   source_dir  = "${path.module}/assets/external_authorizer"
   output_path = "external_authorizer.zip"
+  depends_on = [ null_resource.external_authorizer ]
 }
 
 data "local_file" "role_mapping" {
