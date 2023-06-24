@@ -27,3 +27,4 @@ override.tf.json
 # terraform.rc
 *zip
 *.terraform.lock.hcl
+**/node_modules
