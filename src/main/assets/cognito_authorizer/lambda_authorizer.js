@@ -62,22 +62,6 @@ function matchPath(mapping_path,resource,method,group) {
     return ( ( resource.includes(mapping_path) ) && (authMapping[group][mapping_path].includes(method)) ) ;
 }
 
-exports.handler =  function(event, context, callback) {
-
-    console.log("Getting payload")
-    var encodedPayload = event.headers.Authorization.split(' ')[1].split('.')[1];
-    console.log("Decoding payload")
-    var decodedPayload = atob(encodedPayload);
-    console.log("Parsing JSON payload")
-    var payload = JSON.parse(decodedPayload);
-
-
-
-
-        
-};
-
-
 function getAuthorization(group,resource,method) {
     return ( Object.keys(authMapping).includes(group) ) && 
            ( Object.keys(authMapping[group]).some( (x) => matchPath(x,resource,method,group)) );
