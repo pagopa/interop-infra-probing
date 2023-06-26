@@ -52,10 +52,21 @@ resource "aws_iam_role" "lambda_authorizer_execution_role" {
   }
 }
 
+resource "null_resource" "cognito_authorizer" {
+  provisioner "local-exec" {
+    command = "cd ${path.module}/assets/cognito_authorizer/ && npm install"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 data "archive_file" "cognito_authorizer" {
   type        = "zip"
   source_dir  = "${path.module}/assets/cognito_authorizer"
   output_path = "cognito_authorizer.zip"
+  depends_on  = [null_resource.cognito_authorizer]
 }
 
 resource "null_resource" "external_authorizer" {
@@ -87,10 +98,14 @@ resource "aws_lambda_function" "cognito_authorizer" {
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.cognito_authorizer.output_base64sha256
   runtime          = "nodejs16.x"
+  timeout          = 15
   environment {
     variables = {
-      ENV          = var.env
-      ROLE_MAPPING = data.local_file.role_mapping.content
+      ENV           = var.env
+      ROLE_MAPPING  = data.local_file.role_mapping.content
+      JWKS_URI      = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.user_pool.id}/.well-known/jwks.json"
+      CACHE         = var.lambda_authorizer_cache_enabled
+      CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age
     }
   }
 }
@@ -102,9 +117,13 @@ resource "aws_lambda_function" "external_authorizer" {
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.external_authorizer.output_base64sha256
   runtime          = "nodejs16.x"
+  timeout          = 15
   environment {
     variables = {
-      ENV = var.env
-    JWKS_URI = var.jwks_uri }
+      ENV           = var.env
+      JWKS_URI      = var.jwks_uri
+      CACHE         = var.lambda_authorizer_cache_enabled
+      CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age
+    }
   }
 }

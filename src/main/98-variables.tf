@@ -160,6 +160,18 @@ variable "cognito_authorizer_uri" {
   description = "uri of the Cognito lambda auhtorizer"
 }
 
+variable "lambda_authorizer_cache_enabled" {
+  type        = bool
+  description = "Whether the cache is enabled for JWKS in lambda authorizer"
+  default     = true
+}
+
+variable "lambda_authorizer_cache_max_age" {
+  type        = number
+  description = "Max age for cache JWKS in lambda authorizer"
+  default     = 86400
+}
+
 variable "tags" {
   type = map(any)
   default = {

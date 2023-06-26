@@ -3,18 +3,11 @@ const jwksClient = require('jwks-rsa');
 
 
 const keyClient = jwksClient({
-    cache: true,
-    cacheMaxAge: 86400000,
+    cache: process.env.CACHE,
+    cacheMaxAge: process.env.CACHE_MAX_AGE,
     rateLimit: true,
-    jwksRequestsPerMinute: 10,
-    strictSsl: true,
     jwksUri: process.env.JWKS_URI
 })
-
-const verificationOptions = {
-    "algorithms": "RS256"
-}
-
 
 function getSigningKey (header = decoded.header, callback) {
     keyClient.getSigningKey(header.kid, function(err, key) {
@@ -30,13 +23,14 @@ exports.handler =  function(event, context, callback) {
     
     console.log("Generating authorization policy")
 
-    jwt.verify(token, getSigningKey, verificationOptions, function (error) {
+    jwt.verify(token, getSigningKey, {"algorithms": ["RS256"]}, function (error) {
+        var decoded = jwt.decode(token);
         if (error) {
             callback(null, generatePolicy('Deny', event.methodArn));
-            console.log("User NOT allowed to perform the API call")
+            console.log(`${decoded.jti} NOT allowed to perform the API call`)
         } else {
             callback(null, generatePolicy( 'Allow', event.methodArn));
-            console.log("User allowed to perform the API call")
+            console.log(`${decoded.jti} allowed to perform the API call`)
         }
     })
 
