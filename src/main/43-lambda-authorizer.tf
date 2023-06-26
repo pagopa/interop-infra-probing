@@ -66,6 +66,7 @@ data "archive_file" "cognito_authorizer" {
   type        = "zip"
   source_dir  = "${path.module}/assets/cognito_authorizer"
   output_path = "cognito_authorizer.zip"
+  depends_on  = [null_resource.cognito_authorizer]
 }
 
 resource "null_resource" "external_authorizer" {
