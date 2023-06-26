@@ -843,7 +843,7 @@ components:
       x-amazon-apigateway-authtype: "custom"
       x-amazon-apigateway-authorizer:
         authorizerUri: "${external_authorizer_arn}"
-        authorizerResultTtlInSeconds: 60
+        authorizerResultTtlInSeconds: 0
         identitySource: "method.request.header.Authorization"
         type: "request"
     cognito:
@@ -853,6 +853,6 @@ components:
       x-amazon-apigateway-authtype: "custom"
       x-amazon-apigateway-authorizer:
         authorizerUri: "${cognito_authorizer_arn}"
-        authorizerResultTtlInSeconds: 60
+        authorizerResultTtlInSeconds: 0
         identitySource: "method.request.header.Authorization"
         type: "request"
