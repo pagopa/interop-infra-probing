@@ -29,10 +29,10 @@ exports.handler =  function(event, context, callback) {
 
     if (isAuthorized) {
         callback(null, generatePolicy( 'Allow', event.methodArn));
-        console.log("User allowed to perform the API call")
+        console.log(`User ${payload["cognito:username"]} allowed to perform the API call`)
     } else {
         callback(null, generatePolicy('Deny', event.methodArn));
-        console.log("User NOT allowed to perform the API call")
+        console.log(`User ${payload["cognito:username"]} NOT allowed to perform the API call`)
 
     }
         

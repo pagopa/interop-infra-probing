@@ -87,6 +87,7 @@ resource "aws_lambda_function" "cognito_authorizer" {
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.cognito_authorizer.output_base64sha256
   runtime          = "nodejs16.x"
+  timeout          = 15
   environment {
     variables = {
       ENV          = var.env
@@ -102,6 +103,7 @@ resource "aws_lambda_function" "external_authorizer" {
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.external_authorizer.output_base64sha256
   runtime          = "nodejs16.x"
+  timeout          = 15
   environment {
     variables = {
       ENV = var.env

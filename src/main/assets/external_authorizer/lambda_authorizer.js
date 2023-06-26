@@ -11,12 +11,23 @@ const keyClient = jwksClient({
     jwksUri: process.env.JWKS_URI
 })
 
-const verificationOptions = {
-    "algorithms": "RS256"
+function getJwtData(token,type) {
+
+    var dataIndex = (type === "header") ? 0 : 1;
+    console.log(`Getting ${type}`)
+    var encoded = token.split('.')[dataIndex];
+    console.log(`Decoding ${type}`)
+    var decoded = atob(encoded);
+    console.log(`Parsing JSON ${type}`)
+    var data = JSON.parse(decoded);
+
+    return data;
 }
 
+function getSigningKey (token, callback) {
+    
+    var header = getJwtData(token,"header")
 
-function getSigningKey (header = decoded.header, callback) {
     keyClient.getSigningKey(header.kid, function(err, key) {
         const signingKey = key.publicKey || key.rsaPublicKey;
         callback(null, signingKey);
@@ -30,16 +41,18 @@ exports.handler =  function(event, context, callback) {
     
     console.log("Generating authorization policy")
 
-    jwt.verify(token, getSigningKey, verificationOptions, function (error) {
+    jwt.verify(token, getSigningKey, {  "algorithms": ["RS256"] }, function (error) {
+
+        var payload = getJwtData(token,"payload")
+
         if (error) {
             callback(null, generatePolicy('Deny', event.methodArn));
-            console.log("User NOT allowed to perform the API call")
+            console.log(`${payload.jti} NOT allowed to perform the API call`)
         } else {
             callback(null, generatePolicy( 'Allow', event.methodArn));
-            console.log("User allowed to perform the API call")
+            console.log(`${payload.jti} allowed to perform the API call`)
         }
     })
-
         
 };
 
