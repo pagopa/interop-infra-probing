@@ -24,13 +24,12 @@ function getJwtData(token,type) {
     return data;
 }
 
-function getSigningKey (token, callback) {
+function getSigningKey (token) {
     
     var header = getJwtData(token,"header")
 
     keyClient.getSigningKey(header.kid, function(err, key) {
         const signingKey = key.publicKey || key.rsaPublicKey;
-        callback(null, signingKey);
     })
 }
 
@@ -39,7 +38,7 @@ exports.handler =  function(event, context, callback) {
     var token = event.headers.Authorization.split(' ')[1];
     
 
-    jwt.verify(token, getSigningKey(token), {  "algorithms": ["RS256"] }, function (error) {
+    jwt.verify(token, getSigningKey(token,), {  "algorithms": ["RS256"] }, function (error) {
 
         var payload = getJwtData(token,"payload")
 
