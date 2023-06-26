@@ -64,9 +64,7 @@ resource "null_resource" "external_authorizer" {
   }
 
   triggers = {
-    index   = sha256(file("${path.module}/assets/external_authorizer/lambda_authorizer.js"))
-    package = sha256(file("${path.module}/assets/external_authorizer/package.json"))
-    lock    = sha256(file("${path.module}/assets/external_authorizer/package-lock.json"))
+    always_run = "${timestamp()}"
   }
 }
 
