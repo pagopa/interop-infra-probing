@@ -32,7 +32,7 @@ exports.handler =  function(event, context, callback) {
             console.log(`${decoded.jti} NOT allowed to perform the API call`)
         } else {
             callback(null, generatePolicy( 'Allow', event.methodArn));
-            console.log(`${decoded.jti} NOT allowed to perform the API call`)
+            console.log(`${decoded.jti} allowed to perform the API call`)
         }
     })
 
