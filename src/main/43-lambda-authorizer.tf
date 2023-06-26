@@ -52,6 +52,16 @@ resource "aws_iam_role" "lambda_authorizer_execution_role" {
   }
 }
 
+resource "null_resource" "cognito_authorizer" {
+  provisioner "local-exec" {
+    command = "cd ${path.module}/assets/cognito_authorizer/ && npm install"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 data "archive_file" "cognito_authorizer" {
   type        = "zip"
   source_dir  = "${path.module}/assets/cognito_authorizer"
