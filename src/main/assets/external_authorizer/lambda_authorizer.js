@@ -36,12 +36,10 @@ function getSigningKey (token, callback) {
 
 exports.handler =  function(event, context, callback) {
 
-    console.log("Getting payload")
     var token = event.headers.Authorization.split(' ')[1];
     
-    console.log("Generating authorization policy")
 
-    jwt.verify(token, getSigningKey, {  "algorithms": ["RS256"] }, function (error) {
+    jwt.verify(token, getSigningKey(token), {  "algorithms": ["RS256"] }, function (error) {
 
         var payload = getJwtData(token,"payload")
 
