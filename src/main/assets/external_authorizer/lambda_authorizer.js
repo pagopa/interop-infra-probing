@@ -15,7 +15,7 @@ function getJwtData(token,type) {
 
     var dataIndex = (type === "header") ? 0 : 1;
     console.log(`Getting ${type}`)
-    var encoded = token.split('.')[dataIndex];
+    var encoded = token.toString().split('.')[dataIndex];
     console.log(`Decoding ${type}`)
     var decoded = atob(encoded);
     console.log(`Parsing JSON ${type}`)
