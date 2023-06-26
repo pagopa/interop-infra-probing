@@ -101,10 +101,10 @@ resource "aws_lambda_function" "cognito_authorizer" {
   timeout          = 15
   environment {
     variables = {
-      ENV          = var.env
-      ROLE_MAPPING = data.local_file.role_mapping.content
-      JWKS_URI     = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.user_pool.id}/.well-known/jwks.json"
-      CACHE = var.lambda_authorizer_cache_enabled
+      ENV           = var.env
+      ROLE_MAPPING  = data.local_file.role_mapping.content
+      JWKS_URI      = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.user_pool.id}/.well-known/jwks.json"
+      CACHE         = var.lambda_authorizer_cache_enabled
       CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age
     }
   }
@@ -120,9 +120,9 @@ resource "aws_lambda_function" "external_authorizer" {
   timeout          = 15
   environment {
     variables = {
-      ENV = var.env
-    JWKS_URI = var.jwks_uri 
-          CACHE = var.lambda_authorizer_cache_enabled
+      ENV           = var.env
+      JWKS_URI      = var.jwks_uri
+      CACHE         = var.lambda_authorizer_cache_enabled
       CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age
     }
   }
