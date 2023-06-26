@@ -14,7 +14,7 @@ resource "aws_lambda_permission" "lambda_auth_external_permission" {
   source_arn    = "${aws_api_gateway_rest_api.apigw.execution_arn}/*"
 }
 
-data "aws_iam_policy_document" "assume_role" {
+data "aws_iam_policy_document" "lambda_authorizer_assume_role_policy" {
   statement {
     effect = "Allow"
 
@@ -25,11 +25,31 @@ data "aws_iam_policy_document" "assume_role" {
 
     actions = ["sts:AssumeRole"]
   }
+
+}
+
+data "aws_iam_policy_document" "lambda_authorizer_execution_policy" {
+
+  statement {
+    effect    = "Allow"
+    actions   = ["logs:CreateLogGroup"]
+    resources = ["arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
+    resources = ["arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*"]
+  }
 }
 
 resource "aws_iam_role" "lambda_authorizer_execution_role" {
-  name               = "${var.app_name}-invocation-policy-${var.env}"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  name               = "${var.app_name}-execution-role-${var.env}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_authorizer_assume_role_policy.json
+  inline_policy {
+    name   = "Logging"
+    policy = data.aws_iam_policy_document.lambda_authorizer_execution_policy.json
+  }
 }
 
 data "archive_file" "cognito_authorizer" {
