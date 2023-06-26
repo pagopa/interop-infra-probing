@@ -26,8 +26,8 @@ exports.handler =  function(event, context, callback) {
     console.log("Generating authorization policy")
 
     jwt.verify(token, getSigningKey, {"algorithms": ["RS256"]}, function (error) {
-        var decoded = jwt.decode(token);
-        console.log(decoded)
+        var decoded = JSON.parse(jwt.decode(token));
+        
         if (error) {
             callback(null, generatePolicy('Deny', event.methodArn));
             console.log(`${decoded.payload.jti} NOT allowed to perform the API call`)
