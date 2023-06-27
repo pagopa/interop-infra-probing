@@ -13,7 +13,7 @@ spec:
     targetPort: 2000
   - name: "tcp"
     port: 2000
-    protocol: UDP
+    protocol: TCP
     targetPort: 2000
   selector:
     app: xray-daemon
