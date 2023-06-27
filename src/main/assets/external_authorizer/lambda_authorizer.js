@@ -9,6 +9,7 @@ const keyClient = jwksClient({
     jwksUri: process.env.JWKS_URI
 })
 
+
 function getSigningKey (header, callback) {
     keyClient.getSigningKey(header.kid, function(err, key) {
         if (err) {
@@ -19,6 +20,7 @@ function getSigningKey (header, callback) {
         }
     })
 }
+
 
 exports.handler =  function(event, context, callback) {
 
@@ -39,6 +41,7 @@ exports.handler =  function(event, context, callback) {
 
         
 };
+
 
 var generatePolicy = function(effect, resource) {
     
