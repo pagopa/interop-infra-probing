@@ -140,6 +140,11 @@ variable "probing_env_domain_name" {
   description = "Base domain for the probing project in this environment (e.g. foo.dev.bar.com)"
 }
 
+variable "cw_alarm_thresholds" {
+  type        = map(any)
+  description = "Clouwatch alarms threshold"
+}
+
 variable "tags" {
   type = map(any)
   default = {

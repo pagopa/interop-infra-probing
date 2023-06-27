@@ -40,6 +40,10 @@ timestream_table_magnetic_store_retention_period_in_days = 73000
 timestream_table_memory_store_retention_period_in_hours  = 8766
 
 probing_env_domain_name = "stato-eservice.dev.interop.pagopa.it"
+cw_alarm_thresholds = {
+  lambda_concurrency_utilization = 0.7
+  sqs_message_age                = 120
+}
 
 tags = {
   CreatedBy   = "Terraform"
