@@ -18,7 +18,6 @@ data:
             scrape_timeout: 30s
             scheme: https
             sample_limit: 10000
-            scheme: https
 
             kubernetes_sd_configs:
             - role: node
