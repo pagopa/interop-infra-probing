@@ -3,7 +3,7 @@ resource "kubernetes_manifest" "adot_collector" {
 
   manifest = yamldecode(templatefile("${path.module}/assets/adot_collector/${each.value}", {
     cluster_name           = var.eks_cluster_name
-    namespace              = "opentelemetry-operator-system"
+    namespace              = "aws-observability"
     aws_region             = var.aws_region
     aws_role_arn           = var.adot_irsa_role_arn
     adot_collector_img_tag = var.adot_collector_img_tag
