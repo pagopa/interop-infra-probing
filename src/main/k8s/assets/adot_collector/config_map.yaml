@@ -438,7 +438,7 @@ data:
     exporters:
       awsemf:
         log_group_name: '/aws/eks/{ClusterName}/adot-metrics'
-        log_stream_name: '{Service}'
+        log_stream_name: '{PodName}'
         namespace: 'ContainerInsights'
         region: ${aws_region}
         resource_to_telemetry_conversion:
