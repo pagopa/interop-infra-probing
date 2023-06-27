@@ -16,7 +16,7 @@ resource "aws_lambda_permission" "lambda_auth_external_permission" {
 }
 
 data "aws_iam_role" "lambda_authorizer_execution_role" {
-  name = "AWSLambdaBasicExecutionRole "
+  name = "AWSLambdaBasicExecutionRole"
 }
 
 
