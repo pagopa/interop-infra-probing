@@ -148,6 +148,8 @@ variable "probing_env_domain_name" {
 variable "cw_alarm_thresholds" {
   type        = map(any)
   description = "Clouwatch alarms threshold"
+}
+
 variable "jwks_uri" {
   type        = string
   description = "Well knows jwks URI for PDND call to APIGW"
