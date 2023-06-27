@@ -49,8 +49,6 @@ cw_alarm_thresholds = {
 
 
 jwks_uri                = "https://dev.interop.pagopa.it/.well-known/probing-jwks.json"
-cognito_authorizer_uri  = "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:774300547186:function:interop-probing-apigw-lambda-cognito-authorizer-dev/invocations"
-external_authorizer_uri = "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:774300547186:function:interop-probing-apigw-lambda-external-authorizer-dev/invocations"
 
 tags = {
   CreatedBy   = "Terraform"

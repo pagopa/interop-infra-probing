@@ -155,15 +155,6 @@ variable "jwks_uri" {
   description = "Well knows jwks URI for PDND call to APIGW"
 }
 
-variable "external_authorizer_uri" {
-  type        = string
-  description = "uri of the External lambda auhtorizer"
-}
-
-variable "cognito_authorizer_uri" {
-  type        = string
-  description = "uri of the Cognito lambda auhtorizer"
-}
 
 variable "lambda_authorizer_cache_enabled" {
   type        = bool
