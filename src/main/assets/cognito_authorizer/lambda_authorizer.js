@@ -6,8 +6,8 @@ const jwksClient = require('jwks-rsa');
 
 
 const keyClient = jwksClient({
-    cache: process.env.CACHE,
-    cacheMaxAge: process.env.CACHE_MAX_AGE,
+    cache: process.env.JWKS_CACHE_ENABLED,
+    cacheMaxAge: process.env.JWKS_CACHE_MAX_AGE,
     rateLimit: true,
     jwksUri: process.env.JWKS_URI
 })
