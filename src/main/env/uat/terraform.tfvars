@@ -45,6 +45,8 @@ probing_env_domain_name = "stato-eservice.uat.interop.pagopa.it"
 cw_alarm_thresholds = {
   lambda_concurrency_utilization = 0.7
   sqs_message_age                = 120
+  memory_threshold               = 0.7
+  cpu_threshold                  = 0.7
 }
 
 

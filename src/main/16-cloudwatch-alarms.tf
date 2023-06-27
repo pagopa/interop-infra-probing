@@ -1,4 +1,40 @@
+locals {
+  microservices = ["interop-probing-api", "interop-probing-caller", "interop-probing-eservice-operations",
+    "interop-probing-eservice-registry-reader", "interop-probing-eservice-registry-updater",
+  "interop-probing-response-updater", "interop-probing-scheduler", "interop-probing-telemetry-writer", "interop-probing-statistics-api"]
+}
 
+resource "aws_cloudwatch_metric_alarm" "ms_memory_alarm" {
+  for_each            = toset(local.microservices)
+  alarm_name          = "${var.app_name}-cwalarm-memory-${each.value}-${var.env}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 10
+  metric_name         = "pod_memory_utilization_over_pod_limit"
+  namespace           = "ContainerInsights"
+  dimensions = {
+    Service = each.value
+  }
+  period        = 60
+  statistic     = "Average"
+  threshold     = var.cw_alarm_thresholds.memory_threshold
+  alarm_actions = [aws_sns_topic.cw_alarms.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ms_cpu_alarm" {
+  for_each            = toset(local.microservices)
+  alarm_name          = "${var.app_name}-cwalarm-cpu-${each.value}-${var.env}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 10
+  metric_name         = "pod_cpu_usage_total"
+  namespace           = "ContainerInsights"
+  dimensions = {
+    Service = each.value
+  }
+  period        = 60
+  statistic     = "Average"
+  threshold     = var.cw_alarm_thresholds.cpu_threshold
+  alarm_actions = [aws_sns_topic.cw_alarms.arn]
+}
 
 resource "aws_cloudwatch_metric_alarm" "apigw_server_errors" {
   alarm_name          = "${var.app_name}-cwalarm-apigw-server-errors-${var.env}"
