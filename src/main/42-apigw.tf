@@ -5,7 +5,7 @@ locals {
 resource "aws_api_gateway_rest_api" "apigw" {
   name        = "${var.app_name}-apigw-${var.env}"
   description = "${var.app_name} API Gateway"
-  body        = templatefile(local.openapi_spec, { external_authorizer_arn = var.external_authorizer_uri, cognito_authorizer_arn = var.cognito_authorizer_uri })
+  body        = templatefile(local.openapi_spec, { external_authorizer_arn = aws_lambda_function.external_authorizer.invocation_arn, cognito_authorizer_arn = aws_lambda_function.cognito_authorizer.invocation_arn })
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
