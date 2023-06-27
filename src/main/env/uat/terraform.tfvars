@@ -2,7 +2,7 @@ aws_region          = "eu-central-1"
 env                 = "uat"
 app_name            = "interop-probing"
 be_prefix           = "interop-be-probing"
-sso_admin_role_name = "AWSReservedSSO_FullAdmin_43e33324db7f1652"
+sso_admin_role_name = "AWSReservedSSO_FullAdmin_010f7fe5de34c177"
 fe_base_url         = "https://stato-eservice.uat.interop.pagopa.it"
 
 kubernetes_version = "1.24"
