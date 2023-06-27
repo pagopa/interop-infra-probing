@@ -140,6 +140,24 @@ variable "probing_env_domain_name" {
   description = "Base domain for the probing project in this environment (e.g. foo.dev.bar.com)"
 }
 
+variable "jwks_uri" {
+  type        = string
+  description = "Well knows jwks URI for PDND call to APIGW"
+}
+
+
+variable "lambda_authorizer_cache_enabled" {
+  type        = bool
+  description = "Whether the cache is enabled for JWKS in lambda authorizer"
+  default     = true
+}
+
+variable "lambda_authorizer_cache_max_age" {
+  type        = number
+  description = "Max age for cache JWKS in lambda authorizer"
+  default     = 86400
+}
+
 variable "tags" {
   type = map(any)
   default = {
