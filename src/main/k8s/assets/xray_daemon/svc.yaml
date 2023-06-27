@@ -7,8 +7,12 @@ metadata:
   namespace: ${namespace}
 spec:
   ports:
-  - name: "http"
-    port: 80
+  - name: "udp"
+    port: 2001
+    protocol: UDP
+    targetPort: 2000
+  - name: "tcp"
+    port: 2000
     protocol: UDP
     targetPort: 2000
   selector:
