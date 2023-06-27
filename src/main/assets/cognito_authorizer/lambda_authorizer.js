@@ -6,7 +6,6 @@ const authMapping = JSON.parse(fs.readFileSync(`${__dirname}/cognito_role_mappin
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
-
 const keyClient = jwksClient({
     cache: process.env.JWKS_CACHE_ENABLED,
     cacheMaxAge: process.env.JWKS_CACHE_MAX_AGE,
