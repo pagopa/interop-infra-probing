@@ -69,7 +69,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
   metric_name         = "ProvisionedConcurrencyUtilization"
   namespace           = "AWS/Lambda"
   period              = 60
-  statistic           = "Max"
+  statistic           = "Maximum"
   threshold           = var.cw_alarm_thresholds.lambda_concurrency_utilization
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
