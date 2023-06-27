@@ -3,24 +3,29 @@ const jwksClient = require('jwks-rsa');
 
 
 const keyClient = jwksClient({
-    cache: process.env.CACHE,
-    cacheMaxAge: process.env.CACHE_MAX_AGE,
+    cache: process.env.JWKS_CACHE_ENABLED,
+    cacheMaxAge: process.env.JWKS_CACHE_MAX_AGE,
     rateLimit: true,
     jwksUri: process.env.JWKS_URI
 })
 
-function getSigningKey (header = decoded.header, callback) {
+
+function getSigningKey (header, callback) {
     keyClient.getSigningKey(header.kid, function(err, key) {
-        const signingKey = key.publicKey || key.rsaPublicKey;
-        callback(null, signingKey);
+        if (err) {
+            callback(err)
+        } else {
+            const signingKey = key.publicKey || key.rsaPublicKey;
+            callback(null, signingKey);
+        }
     })
 }
+
 
 exports.handler =  function(event, context, callback) {
 
     console.log("Getting payload")
-    var token = event.headers.Authorization.split(' ')[1];
-    
+    var token = event.headers.Authorization.split(' ')[1];    
     console.log("Generating authorization policy")
 
     jwt.verify(token, getSigningKey, {"algorithms": ["RS256"]}, function (error) {

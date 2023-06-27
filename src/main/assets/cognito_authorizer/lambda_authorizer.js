@@ -1,5 +1,6 @@
 
-const authMapping = JSON.parse(process.env.ROLE_MAPPING)
+const fs = require('fs');
+const authMapping = JSON.parse(fs.readFileSync(`${__dirname}/cognito_role_mapping-${process.env.ENV}.json`, 'utf8'));
 
 
 const jwt = require('jsonwebtoken');
@@ -7,17 +8,21 @@ const jwksClient = require('jwks-rsa');
 
 
 const keyClient = jwksClient({
-    cache: process.env.CACHE,
-    cacheMaxAge: process.env.CACHE_MAX_AGE,
+    cache: process.env.JWKS_CACHE_ENABLED,
+    cacheMaxAge: process.env.JWKS_CACHE_MAX_AGE,
     rateLimit: true,
     jwksUri: process.env.JWKS_URI
 })
 
 
-function getSigningKey (header = decoded.header, callback) {
+function getSigningKey (header, callback) {
     keyClient.getSigningKey(header.kid, function(err, key) {
-        const signingKey = key.publicKey || key.rsaPublicKey;
-        callback(null, signingKey);
+        if (err) {
+            callback(err)
+        } else {
+            const signingKey = key.publicKey || key.rsaPublicKey;
+            callback(null, signingKey);
+        }
     })
 
 }
@@ -25,12 +30,12 @@ function getSigningKey (header = decoded.header, callback) {
 exports.handler =  function(event, context, callback) {
 
     console.log("Getting payload")
-    var token = event.headers.Authorization.split(' ')[1];
+    const token = event.headers.Authorization.split(' ')[1];
     
     console.log("Generating authorization policy")
 
     jwt.verify(token, getSigningKey, {"algorithms": ["RS256"]}, function (error) {
-        var decoded = jwt.decode(token);
+        const decoded = jwt.decode(token);
         if (error) {
             callback(null, generatePolicy('Deny', event.methodArn));
             console.log(`${decoded.jti} NOT verified jwt to perform the API call`)
@@ -72,7 +77,6 @@ function getAuthorization(group,resource,method) {
 
 
 var generatePolicy = function(effect, resource) {
-
     
         var policyDocument = {
             "Version" : "2012-10-17",
