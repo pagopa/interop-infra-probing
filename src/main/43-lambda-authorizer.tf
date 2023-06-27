@@ -123,7 +123,7 @@ resource "aws_lambda_function" "external_authorizer" {
       ENV           = var.env
       JWKS_URI      = var.jwks_uri
       JWKS_CACHE_ENABLED         = var.lambda_authorizer_cache_enabled
-      CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age
+      JWKS_CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age
     }
   }
 }
