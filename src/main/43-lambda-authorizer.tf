@@ -1,12 +1,3 @@
-resource "aws_lambda_permission" "lambda_auth_congnito_permission" {
-  statement_id  = "AllowAPIGWInvokeCognitoAuthorizer"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.cognito_authorizer.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.apigw.execution_arn}/*"
-}
-
-
 resource "aws_lambda_permission" "lambda_auth_external_permission" {
   statement_id  = "AllowAPIGWInvokeExternalAuthorizer"
   action        = "lambda:InvokeFunction"
@@ -15,10 +6,41 @@ resource "aws_lambda_permission" "lambda_auth_external_permission" {
   source_arn    = "${aws_api_gateway_rest_api.apigw.execution_arn}/*"
 }
 
-data "aws_iam_role" "lambda_authorizer_execution_role" {
-  name = "AWSLambdaBasicExecutionRole"
+resource "aws_lambda_permission" "lambda_auth_cognito_permission" {
+  statement_id  = "AllowAPIGWInvokeCognitoAuthorizer"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cognito_authorizer.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.apigw.execution_arn}/*"
 }
 
+data "aws_iam_policy_document" "lambda_authorizer_assume_role_policy" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+
+}
+
+data "aws_iam_policy" "lambda_authorizer_execution_policy" {
+
+  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role" "lambda_authorizer_execution_role" {
+  name               = "${var.app_name}-execution-role-${var.env}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_authorizer_assume_role_policy.json
+  inline_policy {
+    name   = "Logging"
+    policy = data.aws_iam_policy.lambda_authorizer_execution_policy.policy
+  }
+}
 
 resource "null_resource" "cognito_authorizer" {
   provisioner "local-exec" {
@@ -59,10 +81,12 @@ data "archive_file" "external_authorizer" {
   depends_on  = [null_resource.external_authorizer]
 }
 
+
+
 resource "aws_lambda_function" "cognito_authorizer" {
   filename         = "cognito_authorizer.zip"
   function_name    = "${var.app_name}-apigw-lambda-cognito-authorizer-${var.env}"
-  role             = data.aws_iam_role.lambda_authorizer_execution_role.arn
+  role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.cognito_authorizer.output_base64sha256
   runtime          = "nodejs16.x"
@@ -80,7 +104,7 @@ resource "aws_lambda_function" "cognito_authorizer" {
 resource "aws_lambda_function" "external_authorizer" {
   filename         = "external_authorizer.zip"
   function_name    = "${var.app_name}-apigw-lambda-external-authorizer-${var.env}"
-  role             = data.aws_iam_role.lambda_authorizer_execution_role.arn
+  role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.external_authorizer.output_base64sha256
   runtime          = "nodejs16.x"
