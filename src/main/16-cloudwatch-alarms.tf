@@ -57,12 +57,12 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   metric_name         = "Errors"
   namespace           = "AWS/Lambda"
   period              = 60
-  statistic           = "Average"
-  threshold           = var.cw_alarm_thresholds.sqs_message_age
+  statistic           = "SampleCount"
+  threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "AWS/Lambda" {
+resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
   alarm_name          = "${var.app_name}-cwalarm-lambda-concurrency-utilization-pct-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
@@ -74,7 +74,7 @@ resource "aws_cloudwatch_metric_alarm" "AWS/Lambda" {
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "AWS/Lambda" {
+resource "aws_cloudwatch_metric_alarm" "timestream_errors" {
   alarm_name          = "${var.app_name}-cwalarm-timestream-system-errors-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
@@ -82,6 +82,6 @@ resource "aws_cloudwatch_metric_alarm" "AWS/Lambda" {
   namespace           = "AWS/Timestream"
   period              = 60
   statistic           = "SampleCount"
-  threshold           = var.cw_alarm_thresholds.lambda_concurrency_utilization
+  threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
