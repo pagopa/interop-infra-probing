@@ -21,7 +21,6 @@ function getSigningKey (header, callback) {
     })
 }
 
-
 exports.handler =  function(event, context, callback) {
 
     console.log("Getting payload")

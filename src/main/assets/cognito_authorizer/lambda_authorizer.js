@@ -14,7 +14,6 @@ const keyClient = jwksClient({
     jwksUri: process.env.JWKS_URI
 })
 
-
 function getSigningKey (header, callback) {
     keyClient.getSigningKey(header.kid, function(err, key) {
         if (err) {
