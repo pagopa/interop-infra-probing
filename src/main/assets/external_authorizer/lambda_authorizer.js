@@ -9,12 +9,18 @@ const keyClient = jwksClient({
     jwksUri: process.env.JWKS_URI
 })
 
-function getSigningKey (header = decoded.header, callback) {
+
+function getSigningKey (header, callback) {
     keyClient.getSigningKey(header.kid, function(err, key) {
-        const signingKey = key.publicKey || key.rsaPublicKey;
-        callback(null, signingKey);
+        if (err) {
+            callback(err)
+        } else {
+            const signingKey = key.publicKey || key.rsaPublicKey;
+            callback(null, signingKey);
+        }
     })
 }
+
 
 exports.handler =  function(event, context, callback) {
 
