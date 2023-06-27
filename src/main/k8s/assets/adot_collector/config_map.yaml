@@ -292,6 +292,7 @@ data:
       # convert cumulative sum datapoints to delta
       cumulativetodelta:
         include:
+          match_type: strict
           metrics:
               - new_container_cpu_usage_seconds_total
               - pod_cpu_usage_seconds_total
