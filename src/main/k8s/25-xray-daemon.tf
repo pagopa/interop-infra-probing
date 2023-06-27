@@ -10,5 +10,4 @@ resource "kubernetes_manifest" "xray_daemon" {
   field_manager {
     force_conflicts = true
   }
-
 }

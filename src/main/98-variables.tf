@@ -35,6 +35,11 @@ variable "frontend_github_repo" {
   default     = "pagopa/interop-fe-probing"
 }
 
+variable "fe_base_url" {
+  type        = string
+  description = "Base URL of FE page"
+}
+
 variable "k8s_github_repo" {
   type        = string
   description = "Name of the probing K8s Github repo (format: 'organization/repo-name')"
@@ -143,6 +148,31 @@ variable "probing_env_domain_name" {
 variable "cw_alarm_thresholds" {
   type        = map(any)
   description = "Clouwatch alarms threshold"
+variable "jwks_uri" {
+  type        = string
+  description = "Well knows jwks URI for PDND call to APIGW"
+}
+
+variable "external_authorizer_uri" {
+  type        = string
+  description = "uri of the External lambda auhtorizer"
+}
+
+variable "cognito_authorizer_uri" {
+  type        = string
+  description = "uri of the Cognito lambda auhtorizer"
+}
+
+variable "lambda_authorizer_cache_enabled" {
+  type        = bool
+  description = "Whether the cache is enabled for JWKS in lambda authorizer"
+  default     = true
+}
+
+variable "lambda_authorizer_cache_max_age" {
+  type        = number
+  description = "Max age for cache JWKS in lambda authorizer"
+  default     = 86400
 }
 
 variable "tags" {
