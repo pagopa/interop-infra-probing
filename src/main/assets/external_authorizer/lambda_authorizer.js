@@ -40,7 +40,6 @@ exports.handler =  function(event, context, callback) {
         
 };
 
-
 var generatePolicy = function(effect, resource) {
     
         var policyDocument = {
