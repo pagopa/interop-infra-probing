@@ -57,7 +57,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   metric_name         = "Errors"
   namespace           = "AWS/Lambda"
   period              = 60
-  statistic           = "SampleCount"
+  statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
