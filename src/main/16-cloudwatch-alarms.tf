@@ -123,10 +123,6 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
     name      = "ErrorCount"
     namespace = "EKSApplicationLogsFilters"
     value     = "1"
-
-    dimensions = {
-      PodApp = "$.pod_app"
-    }
   }
 }
 
