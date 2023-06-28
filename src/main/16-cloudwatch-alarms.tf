@@ -84,16 +84,12 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
 
   name           = "${var.app_name}-error-logs-filter-${var.env}"
   pattern        = "ERROR"
-  log_group_name = "/aws/eks/interop-probing-eks-dev/application"
+  log_group_name = "/aws/eks/${module.eks.cluster_name}/application"
 
   metric_transformation {
     name      = "ErrorCount"
     namespace = "EKSApplicationLogsFilters"
     value     = "1"
-
-    dimensions = {
-      PodApp = "$.pod_app"
-    }
   }
 }
 
