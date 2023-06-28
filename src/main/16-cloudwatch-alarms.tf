@@ -114,6 +114,7 @@ resource "aws_cloudwatch_metric_alarm" "error_logs" {
 
 resource "aws_cloudwatch_metric_alarm" "timestream_errors" {
   alarm_name          = "${var.app_name}-timestream-system-errors-${var.env}"
+  treat_missing_data  = "notBreaching"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
   metric_name         = "SystemErrors"
