@@ -24,6 +24,7 @@ function getSigningKey (header, callback) {
         }
     })
 
+}
 
 exports.handler =  function(event, context, callback) {
 
@@ -69,6 +70,7 @@ function matchPath(mapping_path,resource,method,group) {
 function getAuthorization(group,resource,method) {
     return ( Object.keys(authMapping).includes(group) ) && 
            ( Object.keys(authMapping[group]).some( (x) => matchPath(x,resource,method,group)) );
+
 }
 
 

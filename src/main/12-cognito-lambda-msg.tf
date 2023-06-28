@@ -25,10 +25,21 @@ resource "aws_iam_role" "lambda_cognito_messaging_execution_role" {
   assume_role_policy = data.aws_iam_policy_document.congito_messaging_assume_role.json
 }
 
+resource "null_resource" "lambda_cognito_messaging" {
+  provisioner "local-exec" {
+    command = "cd ${path.module}/assets/lambda_cognito_messaging/ && npm install"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 data "archive_file" "lambda_cognito_messaging" {
   type        = "zip"
   source_dir  = "${path.module}/assets/lambda_cognito_messaging"
   output_path = "lambda_cognito_messaging.zip"
+  depends_on  = [null_resource.lambda_cognito_messaging]
 }
 
 resource "aws_lambda_function" "cognito_messaging" {

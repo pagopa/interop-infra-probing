@@ -150,6 +150,7 @@ variable "cw_alarm_thresholds" {
   description = "Clouwatch alarms threshold"
 }
 
+
 variable "jwks_uri" {
   type        = string
   description = "Well knows jwks URI for PDND call to APIGW"
