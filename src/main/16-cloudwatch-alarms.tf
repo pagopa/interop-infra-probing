@@ -1,7 +1,7 @@
 locals {
-  microservices = ["interop-probing-api", "interop-probing-caller", "interop-probing-eservice-operations",
-    "interop-probing-eservice-registry-reader", "interop-probing-eservice-registry-updater",
-  "interop-probing-response-updater", "interop-probing-scheduler", "interop-probing-telemetry-writer", "interop-probing-statistics-api"]
+  microservices = ["interop-be-probing-api", "interop-be-probing-caller", "interop-be-probing-eservice-operations",
+    "interop-be-probing-eservice-registry-reader", "interop-be-probing-eservice-registry-updater",
+  "interop-be-probing-response-updater", "interop-be-probing-scheduler", "interop-be-probing-telemetry-writer", "interop-be-probing-statistics-api"]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ms_memory_alarm" {
@@ -29,6 +29,7 @@ resource "aws_cloudwatch_metric_alarm" "ms_cpu_alarm" {
   namespace           = "ContainerInsights"
   dimensions = {
     Service = each.value
+    ClusterName = module.eks.cluster_name
   }
   period        = 60
   statistic     = "Average"
@@ -52,7 +53,7 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
 
   name           = "${var.app_name}-error-logs-filter-${var.env}"
   pattern        = "ERROR"
-  log_group_name = "/aws/eks/interop-probing-eks-${var.env}/application"
+  log_group_name = "/aws/eks/${module.eks.cluster_name}/application"
 
   metric_transformation {
     name      = "ErrorCount"
