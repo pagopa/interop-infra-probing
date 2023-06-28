@@ -1,7 +1,7 @@
 
 
 resource "aws_cloudwatch_metric_alarm" "apigw_server_errors" {
-  alarm_name          = "${var.app_name}-cwalarm-apigw-server-errors-${var.env}"
+  alarm_name          = "${var.app_name}-apigw-5xx-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
   metric_name         = "5XXError"
