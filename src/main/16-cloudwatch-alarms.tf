@@ -36,7 +36,7 @@ resource "aws_cloudwatch_metric_alarm" "error_logs" {
   metric_name         = "ErrorCount"
   namespace           = "ApplicationLogs"
   period              = 60
-  statistic           = "SampleCount"
+  statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
