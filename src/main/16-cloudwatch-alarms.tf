@@ -20,8 +20,12 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
 
   metric_transformation {
     name      = "ErrorCount"
-    namespace = "ApplicationLogs"
-    value     = 1
+    namespace = "EKSApplicationLogsFilters"
+    value     = "1"
+
+    dimensions = {
+      PodApp = "$.pod_app"
+    }
   }
 }
 
