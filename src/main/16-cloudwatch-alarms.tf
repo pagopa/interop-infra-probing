@@ -91,7 +91,7 @@ resource "aws_cloudwatch_metric_alarm" "ms_cpu_alarm" {
   metric_name         = "pod_cpu_usage_total"
   namespace           = "ContainerInsights"
   dimensions = {
-    Service = each.value
+    Service     = each.value
     ClusterName = module.eks.cluster_name
   }
   period        = 60
