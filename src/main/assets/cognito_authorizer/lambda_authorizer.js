@@ -2,7 +2,6 @@
 const fs = require('fs');
 const authMapping = JSON.parse(fs.readFileSync(`${__dirname}/cognito_role_mapping-${process.env.ENV}.json`, 'utf8'));
 
-
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
