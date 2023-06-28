@@ -81,7 +81,7 @@ resource "aws_cloudwatch_metric_alarm" "timestream_errors" {
   metric_name         = "SystemErrors"
   namespace           = "AWS/Timestream"
   period              = 60
-  statistic           = "SampleCount"
+  statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
