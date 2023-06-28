@@ -65,7 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
   alarm_name          = "${var.app_name}-cwalarm-lambda-concurrency-utilization-pct-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 10
+  evaluation_periods  = 1
   metric_name         = "ProvisionedConcurrencyUtilization"
   namespace           = "AWS/Lambda"
   period              = 60
