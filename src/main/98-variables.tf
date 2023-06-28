@@ -35,6 +35,11 @@ variable "frontend_github_repo" {
   default     = "pagopa/interop-fe-probing"
 }
 
+variable "fe_base_url" {
+  type        = string
+  description = "Base URL of FE page"
+}
+
 variable "k8s_github_repo" {
   type        = string
   description = "Name of the probing K8s Github repo (format: 'organization/repo-name')"
