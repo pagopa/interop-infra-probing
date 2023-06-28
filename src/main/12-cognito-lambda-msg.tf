@@ -39,7 +39,7 @@ data "archive_file" "lambda_cognito_messaging" {
   type        = "zip"
   source_dir  = "${path.module}/assets/lambda_cognito_messaging"
   output_path = "lambda_cognito_messaging.zip"
-  depends_on = [ null_resource.lambda_cognito_messaging ]
+  depends_on  = [null_resource.lambda_cognito_messaging]
 }
 
 resource "aws_lambda_function" "cognito_messaging" {
