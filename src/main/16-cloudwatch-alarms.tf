@@ -37,7 +37,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs_message_age" {
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   for_each            = toset(local.lambda_functions)
   treat_missing_data  = "notBreaching"
-  alarm_name          = "${var.app_name}-lambda-errors-${each.value}-${var.env}"
+  alarm_name          = "${var.app_name}-${each.value}-errors-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
   metric_name         = "Errors"
