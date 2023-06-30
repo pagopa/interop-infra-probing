@@ -53,17 +53,35 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
-  for_each            = toset(local.lambda_functions)
   treat_missing_data  = "notBreaching"
-  alarm_name          = "${var.app_name}-lambda-conc-util-pct-${each.value}-${var.env}"
+  alarm_name          = "${var.app_name}-lambda-conc-util-pct-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
-  metric_name         = "ProvisionedConcurrencyUtilization"
+  threshold_metric_id = "sq"
   namespace           = "AWS/Lambda"
   period              = 60
   statistic           = "Maximum"
   threshold           = var.cw_alarm_thresholds.lambda_concurrency_utilization
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+
+  metric_query {
+    id          = "sq"
+    expression  = "SERVICE_QUOTA(conc_util)"
+    return_data = true
+    label       = "LambdaConcurrencyUtilization"
+  }
+
+  metric_query {
+    id          = "conc_util"
+    return_data = true
+
+    metric {
+      metric_name = "ConcurrentExecutions"
+      namespace   = "AWS/Lambda"
+      stat        = "Average"
+      period      = 60
+    }
+  }
 }
 
 
@@ -90,6 +108,10 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
     name      = "ErrorCount"
     namespace = "EKSApplicationLogsFilters"
     value     = "1"
+  }
+
+  dimensions = {
+    PodApp = "$.pod_app"
   }
 }
 
