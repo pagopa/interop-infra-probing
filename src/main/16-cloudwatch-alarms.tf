@@ -58,7 +58,6 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold_metric_id = "sq"
-  threshold           = var.cw_alarm_thresholds.lambda_concurrency_utilization
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 
   metric_query {
