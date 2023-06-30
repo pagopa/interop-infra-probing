@@ -55,7 +55,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
   treat_missing_data  = "notBreaching"
   alarm_name          = "${var.app_name}-lambda-conc-util-pct-${var.env}"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
+  comparison_operator = "GreaterThanUpperThreshold"
   evaluation_periods  = 1
   threshold_metric_id = "sq"
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
@@ -104,11 +104,8 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
     name      = "ErrorCount"
     namespace = "EKSApplicationLogsFilters"
     value     = "1"
-    dimensions = {
-      PodApp = "$.pod_app"
-    }
-  }
 
+  }
 
 }
 
@@ -122,6 +119,9 @@ resource "aws_cloudwatch_metric_alarm" "error_logs" {
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+  dimensions = {
+    PodApp = "$.pod_app"
+  }
 }
 
 
