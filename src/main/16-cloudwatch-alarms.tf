@@ -58,9 +58,6 @@ resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold_metric_id = "sq"
-  namespace           = "AWS/Lambda"
-  period              = 60
-  statistic           = "Maximum"
   threshold           = var.cw_alarm_thresholds.lambda_concurrency_utilization
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 
@@ -108,11 +105,12 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
     name      = "ErrorCount"
     namespace = "EKSApplicationLogsFilters"
     value     = "1"
+    dimensions = {
+      PodApp = "$.pod_app"
+    }
   }
 
-  dimensions = {
-    PodApp = "$.pod_app"
-  }
+
 }
 
 resource "aws_cloudwatch_metric_alarm" "error_logs" {
