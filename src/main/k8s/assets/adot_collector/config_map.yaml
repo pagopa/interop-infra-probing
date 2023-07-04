@@ -51,6 +51,16 @@ data:
                 regex: '^/system\.slice/(.+)\.service$'
                 target_label: systemd_service_name
                 replacement: '$$${1}'
+              - action: replace
+                source_labels: [pod]
+                regex: '^(.+)-([^-]*-[^-]*)'
+                target_label: Service
+                replacement: '$$${1}'
+              - action: replace
+                source_labels: [pod]
+                regex: '^(.+)-\d$'
+                target_label: Service
+                replacement: '$$${1}'
     processors:
       # rename labels which apply to all metrics and are used in metricstransform/rename processor
       metricstransform/label_1:

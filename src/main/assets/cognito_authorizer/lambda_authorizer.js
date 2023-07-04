@@ -2,9 +2,9 @@
 const fs = require('fs');
 const authMapping = JSON.parse(fs.readFileSync(`${__dirname}/cognito_role_mapping-${process.env.ENV}.json`, 'utf8'));
 
+
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
-
 
 const keyClient = jwksClient({
     cache: process.env.JWKS_CACHE_ENABLED,
@@ -69,7 +69,7 @@ function matchPath(mapping_path,resource,method,group) {
 
 function getAuthorization(group,resource,method) {
     return ( Object.keys(authMapping).includes(group) ) && 
-    ( Object.keys(authMapping[group]).some( (x) => matchPath(x,resource,method,group)) );
+           ( Object.keys(authMapping[group]).some( (x) => matchPath(x,resource,method,group)) );
 
 }
 

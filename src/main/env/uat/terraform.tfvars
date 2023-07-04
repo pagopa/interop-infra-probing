@@ -15,6 +15,7 @@ kubernetes_addons_versions = {
 
 interop_probing_bucket_arn = "arn:aws:s3:::interop-probing-eservices-test"
 
+
 database_subnets          = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
 eks_control_plane_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 eks_workload_subnets      = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
@@ -41,6 +42,13 @@ timestream_table_magnetic_store_retention_period_in_days = 73000
 timestream_table_memory_store_retention_period_in_hours  = 8766
 
 probing_env_domain_name = "stato-eservice.uat.interop.pagopa.it"
+
+
+cw_alarm_thresholds = {
+  lambda_concurrency_utilization = 0.7
+  sqs_message_age                = 120
+}
+
 
 jwks_uri                = "https://uat.interop.pagopa.it/.well-known/probing-jwks.json"
 cognito_authorizer_uri  = "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:774300547186:function:interop-probing-apigw-lambda-cognito-authorizer-uat/invocations"

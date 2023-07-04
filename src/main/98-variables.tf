@@ -145,6 +145,12 @@ variable "probing_env_domain_name" {
   description = "Base domain for the probing project in this environment (e.g. foo.dev.bar.com)"
 }
 
+variable "cw_alarm_thresholds" {
+  type        = map(any)
+  description = "Clouwatch alarms threshold"
+}
+
+
 variable "jwks_uri" {
   type        = string
   description = "Well knows jwks URI for PDND call to APIGW"
