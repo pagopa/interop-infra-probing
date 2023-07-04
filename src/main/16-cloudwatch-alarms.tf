@@ -55,21 +55,22 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_pct" {
   treat_missing_data  = "notBreaching"
   alarm_name          = "${var.app_name}-lambda-conc-util-pct-${var.env}"
-  comparison_operator = "GreaterThanUpperThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  threshold           = 60
+  datapoints_to_alarm = 1
   evaluation_periods  = 1
-  threshold_metric_id = "sq"
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 
   metric_query {
     id          = "sq"
-    expression  = "SERVICE_QUOTA(conc_util)"
+    expression  = "conc_util / SERVICE_QUOTA(conc_util) * 100"
     return_data = true
     label       = "LambdaConcurrencyUtilization"
   }
 
   metric_query {
     id          = "conc_util"
-    return_data = true
+    return_data = false
 
     metric {
       metric_name = "ConcurrentExecutions"
@@ -104,6 +105,9 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
     name      = "ErrorCount"
     namespace = "EKSApplicationLogsFilters"
     value     = "1"
+    dimensions = {
+      PodApp = "$.pod_app"
+    }
 
   }
 
@@ -114,14 +118,12 @@ resource "aws_cloudwatch_metric_alarm" "error_logs" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
   metric_name         = "ErrorCount"
-  namespace           = "ApplicationLogs"
+  namespace           = "EKSApplicationLogsFilters"
   period              = 60
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
-  dimensions = {
-    PodApp = "$.pod_app"
-  }
+
 }
 
 
