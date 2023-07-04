@@ -48,10 +48,7 @@ resource "null_resource" "cognito_authorizer" {
   }
 
   triggers = {
-    index   = sha256(file("${path.module}/assets/cognito_authorizer/lambda_authorizer.js"))
-    mapping = sha256(file("${path.module}/assets/cognito_authorizer/cognito_role_mapping-dev.json"))
-    lock    = sha256(file("${path.module}/assets/cognito_authorizer/package-lock.json"))
-    package = sha256(file("${path.module}/assets/cognito_authorizer/package.json"))
+    always_run = "${timestamp()}"
   }
 }
 
@@ -68,9 +65,7 @@ resource "null_resource" "external_authorizer" {
   }
 
   triggers = {
-    index   = sha256(file("${path.module}/assets/external_authorizer/lambda_authorizer.js"))
-    lock    = sha256(file("${path.module}/assets/external_authorizer/package-lock.json"))
-    package = sha256(file("${path.module}/assets/external_authorizer/package.json"))
+    always_run = "${timestamp()}"
   }
 }
 
