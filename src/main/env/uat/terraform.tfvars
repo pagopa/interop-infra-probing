@@ -13,7 +13,7 @@ kubernetes_addons_versions = {
   adot       = "v0.76.1-eksbuild.1"
 }
 
-interop_probing_bucket_arn = "arn:aws:s3:::interop-probing-eservices-uat"
+interop_probing_bucket_arn = "arn:aws:s3:::interop-probing-eservices-test"
 
 database_subnets          = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
 eks_control_plane_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
