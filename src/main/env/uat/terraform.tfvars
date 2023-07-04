@@ -59,3 +59,4 @@ tags = {
   Environment = "uat"
   Owner       = "PagoPA"
   Source      = "https://github.com/pagopa/interop-infra-probing"
+}
