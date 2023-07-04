@@ -147,7 +147,8 @@ resource "aws_cloudwatch_log_metric_filter" "error_logs" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "error_logs" {
-  alarm_name          = "${var.app_name}-application-errors-${var.env}"
+  for_each            = toset(local.microservices)
+  alarm_name          = "${var.app_name}-application-errors-${each.value}-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
   metric_name         = "ErrorCount"
@@ -156,7 +157,9 @@ resource "aws_cloudwatch_metric_alarm" "error_logs" {
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
-
+  dimensions = {
+    PodApp = each.value
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "timestream_errors" {
