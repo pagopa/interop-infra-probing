@@ -11,14 +11,13 @@ data:
     receivers:
       prometheus:
         config:
-          global:
-            scrape_interval: 1m
-            scrape_timeout: 40s
 
           scrape_configs:
           - job_name: 'kubelets-cadvisor-metrics'
-            sample_limit: 10000
+            scrape_interval: 1m
+            scrape_timeout: 30s
             scheme: https
+            sample_limit: 10000
 
             kubernetes_sd_configs:
             - role: node
@@ -29,18 +28,13 @@ data:
             relabel_configs:
               - action: labelmap
                 regex: __meta_kubernetes_node_label_(.+)
-                # Only for Kubernetes ^1.7.3.
-                # See: https://github.com/prometheus/prometheus/issues/2916
               - target_label: __address__
-                # Changes the address to Kube API server's default address and port
                 replacement: kubernetes.default.svc:443
               - source_labels: [__meta_kubernetes_node_name]
                 regex: (.+)
                 target_label: __metrics_path__
-                # Changes the default metrics path to kubelet's proxy cadvdisor metrics endpoint
                 replacement: /api/v1/nodes/$$${1}/proxy/metrics/cadvisor
             metric_relabel_configs:
-              # extract readable container/pod name from id field
               - action: replace
                 source_labels: [id]
                 regex: '^/machine\.slice/machine-rkt\\x2d([^\\]+)\\.+/([^/]+)\.service$'
@@ -62,7 +56,6 @@ data:
                 target_label: Service
                 replacement: '$$${1}'
     processors:
-      # rename labels which apply to all metrics and are used in metricstransform/rename processor
       metricstransform/label_1:
         transforms:
           - include: .*
@@ -293,30 +286,32 @@ data:
             metric_names:
               - new_container_.*
               - pod_.*
-
+              - kube_pod_status_replicas_.*
+              - kube_pod_status_phase.*
+              - kube_pod_container_status_restarts_total
       # convert cumulative sum datapoints to delta
       cumulativetodelta:
         include:
-            metrics:
-                - new_container_cpu_usage_seconds_total
-                - pod_cpu_usage_seconds_total
-                - pod_memory_pgfault
-                - pod_memory_pgmajfault
-                - pod_memory_hierarchical_pgfault
-                - pod_memory_hierarchical_pgmajfault
-                - pod_network_rx_bytes
-                - pod_network_rx_dropped
-                - pod_network_rx_errors
-                - pod_network_rx_packets
-                - pod_network_tx_bytes
-                - pod_network_tx_dropped
-                - pod_network_tx_errors
-                - pod_network_tx_packets
-                - new_container_memory_pgfault
-                - new_container_memory_pgmajfault
-                - new_container_memory_hierarchical_pgfault
-                - new_container_memory_hierarchical_pgmajfault
-            match_type: strict
+          match_type: strict
+          metrics:
+              - new_container_cpu_usage_seconds_total
+              - pod_cpu_usage_seconds_total
+              - pod_memory_pgfault
+              - pod_memory_pgmajfault
+              - pod_memory_hierarchical_pgfault
+              - pod_memory_hierarchical_pgmajfault
+              - pod_network_rx_bytes
+              - pod_network_rx_dropped
+              - pod_network_rx_errors
+              - pod_network_rx_packets
+              - pod_network_tx_bytes
+              - pod_network_tx_dropped
+              - pod_network_tx_errors
+              - pod_network_tx_packets
+              - new_container_memory_pgfault
+              - new_container_memory_pgmajfault
+              - new_container_memory_hierarchical_pgfault
+              - new_container_memory_hierarchical_pgmajfault
 
       # convert delta to rate
       deltatorate:
@@ -405,6 +400,29 @@ data:
               - action: update_label
                 label: pod
                 new_label: PodName
+          - include: kube_deployment.*
+            match_type: regexp
+            action: update
+            operations:
+              - action: update_label
+                label: namespace
+                new_label: Namespace
+              - action: update_label
+                label: deployment
+                new_label: Service
+          - include: kube_pod.*
+            match_type: regexp
+            action: update
+            operations:
+              - action: update_label
+                label: namespace
+                new_label: Namespace
+              - action: update_label
+                label: phase
+                new_label: Phase
+              - action: update_label
+                label: container
+                new_label: Container
           - include: ^new_container_(.*)$$
             match_type: regexp
             action: update
@@ -417,10 +435,9 @@ data:
       batch:
         timeout: 60s
 
-    # only pod level metrics in metrics format, details in https://aws-otel.github.io/docs/getting-started/container-insights/eks-fargate
     exporters:
       awsemf:
-        log_group_name: '/aws/containerinsights/{ClusterName}/performance'
+        log_group_name: '/aws/eks/{ClusterName}/adot-metrics'
         log_stream_name: '{PodName}'
         namespace: 'ContainerInsights'
         region: ${aws_region}
@@ -430,21 +447,27 @@ data:
         parse_json_encoded_attr_values: ["kubernetes"]
         dimension_rollup_option: NoDimensionRollup
         metric_declarations:
-          - dimensions: [ [ClusterName, LaunchType], [ClusterName, Namespace, LaunchType], [ClusterName, Namespace, PodName, LaunchType]]
+          - dimensions: [[ClusterName, Namespace, Service]]
             metric_name_selectors:
-              - pod_cpu_utilization_over_pod_limit
               - pod_cpu_usage_total
               - pod_cpu_limit
-              - pod_memory_utilization_over_pod_limit
               - pod_memory_working_set
               - pod_memory_limit
               - pod_network_rx_bytes
               - pod_network_tx_bytes
+              - kube_pod_container_status_restarts_total
+          - dimensions: [[ClusterName, Namespace, Service],[ClusterName, Namespace, Service, PodName]]
+            metric_name_selectors:
+              - pod_cpu_utilization_over_pod_limit
+              - pod_memory_utilization_over_pod_limit
 
     extensions:
       health_check:
 
     service:
+      telemetry:
+        logs:
+          level: "info"
       pipelines:
         metrics:
           receivers: [prometheus]
