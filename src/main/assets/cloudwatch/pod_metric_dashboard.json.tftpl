@@ -1,0 +1,71 @@
+{
+    "widgets": [
+        {
+            "height": 6,
+            "width": 24,
+            "y": 7,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights", "pod_cpu_utilization_over_pod_limit", "Service", "${microservice}", "ClusterName", "${cluster_name}", "Namespace", "${k8s_namespace}", { "region": "${aws_region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${aws_region}",
+                "stat": "Average",
+                "period": 300,
+                "title": "PodCPUPct",
+                "legend": {
+                    "position": "bottom"
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 24,
+            "height": 7,
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights", "pod_network_tx_bytes", "Service", "${microservice}", "ClusterName", "${cluster_name}", "Namespace", "${k8s_namespace}", { "region": "${aws_region}" } ],
+                    [ ".", "pod_network_rx_bytes", ".", ".", ".", ".", ".", ".", { "region": "${aws_region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${aws_region}",
+                "stat": "Average",
+                "period": 300,
+                "title": "PodNetworkBytes",
+                "yAxis": {
+                    "left": {
+                        "showUnits": false
+                    },
+                    "right": {
+                        "showUnits": false
+                    }
+                },
+                "singleValueFullPrecision": false
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 13,
+            "width": 24,
+            "height": 7,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${aws_region}",
+                "stat": "Average",
+                "period": 300,
+                "title": "PodMemoryPct",
+                "metrics": [
+                    [ "ContainerInsights", "pod_memory_utilization_over_pod_limit", "Service", "${microservice}", "ClusterName", "${cluster_name}", "Namespace", "${k8s_namespace}", { "region": "${aws_region}" } ]
+                ]
+            }
+        }
+    ]
+}
