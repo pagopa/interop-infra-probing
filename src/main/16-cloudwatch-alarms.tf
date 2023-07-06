@@ -1,7 +1,7 @@
 locals {
-  microservices = ["interop-probing-api", "interop-probing-caller", "interop-probing-eservice-operations",
-    "interop-probing-eservice-registry-reader", "interop-probing-eservice-registry-updater",
-  "interop-probing-response-updater", "interop-probing-scheduler", "interop-probing-telemetry-writer", "interop-probing-statistics-api"]
+  microservices = ["interop-be-probing-api", "interop-be-probing-caller", "interop-be-probing-eservice-operations",
+    "interop-be-probing-eservice-registry-reader", "interop-be-probing-eservice-registry-updater",
+  "interop-be-probing-response-updater", "interop-be-probing-scheduler", "interop-be-probing-telemetry-writer", "interop-be-probing-statistics-api"]
 
   lambda_functions = [
     aws_lambda_function.cognito_authorizer.function_name,
