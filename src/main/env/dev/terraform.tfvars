@@ -45,6 +45,8 @@ probing_env_domain_name = "stato-eservice.dev.interop.pagopa.it"
 cw_alarm_thresholds = {
   lambda_concurrency_utilization = 0.7
   sqs_message_age                = 120
+  pod_cpu_utilization            = 0.7
+  pod_memory_utilization         = 0.7
 }
 
 
