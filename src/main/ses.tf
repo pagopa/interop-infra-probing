@@ -24,7 +24,7 @@ locals {
 }
 
 resource "aws_route53_record" "stato_eservice_dkim" {
-  count   = 3
+  count = 3
 
   zone_id = aws_route53_zone.probing_public.zone_id
   name    = "${local.stato_eservice_dkim_tokens[count.index]}._domainkey"
