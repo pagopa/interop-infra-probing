@@ -178,6 +178,24 @@ resource "aws_iam_group_policy" "local_development" {
     Version = "2012-10-17"
     Statement = [
       {
+        Sid    = "CloudWatchDashboardPermission"
+        Effect = "Allow"
+        Action = [
+
+
+          "cloudwatch:GetDashboard",
+
+          "cloudwatch:ListDashboards",
+
+          "cloudwatch:PutDashboard",
+
+          "cloudwatch:DeleteDashboards"
+        ]
+        Resource = [
+          "*"
+        ]
+      },
+      {
         Sid    = "TimestreamActions"
         Effect = "Allow"
         Action = [
