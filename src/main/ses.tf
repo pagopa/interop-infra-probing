@@ -8,7 +8,7 @@ resource "aws_ses_domain_dkim" "stato_eservice" {
 
 # DKIM also verifies domain ownership, no need for separate TXT records
 resource "aws_route53_record" "stato_eservice_dkim" {
-  count   = 3
+  count = 3
 
   zone_id = aws_route53_zone.probing_public.zone_id
   name    = "${aws_ses_domain_dkim.stato_eservice.dkim_tokens[count.index]}._domainkey"

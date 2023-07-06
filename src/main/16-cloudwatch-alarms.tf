@@ -17,6 +17,8 @@ locals {
 
 }
 
+
+
 resource "aws_cloudwatch_metric_alarm" "sqs_message_age" {
   for_each            = toset(local.sqs_queues)
   treat_missing_data  = "notBreaching"
@@ -142,4 +144,36 @@ resource "aws_cloudwatch_metric_alarm" "timestream_errors" {
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "cpu_usage_microservices" {
+  for_each            = toset(local.microservices)
+  alarm_name          = "${var.app_name}-${each.value}-pod-cpu-${var.env}"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 10
+  metric_name         = "pod_cpu_utilization_over_pod_limit"
+  namespace           = "ContainerInsights"
+  period              = 60
+  statistic           = "Average"
+  threshold           = var.cw_alarm_thresholds.pod_cpu_utilization
+  alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+  dimensions = {
+    Service = each.value
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "ram_usage_microservices" {
+  for_each            = toset(local.microservices)
+  alarm_name          = "${var.app_name}-${each.value}-pod-memory-${var.env}"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 10
+  metric_name         = "pod_memory_utilization_over_pod_limit"
+  namespace           = "ContainerInsights"
+  period              = 60
+  statistic           = "Average"
+  threshold           = var.cw_alarm_thresholds.pod_memory_utilization
+  alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+  dimensions = {
+    Service = each.value
+  }
 }
