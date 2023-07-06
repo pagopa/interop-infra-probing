@@ -164,7 +164,9 @@ resource "aws_cloudwatch_metric_alarm" "cpu_usage_microservices" {
   threshold           = var.cw_alarm_thresholds.pod_cpu_utilization
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
   dimensions = {
-    Service = each.value
+    Service     = each.value
+    Namespace   = var.env
+    ClusterName = module.eks.cluster_name
   }
 }
 
@@ -181,6 +183,8 @@ resource "aws_cloudwatch_metric_alarm" "ram_usage_microservices" {
   threshold           = var.cw_alarm_thresholds.pod_memory_utilization
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
   dimensions = {
-    Service = each.value
+    Service     = each.value
+    Namespace   = var.env
+    ClusterName = module.eks.cluster_name
   }
 }
