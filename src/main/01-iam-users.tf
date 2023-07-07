@@ -263,6 +263,8 @@ resource "aws_iam_group_policy" "local_development" {
           "xray:GetInsightSummaries",
           "xray:GetSamplingTargets",
           "xray:PutTraceSegments",
+          "xray:CreateGroup",
+          "xray:DeleteGroup",
           "xray:BatchGetTraces",
           "xray:BatchGetTraceSummaryById",
           "xray:GetTimeSeriesServiceStatistics",
