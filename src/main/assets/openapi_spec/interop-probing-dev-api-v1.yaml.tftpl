@@ -20,14 +20,14 @@ tags:
     description: Operations on probing settings
 paths:
   '/status':
-  get:
-    tags:
-      - Status
-    operationId: getHealthStatus
-    description: Get the micro-service status
-    responses:
-      '204':
-        description: The micro-service is running
+    get:
+      tags:
+        - Status
+      operationId: getHealthStatus
+      description: Get the micro-service status
+      responses:
+        '204':
+          description: The micro-service is running
   "/eservices/mainData/{eserviceRecordId}":
     get:
       summary: Retrive e-service main data
