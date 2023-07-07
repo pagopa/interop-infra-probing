@@ -28,6 +28,12 @@ paths:
       responses:
         '204':
           description: The micro-service is running
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/status
+        httpMethod: GET
+        connectionType: VPC_LINK
+        type: http_proxy
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
   "/eservices/mainData/{eserviceRecordId}":
     get:
       summary: Retrive e-service main data
