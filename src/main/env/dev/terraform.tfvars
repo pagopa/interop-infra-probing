@@ -50,6 +50,8 @@ cw_alarm_thresholds = {
 
 jwks_uri = "https://dev.interop.pagopa.it/.well-known/probing-jwks.json"
 
+well_known_object_kid = "f9af55d7-6e12-4d11-9f7d-bc1bfd6870f8"
+
 tags = {
   CreatedBy   = "Terraform"
   Environment = "dev"
