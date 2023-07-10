@@ -24,6 +24,24 @@
         {
             "type": "metric",
             "x": 0,
+            "y": 13,
+            "width": 24,
+            "height": 7,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${aws_region}",
+                "stat": "Average",
+                "period": 300,
+                "title": "PodMemoryPct",
+                "metrics": [
+                    [ "ContainerInsights", "pod_memory_utilization_over_pod_limit", "Service", "${microservice}", "ClusterName", "${cluster_name}", "Namespace", "${k8s_namespace}", { "region": "${aws_region}" } ]
+                ]
+            }
+        },
+                {
+            "type": "metric",
+            "x": 0,
             "y": 0,
             "width": 24,
             "height": 7,
@@ -47,24 +65,6 @@
                     }
                 },
                 "singleValueFullPrecision": false
-            }
-        },
-        {
-            "type": "metric",
-            "x": 0,
-            "y": 13,
-            "width": 24,
-            "height": 7,
-            "properties": {
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${aws_region}",
-                "stat": "Average",
-                "period": 300,
-                "title": "PodMemoryPct",
-                "metrics": [
-                    [ "ContainerInsights", "pod_memory_utilization_over_pod_limit", "Service", "${microservice}", "ClusterName", "${cluster_name}", "Namespace", "${k8s_namespace}", { "region": "${aws_region}" } ]
-                ]
             }
         }
     ]
