@@ -141,7 +141,7 @@ resource "aws_cloudwatch_metric_alarm" "timestream_errors" {
   alarm_name          = "${var.app_name}-timestream-system-errors-${var.env}"
   treat_missing_data  = "notBreaching"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 10
   datapoints_to_alarm = 1
   metric_name         = "SystemErrors"
   namespace           = "AWS/Timestream"
