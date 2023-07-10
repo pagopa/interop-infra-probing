@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "allow_cloudfront_well_known" {
       test     = "StringEquals"
       variable = "AWS:SourceArn"
       values = [
-        module.fe_cdn.cloudfront_distribution_arn
+        module.well_known_s3_bucket.cloudfront_distribution_arn
       ]
     }
     effect = "Allow"
