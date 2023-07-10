@@ -1,15 +1,15 @@
-data "aws_iam_policy_document" "allow_cloudfront_well_known" {
+data "aws_iam_policy_document" "allow_lambda_well_known" {
   statement {
-    sid = "AllowCloudFrontServicePrincipalReadOnly"
+    sid = "AllowLambdaServicePrincipalReadOnly"
     principals {
       type        = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
+      identifiers = ["lambda.amazonaws.com"]
     }
     condition {
       test     = "StringEquals"
       variable = "AWS:SourceArn"
       values = [
-        module.well_known_s3_bucket.cloudfront_distribution_arn
+        aws_lambda_function.well_known.arn
       ]
     }
     effect = "Allow"
@@ -31,7 +31,7 @@ module "well_known_s3_bucket" {
   bucket = "${var.app_name}-well-known-${var.env}"
 
   attach_policy = true
-  policy        = data.aws_iam_policy_document.allow_cloudfront.json
+  policy        = data.aws_iam_policy_document.allow_lambda_well_known.json
 
   block_public_acls       = true
   block_public_policy     = true
@@ -44,3 +44,4 @@ module "well_known_s3_bucket" {
   }
 
 }
+
