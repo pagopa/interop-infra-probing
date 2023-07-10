@@ -159,7 +159,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_usage_microservices" {
   datapoints_to_alarm = 2
   metric_name         = "pod_cpu_utilization_over_pod_limit"
   namespace           = "ContainerInsights"
-  period              = 180
+  period              = 60
   statistic           = "Average"
   threshold           = var.cw_alarm_thresholds.pod_cpu_utilization
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
