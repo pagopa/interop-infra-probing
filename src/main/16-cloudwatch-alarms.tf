@@ -122,7 +122,7 @@ resource "aws_cloudwatch_metric_alarm" "error_logs" {
   for_each            = toset(local.microservices)
   alarm_name          = "${var.app_name}-${each.value}-app-errors-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 10
   datapoints_to_alarm = 1
   metric_name         = "ErrorCount"
   namespace           = "EKSApplicationLogsFilters"
