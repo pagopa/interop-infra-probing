@@ -108,7 +108,7 @@ module "fe_cdn" {
       cache_policy_id      = data.aws_cloudfront_cache_policy.caching_optimized.id
       lambda_function_association = {
         origin-request = {
-          lambda_arn = aws_lambda_function.well_known.qualified_arn
+          lambda_arn = aws_lambda_function.well_known.arn
         }
 
       }
