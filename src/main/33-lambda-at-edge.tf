@@ -33,6 +33,7 @@ data "aws_iam_policy_document" "lambda_at_edge_assume_role_policy" {
 }
 
 resource "aws_lambda_function" "well_known" {
+  provider         = aws.us_east_1
   filename         = "well_known.zip"
   function_name    = "${var.app_name}-well-known-edge-${var.env}"
   role             = aws_iam_role.lambda_at_edge_execution_role.arn

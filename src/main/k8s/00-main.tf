@@ -27,6 +27,15 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us_east_1"
+  default_tags {
+    tags = var.tags
+  }
+}
+
+
 data "aws_eks_cluster" "this" {
   name = var.eks_cluster_name
 }
