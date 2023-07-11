@@ -105,7 +105,7 @@ module "fe_cdn" {
       use_forwarded_values = false
       allowed_methods      = ["GET", "HEAD", "OPTIONS"]
       cached_methods       = ["GET", "HEAD"]
-      cache_policy_id      = data.aws_cloudfront_cache_policy.caching_optimized.id
+      cache_policy_id      = data.aws_cloudfront_cache_policy.caching_disabled.id
 
     },
     {
