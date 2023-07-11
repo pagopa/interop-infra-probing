@@ -1,7 +1,7 @@
 locals {
-  microservices = ["interop-probing-api", "interop-probing-caller", "interop-probing-eservice-operations",
-    "interop-probing-eservice-registry-reader", "interop-probing-eservice-registry-updater",
-  "interop-probing-response-updater", "interop-probing-scheduler", "interop-probing-telemetry-writer", "interop-probing-statistics-api"]
+  microservices = ["interop-be-probing-api", "interop-be-probing-caller", "interop-be-probing-eservice-operations",
+    "interop-be-probing-eservice-registry-reader", "interop-be-probing-eservice-registry-updater",
+  "interop-be-probing-response-updater", "interop-be-probing-scheduler", "interop-be-probing-telemetry-writer", "interop-be-probing-statistics-api"]
 
   lambda_functions = [
     aws_lambda_function.cognito_authorizer.function_name,
@@ -17,12 +17,15 @@ locals {
 
 }
 
+
+
 resource "aws_cloudwatch_metric_alarm" "sqs_message_age" {
   for_each            = toset(local.sqs_queues)
   treat_missing_data  = "notBreaching"
   alarm_name          = "${var.app_name}-sqs-message-age-${each.value}-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 10
+  evaluation_periods  = 3
+  datapoints_to_alarm = 2
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
@@ -39,7 +42,8 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   treat_missing_data  = "notBreaching"
   alarm_name          = "${var.app_name}-${each.value}-errors-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 10
+  evaluation_periods  = 1
+  datapoints_to_alarm = 1
   metric_name         = "Errors"
   namespace           = "AWS/Lambda"
   period              = 60
@@ -86,7 +90,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_server_errors" {
   alarm_name          = "${var.app_name}-apigw-5xx-${var.env}"
   treat_missing_data  = "notBreaching"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 10
+  evaluation_periods  = 1
+  datapoints_to_alarm = 1
   metric_name         = "5XXError"
   namespace           = "AWS/ApiGateway"
   period              = 60
@@ -117,7 +122,9 @@ resource "aws_cloudwatch_metric_alarm" "error_logs" {
   for_each            = toset(local.microservices)
   alarm_name          = "${var.app_name}-${each.value}-app-errors-${var.env}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
+  treat_missing_data  = "notBreaching"
   evaluation_periods  = 10
+  datapoints_to_alarm = 1
   metric_name         = "ErrorCount"
   namespace           = "EKSApplicationLogsFilters"
   period              = 60
@@ -136,10 +143,49 @@ resource "aws_cloudwatch_metric_alarm" "timestream_errors" {
   treat_missing_data  = "notBreaching"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 10
+  datapoints_to_alarm = 1
   metric_name         = "SystemErrors"
   namespace           = "AWS/Timestream"
   period              = 60
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "cpu_usage_microservices" {
+  for_each            = toset(local.microservices)
+  alarm_name          = "${var.app_name}-${each.value}-pod-cpu-${var.env}"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 3
+  datapoints_to_alarm = 2
+  metric_name         = "pod_cpu_utilization_over_pod_limit"
+  namespace           = "ContainerInsights"
+  period              = 60
+  statistic           = "Average"
+  threshold           = var.cw_alarm_thresholds.pod_cpu_utilization
+  alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+  dimensions = {
+    Service     = each.value
+    Namespace   = var.env
+    ClusterName = module.eks.cluster_name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "ram_usage_microservices" {
+  for_each            = toset(local.microservices)
+  alarm_name          = "${var.app_name}-${each.value}-pod-memory-${var.env}"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 3
+  datapoints_to_alarm = 2
+  metric_name         = "pod_memory_utilization_over_pod_limit"
+  namespace           = "ContainerInsights"
+  period              = 60
+  statistic           = "Average"
+  threshold           = var.cw_alarm_thresholds.pod_memory_utilization
+  alarm_actions       = [aws_sns_topic.cw_alarms.arn]
+  dimensions = {
+    Service     = each.value
+    Namespace   = var.env
+    ClusterName = module.eks.cluster_name
+  }
 }
