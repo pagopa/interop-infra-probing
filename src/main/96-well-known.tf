@@ -1,29 +1,3 @@
-data "aws_iam_policy_document" "allow_lambda_well_known" {
-  statement {
-    sid = "AllowLambdaServicePrincipalReadOnly"
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "AWS:SourceArn"
-      values = [
-        aws_lambda_function.well_known.arn
-      ]
-    }
-    effect = "Allow"
-    actions = [
-      "s3:GetObject"
-    ]
-
-    resources = [
-      "${module.well_known_s3_bucket.s3_bucket_arn}/*",
-    ]
-  }
-}
-
-
 module "well_known_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "3.8.2"
