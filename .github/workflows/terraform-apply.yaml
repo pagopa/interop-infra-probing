@@ -72,7 +72,7 @@ jobs:
           # environment: [dev, uat, prod_w]
           environment: [dev, uat]
       runs-on: ubuntu-latest
-      continue-on-error: false
+      continue-on-error: true
       environment: ${{ matrix.environment }}
       permissions:
         id-token: write   # This is required for requesting the JWT
