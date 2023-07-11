@@ -1,0 +1,881 @@
+---
+openapi: 3.0.3
+info:
+  title: E-Service Monitor Interop API specifications
+  version: 1.0.0
+  x-summary: E-Service Monitor APIs
+  description: OpenAPI specification for E-Service Monitor's services exposed for
+    the Interop platform
+  termsOfService: https://www.e-serviceurl-example.com/terms
+  contact:
+    name: contactToDefinePagoPa
+    email: toDefinePagoPa@pagopa.it
+  license:
+    name: Interop's licence
+    url: https://to-define/
+tags:
+  - name: EServices
+    description: Operations on EServices registry
+  - name: Probing
+    description: Operations on probing settings
+paths:
+  '/status':
+    get:
+      tags:
+        - Status
+      operationId: getHealthStatus
+      description: Get the micro-service status
+      responses:
+        '204':
+          description: The micro-service is running
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/status
+        httpMethod: GET
+        connectionType: VPC_LINK
+        type: http_proxy
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+  "/eservices/mainData/{eserviceRecordId}":
+    get:
+      summary: Retrive e-service main data
+      description: Retrive e-service main data
+      tags:
+        - Read
+      operationId: getEserviceMainData
+      parameters:
+        - name: eserviceRecordId
+          in: path
+          required: true
+          description: the e-service's record id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: The main data of the service got successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MainDataEserviceResponse"
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please ry again later.
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/mainData/{eserviceRecordId}
+        httpMethod: GET
+        connectionType: VPC_LINK
+        type: http_proxy
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        requestParameters:
+          integration.request.path.eserviceRecordId: method.request.path.eserviceRecordId
+  "/eservices/probingData/{eserviceRecordId}":
+    get:
+      summary: Retrive e-service probing data
+      description: Retrive e-service probing data
+      tags:
+        - Read
+      operationId: getEserviceProbingData
+      parameters:
+        - name: eserviceRecordId
+          in: path
+          required: true
+          description: the e-service's record id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: The probing data of the service got successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProbingDataEserviceResponse"
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please ry again later.
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/probingData/{eserviceRecordId}
+        httpMethod: GET
+        connectionType: VPC_LINK
+        type: http_proxy
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        requestParameters:
+          integration.request.path.eserviceRecordId: method.request.path.eserviceRecordId
+  "/eservices/{eserviceId}/versions/{versionId}/updateState":
+    post:
+      summary: Updates the state of an e-service.
+      description: Updates the state of the e-service identified by its id and version id.
+      tags:
+        - Write
+      operationId: updateEserviceState
+      parameters:
+        - name: eserviceId
+          in: path
+          required: true
+          description: The e-service name
+          schema:
+            type: string
+            format: uuid
+        - name: versionId
+          in: path
+          required: true
+          description: the e-service version
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeEserviceStateRequest"
+      responses:
+        "204":
+          description: The update has been successfully completed
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: The e-service hasn't been found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please try again later.
+      security:
+      - external: []
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateState
+        httpMethod: POST
+        connectionType: VPC_LINK
+        type: http_proxy
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        requestParameters:
+          integration.request.path.eserviceId: method.request.path.eserviceId
+          integration.request.path.versionId: method.request.path.versionId
+  "/eservices/{eserviceId}/versions/{versionId}/probing/updateState":
+    post:
+      summary: Activates or deactivates the probing polling process for an e-service.
+      description: Activates or deactivates the probing polling process for the
+        e-service identified by its id and version id
+      tags:
+        - Write
+      operationId: updateEserviceProbingState
+      parameters:
+        - name: eserviceId
+          in: path
+          required: true
+          description: The e-service name
+          schema:
+            type: string
+            format: uuid
+        - name: versionId
+          in: path
+          required: true
+          description: the e-service version
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeProbingStateRequest"
+      responses:
+        "204":
+          description: The update has been successfully completed
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: The e-service hasn't been found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please try again later.
+      security:
+      - external: []      
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/probing/updateState
+        httpMethod: POST
+        connectionType: VPC_LINK
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        type: http_proxy
+        requestParameters:
+          integration.request.path.eserviceId: method.request.path.eserviceId
+          integration.request.path.versionId: method.request.path.versionId
+  "/eservices/{eserviceId}/versions/{versionId}/updateFrequency":
+    post:
+      summary: Updates the frequency and the time interval of an e-service's polling
+        process.
+      description: Updates the frequency and the time interval of the polling process
+        for the e-service identified by its id and version id
+      tags:
+        - Write
+      operationId: updateEserviceFrequency
+      parameters:
+        - name: eserviceId
+          in: path
+          required: true
+          description: The e-service name
+          schema:
+            type: string
+            format: uuid
+        - name: versionId
+          in: path
+          required: true
+          description: the e-service version
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeProbingFrequencyRequest"
+      responses:
+        "204":
+          description: The update has been successfully completed
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: The e-service hasn't been found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please try again later.
+      security:
+      - external: []
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/updateFrequency
+        httpMethod: POST
+        connectionType: VPC_LINK
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        type: http_proxy
+        requestParameters:
+          integration.request.path.eserviceId: method.request.path.eserviceId
+          integration.request.path.versionId: method.request.path.versionId
+  /eservices:
+    get:
+      summary: Retrive e-services by filters
+      description: Retrive e-services by filters
+      tags:
+        - Read
+      operationId: searchEservices
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: the e-service's page limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          required: true
+          description: the page's offset
+          schema:
+            type: integer
+            minimum: 0
+        - name: eserviceName
+          in: query
+          required: false
+          description: the e-service's name
+          schema:
+            type: string
+            format: string
+        - name: producerName
+          in: query
+          required: false
+          description: the e-service's producer name
+          schema:
+            type: string
+            format: string
+        - name: versionNumber
+          in: query
+          required: false
+          description: the e-service's version
+          schema:
+            type: string
+            format: integer
+        - name: state
+          in: query
+          required: false
+          description: the e-service's state
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/EserviceStateFE"
+      responses:
+        "200":
+          description: "The search has been successfully performed "
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchEserviceResponse"
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please try again later.
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices
+        httpMethod: GET
+        connectionType: VPC_LINK
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        type: http_proxy
+  /producers:
+    get:
+      summary: Retrive e-services producers
+      description: Retrive e-services producers
+      tags:
+        - Read
+      operationId: getEservicesProducers
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: the e-service's page limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          required: true
+          description: the page's offset
+          schema:
+            type: integer
+            minimum: 0
+        - name: producerName
+          in: query
+          required: false
+          description: the e-service's producer name
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: The search for the list of producers has been performed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchProducerNameResponse"
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please ry again later.
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/producers
+        httpMethod: GET
+        connectionType: VPC_LINK
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        type: http_proxy
+  "/telemetryData/eservices/{eserviceRecordId}":
+    get:
+      summary: Retrive e-service statistics
+      description: Retrive e-service statistics
+      tags:
+        - Read
+      operationId: statisticsEservices
+      parameters:
+        - name: eserviceRecordId
+          in: path
+          required: true
+          description: The e-service record id
+          schema:
+            type: integer
+            format: int64
+        - name: pollingFrequency
+          in: query
+          required: true
+          description: The e-service polling frequency
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "The search has been successfully performed "
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatisticsEserviceResponse"
+        "400":
+          description: The provided input data is invalid
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: A managed error has occured during the request elaboration
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              example:
+                type: string
+                status: 500
+                title: Internal Server Error
+                detail: There is a problem processing the request on the server.
+                traceId: string
+                errors:
+                  - code: 000-1234
+                    detail: The server is currently down for maintenance. Please try again later.
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/telemetryData/eservices/{eserviceRecordId}
+        httpMethod: GET
+        connectionType: VPC_LINK
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        type: http_proxy
+        requestParameters:
+          integration.request.path.eserviceRecordId: method.request.path.eserviceRecordId
+  '/telemetryData/eservices/filtered/{eserviceRecordId}':
+      get:
+        summary: Retrive filtered e-service statistics
+        description: 'Retrive filtered e-service statistics'
+        tags:
+          - Read
+        operationId: filteredStatisticsEservices
+        parameters:
+          - name: eserviceRecordId
+            in: path
+            required: true
+            description: The e-service record id
+            schema:
+              type: integer
+              format: int64
+          - name: pollingFrequency
+            in: query
+            required: true
+            description: The e-service polling frequency
+            schema:
+              type: integer
+          - name: startDate
+            in: query
+            required: true
+            description: filters start date
+            schema:
+              type: string
+              format: date-time
+          - name: endDate
+            in: query
+            required: true
+            description: filters end date
+            schema:
+              type: string
+              format: date-time
+        responses:
+          '200':
+            description: 'The search has been successfully performed '
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/StatisticsEserviceResponse'
+          '400':
+            description: The provided input data is invalid
+            content:
+              application/problem+json:
+                schema:
+                  $ref: '#/components/schemas/Problem'
+          '500':
+            description: A managed error has occured during the request elaboration
+            content:
+              application/problem+json:
+                schema:
+                  $ref: '#/components/schemas/Problem'
+                example:
+                  type: string
+                  status: 500
+                  title: 'Internal Server Error'
+                  detail: 'There is a problem processing the request on the server.'
+                  traceId: 'string'
+                  errors: [ { 'code': '000-1234', 'detail': 'The server is currently down for maintenance. Please try again later.' } ]
+        security:
+        - cognito: []
+        x-amazon-apigateway-integration:
+          uri: http://$${stageVariables.aws_lb_nlb_dns_name}/telemetryData/eservices/filtered/{eserviceRecordId}
+          httpMethod: GET
+          connectionType: VPC_LINK
+          connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+          type: http_proxy
+          requestParameters:
+            integration.request.path.eserviceRecordId: method.request.path.eserviceRecordId
+components:
+  schemas:
+    StatisticContent:
+      type: object
+      properties:
+        responseTime:
+          title: Response time
+          type: integer
+          format: int64
+        status:
+          $ref: "#/components/schemas/EserviceStatus"
+        time:
+          title: date of telemetry
+          type: string
+          format: date-time
+    PercentageContent:
+      type: object
+      properties:
+        value:
+          title: percentage of telemetry
+          type: number
+          format: float
+        status:
+          title: status of telemetry
+          type: string
+    StatisticsEserviceResponse:
+      type: object
+      properties:
+        values:
+          title: eservice status values list
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticContent"
+        percentages:
+          title: eservice status percentages list
+          type: array
+          items:
+            $ref: "#/components/schemas/PercentageContent"
+    EserviceStatus:
+      type: string
+      enum:
+        - OK
+        - N/D
+        - KO
+    Problem:
+      properties:
+        type:
+          description: URI reference of type definition
+          type: string
+        status:
+          description: The HTTP status code generated by the origin server for this
+            occurrence of the problem.
+          example: 400
+          exclusiveMaximum: true
+          maximum: 600
+          minimum: 100
+          type: integer
+          format: int32
+        title:
+          description: A short, summary of the problem type. Written in english and readable
+          example: Service Unavailable
+          maxLength: 64
+          pattern: ^[ -~]{0,64}$
+          type: string
+        detail:
+          description: A human readable explanation of the problem.
+          example: Request took too long to complete.
+          maxLength: 4096
+          pattern: ^.{0,1024}$
+          type: string
+        traceId:
+          type: string
+          nullable: false
+        errors:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ProblemError"
+      additionalProperties: false
+      required:
+        - status
+        - title
+        - errors
+    ProblemError:
+      properties:
+        code:
+          description: Internal code of the error
+          example: 123-4567
+          minLength: 8
+          maxLength: 8
+          pattern: ^[0-9]{3}-[0-9]{4}$
+          type: string
+        detail:
+          description: A human readable explanation specific to this occurrence of the
+            problem.
+          example: Parameter not valid
+          maxLength: 4096
+          pattern: ^.{0,1024}$
+          type: string
+      required:
+        - code
+        - detail
+    MainDataEserviceResponse:
+      type: object
+      properties:
+        eserviceName:
+          title: Service name
+          type: string
+        versionNumber:
+          title: the e-service's version
+          type: integer
+        producerName:
+          title: Service producer name
+          type: string
+        pollingFrequency:
+          title: the e-service's polling frequency
+          type: integer
+        versionId:
+          description: the e-service version
+          type: string
+          format: uuid
+        eserviceId:
+          description: the e-service id
+          type: string
+          format: uuid
+    ProbingDataEserviceResponse:
+      type: object
+      properties:
+        probingEnabled:
+          title: probing activated
+          type: boolean
+        state:
+          $ref: "#/components/schemas/EserviceStateFE"
+        responseReceived:
+          title: last response date
+          type: string
+          format: date-time
+        eserviceActive:
+          title: eservice active
+          type: boolean
+    ChangeProbingStateRequest:
+      type: object
+      required:
+        - probingEnabled
+      properties:
+        probingEnabled:
+          type: boolean
+    ChangeEserviceStateRequest:
+      type: object
+      required:
+        - eServiceState
+      properties:
+        eServiceState:
+          $ref: "#/components/schemas/EserviceState"
+    ChangeProbingFrequencyRequest:
+      type: object
+      required:
+        - frequency
+        - startTime
+        - endTime
+      properties:
+        frequency:
+          title: Service verification frequency in minutes
+          type: integer
+          format: int32
+          default: 5
+          minimum: 1
+        startTime:
+          title: Service verification start time
+          type: string
+          format: time
+        endTime:
+          title: Service verification end time
+          type: string
+          format: time
+    EserviceState:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+    SearchProducerNameResponse:
+      type: object
+      properties:
+        content:
+          title: list of producers names
+          type: array
+          items:
+            type: string
+    EserviceStateFE:
+      type: string
+      enum:
+        - ONLINE
+        - OFFLINE
+        - N/D
+    SearchEserviceResponse:
+      type: object
+      properties:
+        content:
+          title: eservice dto list
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchEserviceContent"
+        offset:
+          title: page offset
+          type: integer
+        limit:
+          title: page limit
+          type: integer
+        totalElements:
+          title: total elements
+          type: integer
+          format: int64
+    SearchEserviceContent:
+      type: object
+      properties:
+        eserviceRecordId:
+          title: Service record Id
+          type: integer
+          format: int64
+        eserviceName:
+          title: Service name
+          type: string
+        producerName:
+          title: Service producer name
+          type: string
+        responseReceived:
+          title: last response date
+          type: string
+          format: date-time
+        state:
+          $ref: "#/components/schemas/EserviceStateFE"
+        versionNumber:
+          title: the e-service's version
+          type: integer
+  securitySchemes:
+    external:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "custom"
+      x-amazon-apigateway-authorizer:
+        authorizerUri: "${external_authorizer_arn}"
+        authorizerResultTtlInSeconds: 0
+        identitySource: "method.request.header.Authorization"
+        type: "request"
+    cognito:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "custom"
+      x-amazon-apigateway-authorizer:
+        authorizerUri: "${cognito_authorizer_arn}"
+        authorizerResultTtlInSeconds: 0
+        identitySource: "method.request.header.Authorization"
+        type: "request"
