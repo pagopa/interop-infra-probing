@@ -5,7 +5,7 @@ module "well_known_s3_bucket" {
   bucket = "${var.app_name}-well-known-${var.env}"
 
   attach_policy = true
-  policy        = data.aws_iam_policy_document.allow_lambda_well_known.json
+  policy        = data.aws_iam_policy_document.allow_cloudfront.json
 
   block_public_acls       = true
   block_public_policy     = true
