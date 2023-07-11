@@ -168,7 +168,6 @@ variable "lambda_authorizer_cache_max_age" {
   description = "Max age for cache JWKS in lambda authorizer"
   default     = 86400
 }
-
 variable "tags" {
   type = map(any)
   default = {

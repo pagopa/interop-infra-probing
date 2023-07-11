@@ -48,7 +48,10 @@ module "fe_cdn" {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
       origin_access_control = "fe_hosting_oac"
     }
-
+    wellknown_hosting_oac = {
+      domain_name           = module.well_known_s3_bucket.s3_bucket_bucket_domain_name
+      origin_access_control = "wellknown_hosting_oac"
+    }
     apigw = {
       origin_id   = "apigw"
       origin_path = "/${aws_api_gateway_stage.stage.stage_name}"
@@ -75,6 +78,13 @@ module "fe_cdn" {
       signing_behavior = "always"
       signing_protocol = "sigv4"
     }
+
+    wellknown_hosting_oac = {
+      description      = "CloudFront access to S3"
+      origin_type      = "s3"
+      signing_behavior = "always"
+      signing_protocol = "sigv4"
+    }
   }
 
   default_cache_behavior = {
@@ -87,6 +97,17 @@ module "fe_cdn" {
     cache_policy_id      = data.aws_cloudfront_cache_policy.caching_optimized.id
   }
   ordered_cache_behavior = [
+    {
+      path_pattern           = "/.well-known/*"
+      target_origin_id       = "wellknown_hosting_oac"
+      viewer_protocol_policy = "redirect-to-https"
+
+      use_forwarded_values = false
+      allowed_methods      = ["GET", "HEAD", "OPTIONS"]
+      cached_methods       = ["GET", "HEAD"]
+      cache_policy_id      = data.aws_cloudfront_cache_policy.caching_disabled.id
+
+    },
     {
       path_pattern             = "/eservices"
       target_origin_id         = "apigw"

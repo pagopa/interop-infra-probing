@@ -18,12 +18,11 @@ data "aws_iam_policy_document" "allow_cloudfront_well_known" {
     ]
 
     resources = [
-      "${module.well_known_s3_bucket.s3_bucket_arn}/*",
+      "${module.well_known_s3_bucket.s3_bucket_arn}",
+      "${module.well_known_s3_bucket.s3_bucket_arn}/*"
     ]
   }
 }
-
-
 module "well_known_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "3.8.2"
@@ -31,7 +30,7 @@ module "well_known_s3_bucket" {
   bucket = "${var.app_name}-well-known-${var.env}"
 
   attach_policy = true
-  policy        = data.aws_iam_policy_document.allow_cloudfront.json
+  policy        = data.aws_iam_policy_document.allow_cloudfront_well_known.json
 
   block_public_acls       = true
   block_public_policy     = true
