@@ -98,7 +98,7 @@ module "fe_cdn" {
   }
   ordered_cache_behavior = [
     {
-      path_pattern           = "/.well-known"
+      path_pattern           = "/.well-known/*"
       target_origin_id       = "wellknown_hosting_oac"
       viewer_protocol_policy = "redirect-to-https"
 

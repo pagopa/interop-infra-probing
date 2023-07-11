@@ -18,8 +18,7 @@ data "aws_iam_policy_document" "allow_cloudfront" {
     ]
 
     resources = [
-      "${module.fe_s3_bucket.s3_bucket_arn}/*",
-      "${module.well_known_s3_bucket.s3_bucket_arn}/*",
+      "${module.fe_s3_bucket.s3_bucket_arn}/*"
     ]
   }
 }
