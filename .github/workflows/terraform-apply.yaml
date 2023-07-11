@@ -67,7 +67,7 @@ jobs:
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       name: "terraform-apply (merge)"
       strategy:
-        max-parallel: 1
+        max-parallel: 2
         matrix:
           # environment: [dev, uat, prod_w]
           environment: [dev, uat]
