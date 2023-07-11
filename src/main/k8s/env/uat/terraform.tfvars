@@ -9,9 +9,9 @@ tags = {
   Source      = "https://github.com/pagopa/interop-infra-probing"
 }
 
-be_prefix        = "interop-be-probing"
-eks_cluster_name = "interop-probing-eks-uat"
-#adot_irsa_role_arn           = TDB
+be_prefix                    = "interop-be-probing"
+eks_cluster_name             = "interop-probing-eks-uat"
+adot_irsa_role_arn           = "arn:aws:iam::010158505074:role/adot"
 fargate_profiles_roles_names = ["ApplicationProfile-20230711133023431000000006", "ObservabilityProfile-20230711133023779600000008", "SystemProfile-20230711133023582000000007"]
 sso_full_admin_role_name     = "AWSReservedSSO_FullAdmin_010f7fe5de34c177"
 infra_repo_role_name         = "GithubActionIACRole"
