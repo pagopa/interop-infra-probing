@@ -40,6 +40,7 @@ resource "aws_lambda_function" "well_known" {
   source_code_hash = data.archive_file.well_known.output_base64sha256
   runtime          = "nodejs16.x"
   timeout          = 15
+  publish          = true
   environment {
     variables = {
       ENV = var.env
