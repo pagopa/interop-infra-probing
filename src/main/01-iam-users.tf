@@ -178,6 +178,18 @@ resource "aws_iam_group_policy" "local_development" {
     Version = "2012-10-17"
     Statement = [
       {
+        Sid    = "PutObjectOnWellKnownBucket"
+        Effect = "Allow"
+        Action = [
+
+
+          "s3:PutObject"
+        ]
+        Resource = [
+          "${module.well_known_s3_bucket.s3_bucket_arn}/*"
+        ]
+      },
+      {
         Sid    = "CloudWatchDashboardPermission"
         Effect = "Allow"
         Action = [
