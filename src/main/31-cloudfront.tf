@@ -49,7 +49,7 @@ module "fe_cdn" {
       origin_access_control = "fe_hosting_oac"
     }
     wellknown_hosting_oac = {
-      domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
+      domain_name           = module.well_known_s3_bucket.s3_bucket_bucket_domain_name
       origin_access_control = "wellknown_hosting_oac"
     }
     apigw = {
