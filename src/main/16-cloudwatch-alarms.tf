@@ -100,23 +100,23 @@ resource "aws_cloudwatch_metric_alarm" "apigw_server_errors" {
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
 
-resource "aws_cloudwatch_log_metric_filter" "error_logs" {
+# resource "aws_cloudwatch_log_metric_filter" "error_logs" {
 
-  name           = "${var.app_name}-error-logs-filter-${var.env}"
-  pattern        = "{ $.log = \"*ERROR*\" || $.stream = \"stderr\" }"
-  log_group_name = "/aws/eks/${module.eks.cluster_name}/application"
+#   name           = "${var.app_name}-error-logs-filter-${var.env}"
+#   pattern        = "{ $.log = \"*ERROR*\" || $.stream = \"stderr\" }"
+#   log_group_name = "/aws/eks/${module.eks.cluster_name}/application"
 
-  metric_transformation {
-    name      = "ErrorCount"
-    namespace = "EKSApplicationLogsFilters"
-    value     = "1"
-    dimensions = {
-      PodApp = "$.pod_app"
-    }
+#   metric_transformation {
+#     name      = "ErrorCount"
+#     namespace = "EKSApplicationLogsFilters"
+#     value     = "1"
+#     dimensions = {
+#       PodApp = "$.pod_app"
+#     }
 
-  }
+#   }
 
-}
+# }
 
 resource "aws_cloudwatch_metric_alarm" "error_logs" {
   for_each            = toset(local.microservices)

@@ -114,10 +114,10 @@ module "eks" {
 }
 
 
-# resource "aws_ec2_tag" "alb_subnet_tag" {
-#   for_each    = toset(data.aws_subnets.workload.ids)
-#   resource_id = each.value
-#   key         = "kubernetes.io/role/internal-elb"
-#   value       = "1"
-# }
+resource "aws_ec2_tag" "alb_subnet_tag" {
+  for_each    = toset(data.aws_subnets.workload.ids)
+  resource_id = each.value
+  key         = "kubernetes.io/role/internal-elb"
+  value       = "1"
+}
 
