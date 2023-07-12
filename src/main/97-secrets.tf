@@ -22,12 +22,12 @@ resource "aws_secretsmanager_secret_version" "be_probing_aurora_flyway_user_cred
   })
 }
 
-resource "aws_secretsmanager_secret" "be_probing_api_aurora_user_credentials" {
-  name = "/${var.app_name}/${var.env}/operational-database/probing-api-user-credentials"
+resource "aws_secretsmanager_secret" "be_probing_app_aurora_user_credentials" {
+  name = "/${var.app_name}/${var.env}/operational-database/app-user-credentials"
 }
 
-resource "aws_secretsmanager_secret_version" "be_probing_api_aurora_user_credentials" {
-  secret_id = aws_secretsmanager_secret.be_probing_api_aurora_user_credentials.id
+resource "aws_secretsmanager_secret_version" "be_probing_app_aurora_user_credentials" {
+  secret_id = aws_secretsmanager_secret.be_probing_app_aurora_user_credentials.id
   secret_string = jsonencode({
     username = "user",
     password = "password"
