@@ -3,7 +3,7 @@
         {
             "height": 6,
             "width": 24,
-            "y": 7,
+            "y": 0,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -22,11 +22,11 @@
             }
         },
         {
-            "type": "metric",
-            "x": 0,
-            "y": 13,
-            "width": 24,
             "height": 7,
+            "width": 24,
+            "y": 6,
+            "x": 0,
+            "type": "metric",
             "properties": {
                 "view": "timeSeries",
                 "stacked": false,
@@ -39,12 +39,12 @@
                 ]
             }
         },
-                {
-            "type": "metric",
-            "x": 0,
-            "y": 0,
-            "width": 24,
+        {
             "height": 7,
+            "width": 24,
+            "y": 13,
+            "x": 0,
+            "type": "metric",
             "properties": {
                 "metrics": [
                     [ "ContainerInsights", "pod_network_tx_bytes", "Service", "${microservice}", "ClusterName", "${cluster_name}", "Namespace", "${k8s_namespace}", { "region": "${aws_region}" } ],
