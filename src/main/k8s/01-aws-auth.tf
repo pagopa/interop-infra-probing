@@ -34,6 +34,13 @@ locals {
       k8s_username = user.user_name
       k8s_groups   = ["system:masters"]
   })]
+
+  readonly_users_mapping = [for user in data.aws_iam_user.readonly : templatefile("./templates/aws-auth-user.tpl",
+    {
+      user_arn     = user.arn
+      k8s_username = user.user_name
+      k8s_groups   = ["view"]
+  })]
 }
 
 data "aws_iam_role" "fargate_profiles" {
@@ -56,6 +63,12 @@ data "aws_iam_user" "admin" {
   user_name = each.key
 }
 
+data "aws_iam_user" "readonly" {
+  for_each = toset(var.iam_users_k8s_readonly)
+
+  user_name = each.key
+}
+
 resource "kubernetes_config_map_v1" "aws_auth" {
   metadata {
     name      = "aws-auth"
@@ -64,6 +77,6 @@ resource "kubernetes_config_map_v1" "aws_auth" {
 
   data = {
     mapRoles = join("", concat(local.fargate_profiles_mapping, [local.sso_full_admin_mapping, local.infra_deploy_mapping, local.k8s_deploy_mapping]))
-    mapUsers = length(local.admin_users_mapping) > 0 ? join("", local.admin_users_mapping) : null
+    mapUsers = length(local.admin_users_mapping) + length(local.readonly_users_mapping) > 0 ? join("", concat(local.admin_users_mapping, local.readonly_users_mapping)) : null
   }
 }
