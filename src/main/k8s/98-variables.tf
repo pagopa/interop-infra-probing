@@ -57,6 +57,12 @@ variable "iam_users_k8s_admin" {
   default     = []
 }
 
+variable "iam_users_k8s_readonly" {
+  type        = list(string)
+  description = "IAM users to be granted read only access in the cluster"
+  default     = []
+}
+
 variable "enable_fluentbit_process_logs" {
   type        = bool
   description = "Enables FluentBit process logs to help with debugging. WARNING: produces A LOT of logs and could significantly increase CloudWatch costs"
