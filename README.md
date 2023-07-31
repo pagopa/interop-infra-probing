@@ -33,6 +33,26 @@ cd src/main
 
 ./terraform.sh apply uat
 ```
+
+## Manage cognito users
+
+### Create user
+In order to create a cognito user with already verified password must be used the following 
+
+```bash
+aws cognito-idp admin-create-user --user-pool-id <value> --username <value>
+
+aws cognito-idp admin-set-user-password --user-pool-id <value> --username <value> --password <value>
+```
+Password can be arbitrary beacause the user is forced to change password at the first access.
+### Add users to a group
+In order to add a user in a specific user group use the following
+
+```bash
+aws cognito-idp admin-add-user-to-group --user-pool-id <value> --username <value> --group-name <value>
+```
+PN The possible groups are: `users` , `admins`
+
 ## Referencees
 
 * [Confluence page](https://pagopa.atlassian.net/wiki/spaces/DEVOPS/pages/467894592/AWS+Setup+new+project)
