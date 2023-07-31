@@ -47,6 +47,7 @@ cw_alarm_thresholds = {
   sqs_message_age                = 120
   pod_cpu_utilization            = 70
   pod_memory_utilization         = 70
+  sqs_message_age_registry_queue = 4500
 }
 
 
