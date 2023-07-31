@@ -9,7 +9,6 @@ locals {
     aws_lambda_function.cognito_messaging.function_name,
   ]
   sqs_queues = [
-    module.sqs_registry_queue.queue_name,
     module.sqs_polling_queue.queue_name,
     module.sqs_polling_result_queue.queue_name,
     module.sqs_telemetry_result_queue.queue_name
@@ -34,6 +33,23 @@ resource "aws_cloudwatch_metric_alarm" "sqs_message_age" {
     QueueName = each.value
   }
   threshold     = var.cw_alarm_thresholds.sqs_message_age
+  alarm_actions = [aws_sns_topic.cw_alarms.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_message_age_registry_queue" {
+  treat_missing_data  = "notBreaching"
+  alarm_name          = "${var.app_name}-sqs-message-age-${module.sqs_registry_queue.queue_name}-${var.env}"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 3
+  datapoints_to_alarm = 2
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Average"
+  dimensions = {
+    QueueName = module.sqs_registry_queue.queue_name
+  }
+  threshold     = var.cw_alarm_thresholds.sqs_message_age_registry_queue
   alarm_actions = [aws_sns_topic.cw_alarms.arn]
 }
 
@@ -100,23 +116,23 @@ resource "aws_cloudwatch_metric_alarm" "apigw_server_errors" {
   alarm_actions       = [aws_sns_topic.cw_alarms.arn]
 }
 
-# resource "aws_cloudwatch_log_metric_filter" "error_logs" {
+resource "aws_cloudwatch_log_metric_filter" "error_logs" {
 
-#   name           = "${var.app_name}-error-logs-filter-${var.env}"
-#   pattern        = "{ $.log = \"*ERROR*\" || $.stream = \"stderr\" }"
-#   log_group_name = "/aws/eks/${module.eks.cluster_name}/application"
+  name           = "${var.app_name}-error-logs-filter-${var.env}"
+  pattern        = "{ $.log = \"*ERROR*\" || $.stream = \"stderr\" }"
+  log_group_name = "/aws/eks/${module.eks.cluster_name}/application"
 
-#   metric_transformation {
-#     name      = "ErrorCount"
-#     namespace = "EKSApplicationLogsFilters"
-#     value     = "1"
-#     dimensions = {
-#       PodApp = "$.pod_app"
-#     }
+  metric_transformation {
+    name      = "ErrorCount"
+    namespace = "EKSApplicationLogsFilters"
+    value     = "1"
+    dimensions = {
+      PodApp = "$.pod_app"
+    }
 
-#   }
+  }
 
-# }
+}
 
 resource "aws_cloudwatch_metric_alarm" "error_logs" {
   for_each            = toset(local.microservices)
