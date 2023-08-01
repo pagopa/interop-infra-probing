@@ -14,6 +14,15 @@ data "aws_cloudfront_origin_request_policy" "all_viewer_except_host_header" {
   name = "Managed-AllViewerExceptHostHeader"
 }
 
+
+resource "aws_cloudfront_function" "refresh_handling" {
+  name    = "${var.app_name}-cf-edge-function-${var.env}"
+  runtime = "cloudfront-js-1.0"
+  comment = "403 refresh error handling"
+  publish = true
+  code    = file("${path.module}/assets/cloudfront_function/error.js")
+}
+
 module "fe_cdn" {
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "3.2.1"
@@ -38,11 +47,11 @@ module "fe_cdn" {
     ssl_support_method       = "sni-only"
   }
 
-  custom_error_response = [{
-    error_code         = 403
-    response_code      = 200
-    response_page_path = "/index.html"
-  }]
+  # custom_error_response = [{
+  #   error_code         = 403
+  #   response_code      = 200
+  #   response_page_path = "/index.html"
+  # }]
   origin = {
     fe_hosting_oac = {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
@@ -95,6 +104,11 @@ module "fe_cdn" {
     allowed_methods      = ["GET", "HEAD", "OPTIONS"]
     cached_methods       = ["GET", "HEAD"]
     cache_policy_id      = data.aws_cloudfront_cache_policy.caching_optimized.id
+    function_association = {
+      viewer-request = {
+        function_arn = aws_cloudfront_function.refresh_handling.arn
+      }
+    }
   }
   ordered_cache_behavior = [
     {
