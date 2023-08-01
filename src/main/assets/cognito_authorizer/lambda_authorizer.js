@@ -44,8 +44,11 @@ exports.handler =  function(event, context, callback) {
             var groups = decoded["cognito:groups"];
             
             console.log("Checking authorization")
-        
-            var isAuthorized = groups.some( (x) => getAuthorization(x,resource,method) )
+
+            var isAuthorized = false
+            if ( !(groups === undefined || groups === null) ) {
+                isAuthorized = groups.some( (x) => getAuthorization(x,resource,method) )
+            }            
             
             console.log("Generating authorization policy")
         
