@@ -47,11 +47,6 @@ module "fe_cdn" {
     ssl_support_method       = "sni-only"
   }
 
-  # custom_error_response = [{
-  #   error_code         = 403
-  #   response_code      = 200
-  #   response_page_path = "/index.html"
-  # }]
   origin = {
     fe_hosting_oac = {
       domain_name           = module.fe_s3_bucket.s3_bucket_bucket_domain_name
