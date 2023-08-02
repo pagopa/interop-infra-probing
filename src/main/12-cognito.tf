@@ -2,11 +2,6 @@ resource "aws_cognito_user_pool" "user_pool" {
   name                = "${var.app_name}-user-pool-${var.env}"
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
-  schema {
-    name                = "email"
-    attribute_data_type = "String"
-    required            = true
-  }
   lambda_config {
     custom_message = aws_lambda_function.cognito_messaging.arn
   }
