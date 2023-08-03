@@ -40,9 +40,9 @@ cd src/main
 In order to create a cognito user with already verified password must be used the following 
 
 ```bash
-aws cognito-idp admin-create-user --user-pool-id <value> --username <value>
+aws cognito-idp admin-create-user --user-pool-id <value> --username <value> --user-attributes Name=email,Value=<email> Name=email_verified,Value=True
 
-aws cognito-idp admin-set-user-password --user-pool-id <value> --username <value> --password <value>
+aws cognito-idp admin-set-user-password --user-pool-id <value> --username <value> --password <value> --permanent
 ```
 Password can be arbitrary beacause the user is forced to change password at the first access.
 ### Add users to a group
