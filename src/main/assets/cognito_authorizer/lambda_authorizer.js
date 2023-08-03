@@ -46,7 +46,7 @@ exports.handler =  function(event, context, callback) {
             console.log("Checking authorization")
 
             var isAuthorized = false
-            if ( !(groups === undefined || groups === null) ) {
+            if (groups) {
                 isAuthorized = groups.some( (x) => getAuthorization(x,resource,method) )
             }            
             
