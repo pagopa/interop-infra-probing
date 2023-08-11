@@ -3,6 +3,6 @@
     "/telemetryData/eservices/filtered": ["GET"]
   },
   "users": {
-    "/api": ["POST"]
+    "/api": ["POST","GET"]
   }
 }
