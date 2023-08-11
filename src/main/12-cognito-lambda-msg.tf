@@ -47,8 +47,9 @@ resource "aws_s3_object" "lambda_cognito_messaging" {
 
 
 resource "aws_lambda_function" "cognito_messaging" {
+  depends_on = [ aws_s3_object.lambda_cognito_messaging ]
   s3_bucket     = module.lambda_packages_bucket.s3_bucket_id
-  s3_key        = aws_s3_object.cognito_messaging.id
+  s3_key        = "lambda_cognito_messaging.zip"
   function_name = "${var.app_name}-lambda-cognito-messaging-${var.env}"
   role          = aws_iam_role.lambda_cognito_messaging_execution_role.arn
   handler       = "index.handler"
