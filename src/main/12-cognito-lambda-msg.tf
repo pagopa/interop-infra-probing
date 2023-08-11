@@ -27,28 +27,32 @@ resource "aws_iam_role" "lambda_cognito_messaging_execution_role" {
 
 resource "null_resource" "lambda_cognito_messaging" {
   provisioner "local-exec" {
-    command = "cd ${path.module}/assets/lambda_cognito_messaging/ && npm install"
+    command = "cd ${path.module}/assets/lambda_cognito_messaging/ && npm install && zip -qr lambda_cognito_messaging.zip ."
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    index   = sha256(file("${path.module}/assets/lambda_cognito_messaging/index.js"))
+    package = sha256(file("${path.module}/assets/lambda_cognito_messaging/package.json"))
+    lock    = sha256(file("${path.module}/assets/lambda_cognito_messaging/package-lock.json"))
   }
 }
 
-data "archive_file" "lambda_cognito_messaging" {
-  type        = "zip"
-  source_dir  = "${path.module}/assets/lambda_cognito_messaging"
-  output_path = "lambda_cognito_messaging.zip"
-  depends_on  = [null_resource.lambda_cognito_messaging]
+resource "aws_s3_object" "lambda_cognito_messaging" {
+  count      = fileexists("${path.module}/assets/lambda_cognito_messaging/lambda_cognito_messaging.zip") ? 0 : 1
+  bucket     = module.lambda_packages_bucket.s3_bucket_id
+  key        = "lambda_cognito_messaging.zip"
+  source     = "${path.module}/assets/lambda_cognito_messaging/lambda_cognito_messaging.zip"
+  depends_on = [null_resource.lambda_cognito_messaging]
 }
 
+
 resource "aws_lambda_function" "cognito_messaging" {
-  filename         = "lambda_cognito_messaging.zip"
-  function_name    = "${var.app_name}-lambda-cognito-messaging-${var.env}"
-  role             = aws_iam_role.lambda_cognito_messaging_execution_role.arn
-  handler          = "lambda_cognito_messaging.handler"
-  source_code_hash = data.archive_file.lambda_cognito_messaging.output_base64sha256
-  runtime          = "nodejs16.x"
+  s3_bucket     = module.lambda_packages_bucket.s3_bucket_id
+  s3_key        = "lambda_cognito_messaging.zip"
+  function_name = "${var.app_name}-lambda-cognito-messaging-${var.env}"
+  role          = aws_iam_role.lambda_cognito_messaging_execution_role.arn
+  handler       = "index.handler"
+  runtime       = "nodejs16.x"
   environment {
     variables = {
       ENV                   = var.env
