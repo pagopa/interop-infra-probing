@@ -44,42 +44,29 @@ resource "aws_iam_role" "lambda_authorizer_execution_role" {
 
 resource "null_resource" "cognito_authorizer" {
   provisioner "local-exec" {
-    command = "cd ${path.module}/assets/cognito_authorizer/ && npm install"
+    command = "cd ${path.module}/assets/cognito_authorizer/ && npm install && zip -qr cognito_authorizer.zip ."
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    index        = sha256(file("${path.module}/assets/cognito_authorizer/index.js"))
+    package      = sha256(file("${path.module}/assets/cognito_authorizer/package.json"))
+    lock         = sha256(file("${path.module}/assets/cognito_authorizer/package-lock.json"))
+    role_mapping = sha256(file("${path.module}/assets/cognito_authorizer/cognito_role_mapping-${var.env}.json"))
   }
 }
 
-data "archive_file" "cognito_authorizer" {
-  type        = "zip"
-  source_dir  = "${path.module}/assets/cognito_authorizer"
-  output_path = "cognito_authorizer.zip"
-  depends_on  = [null_resource.cognito_authorizer]
+resource "aws_s3_object" "cognito_authorizer" {
+  count      = fileexists("${path.module}/assets/cognito_authorizer/cognito_authorizer.zip") ? 0 : 1
+  bucket     = module.lambda_packages_bucket.s3_bucket_id
+  key        = "cognito_authorizer.zip"
+  source     = "${path.module}/assets/cognito_authorizer/cognito_authorizer.zip"
+  depends_on = [null_resource.cognito_authorizer]
 }
-
-resource "null_resource" "external_authorizer" {
-  provisioner "local-exec" {
-    command = "cd ${path.module}/assets/external_authorizer/ && npm install"
-  }
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-}
-
-data "archive_file" "external_authorizer" {
-  type        = "zip"
-  source_dir  = "${path.module}/assets/external_authorizer"
-  output_path = "external_authorizer.zip"
-  depends_on  = [null_resource.external_authorizer]
-}
-
 
 
 resource "aws_lambda_function" "cognito_authorizer" {
-  filename         = "cognito_authorizer.zip"
+  s3_bucket        = module.lambda_packages_bucket.s3_bucket_id
+  s3_key           = "cognito_authorizer.zip"
   function_name    = "${var.app_name}-apigw-lambda-cognito-authorizer-${var.env}"
   role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "index.handler"
@@ -96,8 +83,33 @@ resource "aws_lambda_function" "cognito_authorizer" {
   }
 }
 
+resource "null_resource" "external_authorizer" {
+  provisioner "local-exec" {
+    command = "cd ${path.module}/assets/external_authorizer/ && npm install && zip -qr external_authorizer.zip ."
+  }
+
+  triggers = {
+    index   = sha256(file("${path.module}/assets/external_authorizer/index.js"))
+    package = sha256(file("${path.module}/assets/external_authorizer/package.json"))
+    lock    = sha256(file("${path.module}/assets/external_authorizer/package-lock.json"))
+  }
+}
+
+
+resource "aws_s3_object" "external_authorizer" {
+  count      = fileexists("${path.module}/assets/external_authorizer/external_authorizer.zip") ? 0 : 1
+  bucket     = module.lambda_packages_bucket.s3_bucket_id
+  key        = "external_authorizer.zip"
+  source     = "${path.module}/assets/external_authorizer/external_authorizer.zip"
+  depends_on = [null_resource.external_authorizer]
+}
+
+
+
+
 resource "aws_lambda_function" "external_authorizer" {
-  filename         = "external_authorizer.zip"
+  s3_bucket        = module.lambda_packages_bucket.s3_bucket_id
+  s3_key           = "external_authorizer.zip"
   function_name    = "${var.app_name}-apigw-lambda-external-authorizer-${var.env}"
   role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "index.handler"
