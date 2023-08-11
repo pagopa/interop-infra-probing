@@ -65,13 +65,13 @@ resource "aws_s3_object" "cognito_authorizer" {
 
 
 resource "aws_lambda_function" "cognito_authorizer" {
-  s3_bucket        = module.lambda_packages_bucket.s3_bucket_id
-  s3_key           = "cognito_authorizer.zip"
-  function_name    = "${var.app_name}-apigw-lambda-cognito-authorizer-${var.env}"
-  role             = aws_iam_role.lambda_authorizer_execution_role.arn
-  handler          = "index.handler"
-  runtime          = "nodejs16.x"
-  timeout          = 15
+  s3_bucket     = module.lambda_packages_bucket.s3_bucket_id
+  s3_key        = "cognito_authorizer.zip"
+  function_name = "${var.app_name}-apigw-lambda-cognito-authorizer-${var.env}"
+  role          = aws_iam_role.lambda_authorizer_execution_role.arn
+  handler       = "index.handler"
+  runtime       = "nodejs16.x"
+  timeout       = 15
   environment {
     variables = {
       ENV                = var.env
@@ -107,13 +107,13 @@ resource "aws_s3_object" "external_authorizer" {
 
 
 resource "aws_lambda_function" "external_authorizer" {
-  s3_bucket        = module.lambda_packages_bucket.s3_bucket_id
-  s3_key           = "external_authorizer.zip"
-  function_name    = "${var.app_name}-apigw-lambda-external-authorizer-${var.env}"
-  role             = aws_iam_role.lambda_authorizer_execution_role.arn
-  handler          = "index.handler"
-  runtime          = "nodejs16.x"
-  timeout          = 15
+  s3_bucket     = module.lambda_packages_bucket.s3_bucket_id
+  s3_key        = "external_authorizer.zip"
+  function_name = "${var.app_name}-apigw-lambda-external-authorizer-${var.env}"
+  role          = aws_iam_role.lambda_authorizer_execution_role.arn
+  handler       = "index.handler"
+  runtime       = "nodejs16.x"
+  timeout       = 15
   environment {
     variables = {
       ENV                = var.env
