@@ -65,7 +65,7 @@ resource "aws_s3_object" "cognito_authorizer" {
 
 
 resource "aws_lambda_function" "cognito_authorizer" {
-  depends_on = [ aws_s3_object.cognito_authorizer ]
+  depends_on    = [aws_s3_object.cognito_authorizer]
   s3_bucket     = module.lambda_packages_bucket.s3_bucket_id
   s3_key        = "cognito_authorizer.zip"
   function_name = "${var.app_name}-apigw-lambda-cognito-authorizer-${var.env}"
@@ -108,7 +108,7 @@ resource "aws_s3_object" "external_authorizer" {
 
 
 resource "aws_lambda_function" "external_authorizer" {
-  depends_on = [ aws_s3_object.external_authorizer ]
+  depends_on    = [aws_s3_object.external_authorizer]
   s3_bucket     = module.lambda_packages_bucket.s3_bucket_id
   s3_key        = "external_authorizer.zip"
   function_name = "${var.app_name}-apigw-lambda-external-authorizer-${var.env}"
