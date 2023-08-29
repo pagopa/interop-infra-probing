@@ -2,6 +2,9 @@ resource "aws_cognito_user_pool" "user_pool" {
   name                = "${var.app_name}-user-pool-${var.env}"
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
+  alias_attributes = [
+    "email",
+  ]
 
   schema {
     name                     = "email"
