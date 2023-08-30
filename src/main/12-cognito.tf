@@ -2,6 +2,21 @@ resource "aws_cognito_user_pool" "user_pool" {
   name                = "${var.app_name}-user-pool-${var.env}"
   deletion_protection = "ACTIVE"
   mfa_configuration   = "OFF"
+  alias_attributes = [
+    "email",
+  ]
+
+  schema {
+    name                     = "email"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      min_length = 4
+      max_length = 2048
+    }
+  }
   lambda_config {
     custom_message = aws_lambda_function.cognito_messaging.arn
   }

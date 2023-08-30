@@ -39,8 +39,10 @@ cd src/main
 ### Create user
 In order to create a cognito user with already verified password must be used the following 
 
+IMPORTANT Username MUST NOT be in email format.
+
 ```bash
-aws cognito-idp admin-create-user --user-pool-id <value> --username <value> --user-attributes Name=email,Value=<email> Name=email_verified,Value=True
+aws cognito-idp admin-create-user --user-pool-id <value> --username <value> --user-attributes Name=email,Value=<email> Name=email_verified,Value=True --force-alias-creation
 
 aws cognito-idp admin-set-user-password --user-pool-id <value> --username <value> --password <value> --permanent
 ```
