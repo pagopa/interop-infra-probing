@@ -108,3 +108,13 @@ resource "aws_api_gateway_usage_plan_key" "main" {
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.main.id
 }
+
+resource "aws_api_gateway_gateway_response" "missing_token" {
+  rest_api_id   = aws_api_gateway_rest_api.apigw.id
+  status_code   = "404"
+  response_type = "ACCESS_DENIED"
+
+  response_templates = {
+    "application/json" = "{\"message\":\"Not Found\"}"
+  }
+}
