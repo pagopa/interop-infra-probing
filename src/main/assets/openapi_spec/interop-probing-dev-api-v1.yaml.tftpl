@@ -28,7 +28,7 @@ paths:
       x-amazon-apigateway-integration:
         type: mock
         responses:
-          "\d{3}":
+          "\\d{3}":
             statusCode: "404"
   '/status':
     get:
