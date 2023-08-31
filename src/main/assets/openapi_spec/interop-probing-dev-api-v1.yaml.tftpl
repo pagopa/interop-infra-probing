@@ -365,7 +365,7 @@ paths:
         schema:
           type: "string"
       x-amazon-apigateway-integration:
-        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/{proxy+}
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/{proxy}
         httpMethod: ANY
         connectionType: VPC_LINK
         connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
