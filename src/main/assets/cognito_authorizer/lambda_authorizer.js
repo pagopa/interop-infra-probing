@@ -35,15 +35,17 @@ exports.handler =  function(event, context, callback) {
 
     jwt.verify(token, getSigningKey, {"algorithms": ["RS256"]}, function (error) {
         const decoded = jwt.decode(token);
+        console.log(`Trying to perform ${event.httpMethod}@${event.resource}`)
         if (error) {
             callback(null, generatePolicy('Deny', event.methodArn));
+            
             console.log(`${decoded.jti} NOT verified jwt to perform the API call`)
         } else {
             var method = event.httpMethod;
             var resource = event.resource;
             var groups = decoded["cognito:groups"];
             
-            console.log("Checking authorization")
+            console.log("Checking authorization")            
 
             var isAuthorized = false
             if (groups) {

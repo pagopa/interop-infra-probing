@@ -24,7 +24,9 @@ function getSigningKey (header, callback) {
 exports.handler =  function(event, context, callback) {
 
     console.log("Getting payload")
-    var token = event.headers.Authorization.split(' ')[1];    
+    var token = event.headers.Authorization.split(' ')[1];
+    
+    console.log(`Trying to perform ${event.httpMethod}@${event.resource}`)
     console.log("Generating authorization policy")
 
     jwt.verify(token, getSigningKey, {"algorithms": ["RS256"]}, function (error) {
