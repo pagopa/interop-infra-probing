@@ -27,13 +27,11 @@ paths:
         required: true
         schema:
           type: "string"
-      responses:
-        "404":
-          description: "404 response"
-          content: {}
       x-amazon-apigateway-integration:
-        httpMethod: ANY
         type: mock
+        responses:
+          "\\d{3}":
+            statusCode: "404"
   '/status':
     get:
       tags:
