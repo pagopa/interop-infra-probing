@@ -346,6 +346,34 @@ paths:
         requestParameters:
           integration.request.path.eserviceId: method.request.path.eserviceId
           integration.request.path.versionId: method.request.path.versionId
+  "/eservices/{eserviceId}/versions/{versionId}/{proxy+}":
+    x-amazon-apigateway-any-method:
+      parameters:
+      - name: "proxy"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "versionId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "eserviceId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/eservices/{eserviceId}/versions/{versionId}/{proxy+}
+        httpMethod: ANY
+        connectionType: VPC_LINK
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        type: http_proxy
+        requestParameters:
+          integration.request.path.eserviceId: method.request.path.eserviceId
+          integration.request.path.versionId: method.request.path.versionId
+          integration.request.path.proxy: method.request.path.proxy
   /eservices:
     get:
       summary: Retrive e-services by filters
@@ -879,4 +907,3 @@ components:
         authorizerResultTtlInSeconds: 0
         identitySource: "method.request.header.Authorization"
         type: "request"
-        
