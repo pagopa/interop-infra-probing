@@ -19,6 +19,22 @@ tags:
   - name: Probing
     description: Operations on probing settings
 paths:
+  "/{proxy+}":
+    x-amazon-apigateway-any-method:
+      parameters:
+      - name: "proxy"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      x-amazon-apigateway-integration:
+        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/{proxy}
+        httpMethod: ANY
+        connectionType: VPC_LINK
+        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
+        type: http_proxy
+        requestParameters:
+          integration.request.path.proxy: method.request.path.proxy
   '/status':
     get:
       tags:
