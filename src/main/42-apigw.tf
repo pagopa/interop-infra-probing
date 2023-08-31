@@ -112,7 +112,7 @@ resource "aws_api_gateway_usage_plan_key" "main" {
 resource "aws_api_gateway_gateway_response" "missing_token" {
   rest_api_id   = aws_api_gateway_rest_api.apigw.id
   status_code   = "404"
-  response_type = "INVALID_API_KEY"
+  response_type = "INVALID_SIGNATURE"
 
   response_templates = {
     "application/json" = "{\"message\":\"Not Found\"}"
