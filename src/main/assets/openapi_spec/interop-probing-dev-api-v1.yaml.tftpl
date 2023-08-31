@@ -27,14 +27,10 @@ paths:
         required: true
         schema:
           type: "string"
-      x-amazon-apigateway-integration:
-        uri: http://$${stageVariables.aws_lb_nlb_dns_name}/{proxy}
-        httpMethod: ANY
-        connectionType: VPC_LINK
-        connectionId: $${stageVariables.aws_api_gateway_vpc_link_backend_id}
-        type: http_proxy
-        requestParameters:
-          integration.request.path.proxy: method.request.path.proxy
+      responses:
+        "404":
+          description: "404 response"
+          content: {}
   '/status':
     get:
       tags:
