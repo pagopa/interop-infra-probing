@@ -19,21 +19,6 @@ tags:
   - name: Probing
     description: Operations on probing settings
 paths:
-  "/{proxy+}":
-    x-amazon-apigateway-any-method:
-      parameters:
-      - name: "proxy"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-      responses:
-        "404":
-          description: "404 response"
-          content: {}
-      x-amazon-apigateway-integration:
-        httpMethod: ANY
-        type: mock
   '/status':
     get:
       tags:
