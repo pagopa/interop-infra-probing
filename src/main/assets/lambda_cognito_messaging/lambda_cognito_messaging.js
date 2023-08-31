@@ -127,7 +127,7 @@ exports.handler = async (event) => {
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
              <img class="css-zr5gjd" src="https://www.interop.pagopa.it/static/logo/pagopa.png" alt="logo PagoPa" width="100" height="28"/>
-      <h1 style="margin-bottom: 10px;font-family:'Titillium Web';color: #17324d;background-color: #ffffff; word-wrap: break-word; font-size: 32px; font-weight: 700; line-height:40px;"><strong>Ripristino password</strong></h1>      
+      <h1 style="margin-bottom: 10px;font-family:'Titillium Web',Sans-Serif;color: #17324d;background-color: #ffffff; word-wrap: break-word; font-size: 32px; font-weight: 700; line-height:40px;"><strong>Ripristino password</strong></h1>      
           </td>
         </tr>
       </tbody>
@@ -138,7 +138,7 @@ exports.handler = async (event) => {
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
             
-      <div style="word-wrap: break-word;font-family:'Titillium Web';color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
+      <div style="word-wrap: break-word;font-family:'Titillium Web',Sans-Serif;color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
         <p>Ciao,</p>
       </div>
     
@@ -152,7 +152,7 @@ exports.handler = async (event) => {
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
             
-      <div style="word-wrap: break-word;font-family:'Titillium Web';color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
+      <div style="word-wrap: break-word;font-family:'Titillium Web',Sans-Serif;color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
         <p >è stato chiesto un ripristino della password per questa utenza sul</p>
     <p>portale di monitoraggio e-service di <strong>PDND Interoperabilità</strong>. <span style="color: #0073e6; line-height: 30.6px;"><a rel="noopener" href="${process.env.FE_URL}${process.env.RESET_PASSOWORD_ROUTE}#code=${event.request.codeParameter}&username=${event.request.userAttributes.email}" target="_blank" style="color: #0073e6;">Clicca qui</a></span></p>
     <p>per inserire la nuova password e completare la procedura.</p>
@@ -221,7 +221,7 @@ exports.handler = async (event) => {
       <!--[if mso]></div><![endif]-->
       <!--[if IE]></div><![endif]-->
     </body      
-    </html>   
+    </html>     
     `;
     event.response.emailMessage = message;
     event.response.emailSubject = "Ripristino Password" + envInfo;
@@ -351,7 +351,7 @@ exports.handler = async (event) => {
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
              <img class="css-zr5gjd" src="https://www.interop.pagopa.it/static/logo/pagopa.png" alt="logo PagoPa" width="100" height="28"/>
-      <h1 style="margin-bottom: 10px;font-family:'Titillium Web';color: #17324d;background-color: #ffffff; word-wrap: break-word; font-size: 32px; font-weight: 700; line-height:40px;"><strong>Nuova utenza attiva</strong></h1>
+      <h1 style="margin-bottom: 10px;font-family:'Titillium Web',Sans-Serif;color: #17324d;background-color: #ffffff; word-wrap: break-word; font-size: 32px; font-weight: 700; line-height:40px;"><strong>Nuova utenza attiva</strong></h1>
     
           </td>
         </tr>
@@ -363,7 +363,7 @@ exports.handler = async (event) => {
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
             
-      <div style="word-wrap: break-word;font-family:'Titillium Web';color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
+      <div style="word-wrap: break-word;font-family:'Titillium Web',Sans-Serif;color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
         <p>Ciao,</p>
       </div>
     
@@ -377,7 +377,7 @@ exports.handler = async (event) => {
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
             
-      <div style="word-wrap: break-word;font-family:'Titillium Web';color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
+      <div style="word-wrap: break-word;font-family:'Titillium Web',Sans-Serif;color: #17324d;background-color: #ffffff;font-size: 18px;line-height:28px;text-align:left;font-weight: 400;">
         <!-- ${event.request.codeParameter}${event.request.usernameParameter} -->
         <p >è stata creata una nuova utenza per te sul portale di monitoraggio e-</p>
     <p>-service di <strong>PDND Interoperabilità</strong>.  Per effettuare il primo accesso, vai</p>
@@ -422,7 +422,7 @@ exports.handler = async (event) => {
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;" align="left">
             
       <div style="font-size: 14px;word-wrap: break-word;">
-        <p><span style="color: #ced4d9;"><span style="line-height: 20px;">Ricevi questo messaggio perché hai un’utenza attiva nell’Area Riservata dell’ent</span>e.</span></p>
+        <p><span style="color: #ced4d9;"><span style="line-height: 20px;font-family:'Titillium Web',Sans-Serif;">Ricevi questo messaggio perché hai un’utenza attiva nell’Area Riservata dell’ent</span>e.</span></p>
       </div>
     
           </td>
@@ -449,7 +449,7 @@ exports.handler = async (event) => {
       <!--[if IE]></div><![endif]-->
     </body>
     
-    </html>      
+    </html>          
     `;      
     event.response.emailMessage = message;
     event.response.emailSubject = "Nuova utenza attiva" + envInfo;
