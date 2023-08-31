@@ -10,7 +10,7 @@ resource "aws_api_gateway_rest_api" "apigw" {
 
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.apigw.id
-
+  depends_on = [ aws_api_gateway_integration_response.response_404 ]
   triggers = {
     redeployment = sha1(jsonencode(aws_api_gateway_rest_api.apigw.body))
   }
@@ -107,4 +107,39 @@ resource "aws_api_gateway_usage_plan_key" "main" {
   key_id        = aws_api_gateway_api_key.cloudfront.id
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.main.id
+}
+
+resource "aws_api_gateway_resource" "proxy" {
+  rest_api_id = aws_api_gateway_rest_api.apigw.id
+  parent_id   = aws_api_gateway_rest_api.apigw.root_resource_id
+  path_part   = "{proxy+}"
+}
+
+
+resource "aws_api_gateway_method" "proxy_any" {
+  rest_api_id   = aws_api_gateway_rest_api.apigw.id
+  resource_id   = aws_api_gateway_resource.proxy.id
+  http_method   = "ANY"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "proxy" {
+  rest_api_id = aws_api_gateway_rest_api.apigw.id
+  resource_id = aws_api_gateway_resource.proxy.id
+  http_method = aws_api_gateway_method.proxy_any.http_method
+  type        = "MOCK"
+}
+
+resource "aws_api_gateway_method_response" "response_404" {
+  rest_api_id = aws_api_gateway_rest_api.apigw.id
+  resource_id = aws_api_gateway_resource.proxy.id
+  http_method = aws_api_gateway_method.proxy_any.http_method
+  status_code = "404"
+}
+
+resource "aws_api_gateway_integration_response" "response_404" {
+  rest_api_id = aws_api_gateway_rest_api.apigw.id
+  resource_id = aws_api_gateway_resource.proxy.id
+  http_method = aws_api_gateway_method.proxy_any.http_method
+  status_code = aws_api_gateway_method_response.response_404.status_code
 }
