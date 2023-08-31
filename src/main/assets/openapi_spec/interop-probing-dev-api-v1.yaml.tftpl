@@ -20,17 +20,15 @@ tags:
     description: Operations on probing settings
 paths:
   "/{proxy+}":
-    x-amazon-apigateway-any-method:
+    any:
       parameters:
-      - name: "proxy"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
+        - name: proxy
+          in: path
+          required: true
       x-amazon-apigateway-integration:
         type: mock
         responses:
-          "\\d{3}":
+          "\d{3}":
             statusCode: "404"
   '/status':
     get:
