@@ -142,4 +142,5 @@ resource "aws_api_gateway_integration_response" "response_404" {
   resource_id = aws_api_gateway_resource.proxy.id
   http_method = aws_api_gateway_method.proxy_any.http_method
   status_code = aws_api_gateway_method_response.response_404.status_code
+  selection_pattern   = "\\d{3}"
 }
