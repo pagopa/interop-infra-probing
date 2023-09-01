@@ -124,12 +124,12 @@ resource "aws_api_gateway_method" "proxy_any" {
 }
 
 resource "aws_api_gateway_integration" "proxy" {
-  rest_api_id     = aws_api_gateway_rest_api.apigw.id
-  resource_id     = aws_api_gateway_resource.proxy.id
-  http_method     = aws_api_gateway_method.proxy_any.http_method
+  rest_api_id          = aws_api_gateway_rest_api.apigw.id
+  resource_id          = aws_api_gateway_resource.proxy.id
+  http_method          = aws_api_gateway_method.proxy_any.http_method
   passthrough_behavior = "WHEN_NO_TEMPLATES"
-  type            = "MOCK"
-  connection_type = "INTERNET"
+  type                 = "MOCK"
+  connection_type      = "INTERNET"
 }
 
 resource "aws_api_gateway_method_response" "response_404" {
