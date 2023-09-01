@@ -19,6 +19,26 @@ tags:
   - name: Probing
     description: Operations on probing settings
 paths:
+  '/{proxy+}':
+    x-amazon-apigateway-any-method:
+      parameters:
+      - name: "proxy"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "404":
+          description: "404 response"
+          content: {}
+      x-amazon-apigateway-integration:
+        responses:
+          \d{3}:
+            statusCode: "404"
+        requestTemplates:
+          application/json: "{\"statusCode\": 404}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
   '/status':
     get:
       tags:
@@ -879,4 +899,3 @@ components:
         authorizerResultTtlInSeconds: 0
         identitySource: "method.request.header.Authorization"
         type: "request"
-        
