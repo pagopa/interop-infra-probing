@@ -19,6 +19,5 @@ k8s_repo_role_name           = "interop-be-probing-k8s-deploy-uat"
 adot_collector_img_tag       = "v0.30.0"
 metrics_server_img_tag       = "v0.6.3"
 
-iam_users_k8s_readonly        = ["giuseppe.dellorusso"]
 enable_fluentbit_process_logs = false
 container_logs_retention_days = 180
