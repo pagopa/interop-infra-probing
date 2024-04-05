@@ -39,7 +39,7 @@ locals {
     {
       user_arn     = user.arn
       k8s_username = user.user_name
-      k8s_groups   = ["view"]
+      k8s_groups   = ["readonly-group"]
   })]
 }
 
