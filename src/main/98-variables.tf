@@ -32,7 +32,7 @@ variable "interop_probing_bucket_arn" {
 variable "frontend_github_repo" {
   type        = string
   description = "Name of the probing frontend Github repo (format: 'organization/repo-name')"
-  default     = "pagopa/interop-fe-probing"
+  default     = "pagopa/interop-probing-core"
 }
 
 variable "fe_base_url" {
