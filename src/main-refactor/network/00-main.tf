@@ -45,7 +45,7 @@ provider "aws" {
 locals {
   project                        = "probing"
   deploy_interop_msk_integration = var.env != "qa" && var.interop_msk_cluster_arn != null
-  terraform_state                = "core"
+  terraform_state                = "network" #TOCHECK: Is this local necessary in the current state? It is used in the deployment-role's iam policy to grant him access only to the secrets that are managed by the deployment role to propagate such secrets in k8s. In this TF state, there are no secrets to be granted access for.
 }
 
 data "aws_caller_identity" "current" {}
