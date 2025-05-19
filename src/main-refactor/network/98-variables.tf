@@ -54,3 +54,15 @@ variable "dns_probing_vapt_ns_records" {
   type        = list(string)
   default     = []
 }
+
+variable "dns_probing_uat_ns_records" {
+  description = "NS records for Probing 'uat' hosted zone. Used to grant DNS delegation for the subdomain"
+  type        = list(string)
+  default     = []
+}
+
+variable "dns_probing_att_ns_records" {
+  description = "NS records for Probing 'att' hosted zone. Used to grant DNS delegation for the subdomain"
+  type        = list(string)
+  default     = []
+}

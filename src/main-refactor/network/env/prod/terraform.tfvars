@@ -19,6 +19,10 @@ dns_probing_base_domain = "stato-eservice.interop.pagopa.it"
 
 dns_tracing_dev_ns_records = []
 
+dns_tracing_qa_ns_records = []
+
+dns_tracing_vapt_ns_records = []
+
 dns_tracing_uat_ns_records = []
 
 dns_tracing_att_ns_records = []
