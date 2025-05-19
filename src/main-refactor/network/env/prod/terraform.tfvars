@@ -16,3 +16,9 @@ sso_admin_role_name = "AWSReservedSSO_FullAdmin_"
 interop_msk_cluster_arn = ""
 
 dns_probing_base_domain = "stato-eservice.interop.pagopa.it"
+
+dns_tracing_dev_ns_records = []
+
+dns_tracing_uat_ns_records = []
+
+dns_tracing_att_ns_records = []
