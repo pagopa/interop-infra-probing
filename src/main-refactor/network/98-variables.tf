@@ -7,6 +7,11 @@ variable "env" {
   type        = string
   default     = "dev"
   description = "Environment name"
+
+  validation {
+    condition     = var.env == "dev" || var.env == "uat" || var.env == "prod"
+    error_message = "The env value must be either 'dev', 'uat' or 'prod'. No other values are allowed."
+  }
 }
 
 variable "azs" {
