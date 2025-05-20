@@ -2,7 +2,7 @@ locals {
   eks_control_plane_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   eks_workload_cidrs      = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   aurora_cidrs            = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
-  app_public_cidrs        = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
+  egress_cidrs            = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
   vpce_cidrs              = ["10.0.13.0/24", "10.0.14.0/24", "10.0.15.0/24"]
   vpn_cidrs               = ["10.0.16.0/24", "10.0.17.0/24", "10.0.18.0/24"]
   msk_cidrs               = ["10.0.19.0/24", "10.0.20.0/24", "10.0.21.0/24"]
@@ -16,8 +16,8 @@ locals {
   aurora_subnets_names = [for idx, subn in local.aurora_cidrs :
   format("%s-aurora-%d-%s", local.project, idx + 1, var.env)]
 
-  app_public_subnets_names = [for idx, subn in local.app_public_cidrs :
-  format("%s-app-public-%d-%s", local.project, idx + 1, var.env)]
+  egress_subnets_names = [for idx, subn in local.egress_cidrs :
+  format("%s-egress-%d-%s", local.project, idx + 1, var.env)]
 
   vpce_subnets_names = [for idx, subn in local.vpce_cidrs :
   format("%s-vpce-%d-%s", local.project, idx + 1, var.env)]
@@ -49,8 +49,8 @@ module "vpc" {
   one_nat_gateway_per_az = true
 
   # Order matters: the first N subnets (N = #AZs) will host a NAT instance. See 'one_nat_gateway_per_az'
-  public_subnets      = local.app_public_cidrs
-  public_subnet_names = local.app_public_subnets_names
+  public_subnets      = local.egress_cidrs
+  public_subnet_names = local.egress_subnets_names
 
   private_subnets      = local.eks_workload_cidrs
   private_subnet_names = local.eks_workload_subnets_names
