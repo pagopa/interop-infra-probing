@@ -44,7 +44,7 @@ provider "aws" {
 
 locals {
   project                        = "probing"
-  deploy_interop_msk_integration = var.interop_msk_cluster_arn != null
+  deploy_interop_msk_integration = (var.env == "dev" || var.env == "uat" || var.env == "prod") && var.interop_msk_cluster_arn != null
 }
 
 data "aws_caller_identity" "current" {}
