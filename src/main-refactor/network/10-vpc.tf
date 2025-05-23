@@ -1,17 +1,21 @@
 locals {
-  eks_control_plane_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  eks_workload_cidrs      = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  aurora_cidrs            = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
-  egress_cidrs            = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
-  vpce_cidrs              = ["10.0.13.0/24", "10.0.14.0/24", "10.0.15.0/24"]
-  vpn_cidrs               = ["10.0.16.0/24", "10.0.17.0/24", "10.0.18.0/24"]
-  msk_cidrs               = ["10.0.19.0/24", "10.0.20.0/24", "10.0.21.0/24"]
+  eks_workload_cidrs      = ["10.0.0.0/21", "10.0.8.0/21", "10.0.16.0/21"]
+  eks_control_plane_cidrs = ["10.0.24.0/24", "10.0.25.0/24", "10.0.26.0/24"]
+  probing_api_lb_cidrs    = ["10.0.27.0/24", "10.0.28.0/24", "10.0.29.0/24"]
+  aurora_cidrs            = ["10.0.30.0/24", "10.0.31.0/24", "10.0.32.0/24"]
+  egress_cidrs            = ["10.0.33.0/24", "10.0.34.0/24", "10.0.35.0/24"]
+  vpce_cidrs              = ["10.0.36.0/24", "10.0.37.0/24", "10.0.38.0/24"]
+  vpn_cidrs               = ["10.0.39.0/24", "10.0.40.0/24", "10.0.41.0/24"]
+  msk_cidrs               = ["10.0.42.0/24", "10.0.43.0/24", "10.0.44.0/24"]
+
+  eks_workload_subnets_names = [for idx, subn in local.eks_workload_cidrs :
+  format("%s-eks-workload-%d-%s", local.project, idx + 1, var.env)]
 
   eks_control_plane_subnets_names = [for idx, subn in local.eks_control_plane_cidrs :
   format("%s-eks-cp-%d-%s", local.project, idx + 1, var.env)]
 
-  eks_workload_subnets_names = [for idx, subn in local.eks_workload_cidrs :
-  format("%s-eks-workload-%d-%s", local.project, idx + 1, var.env)]
+  probing_api_lb_subnets_names = [for idx, subn in local.probing_api_lb_cidrs :
+  format("%s-api-lb-%d-%s", local.project, idx + 1, var.env)]
 
   aurora_subnets_names = [for idx, subn in local.aurora_cidrs :
   format("%s-aurora-%d-%s", local.project, idx + 1, var.env)]
@@ -49,8 +53,14 @@ module "vpc" {
   one_nat_gateway_per_az = true
 
   # Order matters: the first N subnets (N = #AZs) will host a NAT instance. See 'one_nat_gateway_per_az'
-  public_subnets      = local.egress_cidrs
-  public_subnet_names = local.egress_subnets_names
+  public_subnets = concat(
+    local.egress_cidrs,
+    local.probing_api_lb_cidrs
+  )
+  public_subnet_names = concat(
+    local.egress_subnets_names,
+    local.probing_api_lb_subnets_names
+  )
 
   private_subnets      = local.eks_workload_cidrs
   private_subnet_names = local.eks_workload_subnets_names
