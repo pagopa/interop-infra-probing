@@ -1,4 +1,4 @@
-bucket         = "terraform-backend-774300547186"
+bucket         = "terraform-backend-774300547186-es1"
 key            = "dev/init/terraform.tfstate"
-region         = "eu-central-1"
+region         = "eu-south-1"
 dynamodb_table = "terraform-lock"

@@ -1,3 +1,5 @@
+.DS_Store
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -25,6 +27,5 @@ override.tf.json
 # Ignore CLI configuration files
 # .terraformrc
 # terraform.rc
-*zip
-*.terraform.lock.hcl
+*.zip
 **/node_modules
