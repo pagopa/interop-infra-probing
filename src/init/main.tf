@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.3.6"
+  required_version = "~> 1.8.3"
 
   # TODO Uncomment once the backend S3 bucket is created and upload the state file.
   backend "s3" {}
@@ -7,7 +7,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.48.0"
+      version = "~> 5.100.0"
     }
   }
 }
@@ -20,7 +20,7 @@ provider "aws" {
 # create an S3 bucket to store the state file in
 
 resource "aws_s3_bucket" "terraform_states" {
-  bucket = format("terraform-backend-%s", data.aws_caller_identity.current.account_id)
+  bucket = format("terraform-backend-%s-es1", data.aws_caller_identity.current.account_id)
 
   lifecycle {
     prevent_destroy = true
