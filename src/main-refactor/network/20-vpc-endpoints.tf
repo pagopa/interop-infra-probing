@@ -108,20 +108,6 @@ module "vpce_interface" {
 
       tags = { Name = "CloudWatch-Logs" }
     },
-    # timestream_ingest = {
-    #   service_name        = "com.amazonaws.${var.aws_region}.timestream.ingest-cell1"
-    #   service_type        = "Interface"
-    #   private_dns_enabled = true
-
-    #   tags = { Name = "Timestream-Ingest" }
-    # },
-    # timestream_query = {
-    #   service_name        = "com.amazonaws.${var.aws_region}.timestream.query-cell1"
-    #   service_type        = "Interface"
-    #   private_dns_enabled = true
-
-    #   tags = { Name = "Timestream-Query" }
-    # },
     rds = {
       service_name        = "com.amazonaws.${var.aws_region}.rds"
       service_type        = "Interface"
