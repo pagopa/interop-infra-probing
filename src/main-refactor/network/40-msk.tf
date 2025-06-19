@@ -24,7 +24,7 @@ resource "aws_security_group" "interop_msk_vpc_connection" {
     to_port     = 65535
     protocol    = "tcp"
     security_groups = [
-      data.aws_eks_cluster.probing.vpc_config.security_group_ids[0],
+      data.aws_eks_cluster.probing[0].vpc_config[0].cluster_security_group_id,
       aws_security_group.vpn_clients.id
     ]
   }

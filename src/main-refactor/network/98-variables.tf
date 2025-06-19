@@ -75,4 +75,5 @@ variable "dns_probing_att_ns_records" {
 variable "eks_cluster_name" {
   type        = string
   description = "Name of the probing EKS cluster"
+  default     = null
 }
