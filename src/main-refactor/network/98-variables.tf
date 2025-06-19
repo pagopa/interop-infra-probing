@@ -71,3 +71,8 @@ variable "dns_probing_att_ns_records" {
   type        = list(string)
   default     = []
 }
+
+variable "eks_cluster_name" {
+  type        = string
+  description = "Name of the probing EKS cluster"
+}

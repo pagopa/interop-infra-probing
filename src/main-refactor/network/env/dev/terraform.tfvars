@@ -16,3 +16,5 @@ sso_admin_role_name = "AWSReservedSSO_FullAdmin_bd35c1497d9407bb"
 interop_msk_cluster_arn = "arn:aws:kafka:eu-south-1:505630707203:cluster/interop-platform-events-dev/259df37b-31c3-405c-bb30-d2bce2ca67c6-2"
 
 dns_probing_base_domain = "dev.stato-eservice.interop.pagopa.it"
+
+eks_cluster_name = "probing-eks-cluster-dev"
