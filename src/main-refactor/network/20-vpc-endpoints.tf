@@ -114,13 +114,20 @@ module "vpce_interface" {
       private_dns_enabled = true
 
       tags = { Name = "RDS" }
-    }
+    },
+    timestream = {
+      service_name        = "com.amazonaws.${var.aws_region}.timestream-influxdb"
+      service_type        = "Interface"
+      private_dns_enabled = true
+
+      tags = { Name = "Timestream" }
+    },
     # Set 'private_dns_enabled' to 'false' when creating it for the first time, then wait until the service owner accepts your connection request before setting it to true. 
     # Check the status of this endpoint connection in the AWS Console: it must transition from 'Pending acceptance' to 'Available' before setting private_dns_enabled to true.
     msk = {
       service_name        = "com.amazonaws.${var.aws_region}.kafka"
       service_type        = "Interface"
-      private_dns_enabled = true
+      private_dns_enabled = false
 
       tags = { Name = "MSK" }
     }
