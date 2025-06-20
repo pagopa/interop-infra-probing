@@ -6,7 +6,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.46.0"
+      version = "~> 5.100.0"
     }
   }
 }
@@ -43,8 +43,7 @@ provider "aws" {
 }
 
 locals {
-  project                        = "probing"
-  deploy_interop_msk_integration = var.interop_msk_cluster_arn != null
+  project = "probing"
 }
 
 data "aws_caller_identity" "current" {}
