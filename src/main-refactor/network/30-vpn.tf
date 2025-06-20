@@ -14,7 +14,8 @@ data "aws_subnets" "vpn" {
 data "aws_acm_certificate" "vpn" {
   count = var.env != "prod" ? 1 : 0
 
-  domain = format("vpn.%s", var.dns_probing_base_domain)
+  # domain = format("vpn.%s", var.dns_probing_base_domain)
+  domain = format("vpn.%s.probing.interop.pagopa.it", var.env) #TODO: edit to 'stato-eservice' instead of 'probing' when certificate is ready
 }
 
 # TODO
