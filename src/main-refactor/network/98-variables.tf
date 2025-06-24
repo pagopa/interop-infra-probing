@@ -31,12 +31,6 @@ variable "sso_admin_role_name" {
   description = "Name of the SSO admin role"
 }
 
-variable "interop_msk_cluster_arn" {
-  description = "ARN of the Interop MSK cluster"
-  type        = string
-  default     = null
-}
-
 variable "dns_probing_base_domain" {
   description = "Base DNS domain for the Probing product"
   type        = string
