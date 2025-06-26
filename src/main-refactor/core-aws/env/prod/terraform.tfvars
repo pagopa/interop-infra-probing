@@ -27,7 +27,7 @@ interop_msk_clusters_arns = {
   prod = ""
 }
 
-probing_analytics_database_name = "nterop_probing_telemetry"
+probing_analytics_database_name = "interop_probing_telemetry"
 
 probing_operational_database_prefix_name        = "interop_probing_operational"
 probing_operational_database_master_username    = "root"
