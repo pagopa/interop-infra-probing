@@ -14,7 +14,6 @@ data "aws_cloudfront_origin_request_policy" "all_viewer_except_host_header" {
   name = "Managed-AllViewerExceptHostHeader"
 }
 
-
 resource "aws_cloudfront_function" "refresh_handling" {
   name    = format("%s-cf-edge-function-%s", local.app_name, var.stage)
   runtime = "cloudfront-js-1.0"

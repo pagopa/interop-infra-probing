@@ -4,33 +4,20 @@ data "aws_api_gateway_rest_api" "probing_apigw" {
   name = module.probing_apigw.apigw_name
 }
 
-resource "aws_lambda_permission" "lambda_auth_external_permission" {
-  statement_id  = "AllowAPIGWInvokeExternalAuthorizer"
+resource "aws_lambda_permission" "allow_apigw_invoke_external_authorizer" {
+  statement_id  = "AllowAPIGWInvokeLambdaExternalAuthorizer"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.external_authorizer.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${data.aws_api_gateway_rest_api.probing_apigw.execution_arn}/*"
 }
 
-resource "aws_lambda_permission" "lambda_auth_cognito_permission" {
-  statement_id  = "AllowAPIGWInvokeCognitoAuthorizer"
+resource "aws_lambda_permission" "allow_apigw_invoke_cognito_authorizer" {
+  statement_id  = "AllowAPIGWInvokeLambdaCognitoAuthorizer"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.cognito_authorizer.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${data.aws_api_gateway_rest_api.probing_apigw.execution_arn}/*"
-}
-
-data "aws_iam_policy_document" "lambda_authorizer_assume_role_policy" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
 }
 
 data "aws_iam_policy" "lambda_authorizer_execution_policy" {
@@ -39,7 +26,7 @@ data "aws_iam_policy" "lambda_authorizer_execution_policy" {
 
 resource "aws_iam_role" "lambda_authorizer_execution_role" {
   name               = "${local.app_name}-execution-role-${var.stage}"
-  assume_role_policy = data.aws_iam_policy_document.lambda_authorizer_assume_role_policy.json
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 
   inline_policy {
     name   = "Logging"
@@ -59,8 +46,8 @@ resource "null_resource" "cognito_authorizer" {
 
 data "archive_file" "cognito_authorizer" {
   type        = "zip"
-  source_dir  = "${path.module}/assets/cognito_authorizer"
-  output_path = "cognito_authorizer.zip"
+  source_dir  = "${path.module}/lambda/cognito_authorizer"
+  output_path = "${path.module}/lambda/cognito_authorizer/cognito_authorizer.zip"
   depends_on  = [null_resource.cognito_authorizer]
 }
 
@@ -76,13 +63,13 @@ resource "null_resource" "external_authorizer" {
 
 data "archive_file" "external_authorizer" {
   type        = "zip"
-  source_dir  = "${path.module}/assets/external_authorizer"
-  output_path = "external_authorizer.zip"
+  source_dir  = "${path.module}/lambda/external_authorizer"
+  output_path = "${path.module}/lambda/external_authorizer/external_authorizer.zip"
   depends_on  = [null_resource.external_authorizer]
 }
 
 resource "aws_lambda_function" "cognito_authorizer" {
-  filename         = "cognito_authorizer.zip"
+  filename         = data.archive_file.cognito_authorizer.output_path
   function_name    = "${local.app_name}-apigw-lambda-cognito-authorizer-${var.stage}"
   role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "lambda_authorizer.handler"
@@ -101,7 +88,7 @@ resource "aws_lambda_function" "cognito_authorizer" {
 }
 
 resource "aws_lambda_function" "external_authorizer" {
-  filename         = "external_authorizer.zip"
+  filename         = data.archive_file.external_authorizer.output_path
   function_name    = "${local.app_name}-apigw-lambda-external-authorizer-${var.stage}"
   role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "lambda_authorizer.handler"

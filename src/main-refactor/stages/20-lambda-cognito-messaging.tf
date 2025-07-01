@@ -1,12 +1,12 @@
-resource "aws_lambda_permission" "allow_cognito" {
-  statement_id  = "AllowExecutionFromCognito"
+resource "aws_lambda_permission" "allow_cognito_invoke_lambda_messaging" {
+  statement_id  = "AllowCognitoInvokeLambdaMessaging"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.cognito_messaging.function_name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.user_pool.arn
 }
 
-data "aws_iam_policy_document" "congito_messaging_assume_role" {
+data "aws_iam_policy_document" "lambda_assume_role" {
   statement {
     effect = "Allow"
 
@@ -20,14 +20,14 @@ data "aws_iam_policy_document" "congito_messaging_assume_role" {
 }
 
 resource "aws_iam_role" "lambda_cognito_messaging_execution_role" {
-  name               = "${local.app_name}-cognito-messaging-invocation-policy-${var.stage}"
+  name               = "${local.app_name}-cognito-messaging-execution-role-${var.stage}"
   path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.congito_messaging_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
 resource "null_resource" "lambda_cognito_messaging" {
   provisioner "local-exec" {
-    command = "cd ${path.module}/assets/lambda_cognito_messaging/ && npm install"
+    command = "cd ${path.module}/lambda/lambda_cognito_messaging/ && npm install"
   }
 
   triggers = {
@@ -37,13 +37,13 @@ resource "null_resource" "lambda_cognito_messaging" {
 
 data "archive_file" "lambda_cognito_messaging" {
   type        = "zip"
-  source_dir  = "${path.module}/assets/lambda_cognito_messaging"
-  output_path = "lambda_cognito_messaging.zip"
+  source_dir  = "${path.module}/lambda/lambda_cognito_messaging"
+  output_path = "${path.module}/lambda/lambda_cognito_messaging/lambda_cognito_messaging.zip"
   depends_on  = [null_resource.lambda_cognito_messaging]
 }
 
 resource "aws_lambda_function" "cognito_messaging" {
-  filename         = "lambda_cognito_messaging.zip"
+  filename         = data.archive_file.lambda_cognito_messaging.output_path
   function_name    = "${local.app_name}-lambda-cognito-messaging-${var.stage}"
   role             = aws_iam_role.lambda_cognito_messaging_execution_role.arn
   handler          = "lambda_cognito_messaging.handler"

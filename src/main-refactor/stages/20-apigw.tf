@@ -6,8 +6,6 @@ resource "aws_cloudwatch_log_group" "apigw_access_logs" {
 }
 
 module "probing_apigw" {
-  depends_on = []
-
   source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/rest-apigw-openapi?ref=v1.21.0"
 
   maintenance_mode = false
