@@ -36,11 +36,18 @@ resource "aws_iam_role" "lambda_authorizer_execution_role" {
 
 resource "null_resource" "cognito_authorizer" {
   provisioner "local-exec" {
-    command = "cd ${path.module}/assets/cognito_authorizer/ && npm install"
+    command = "cd ${path.module}/lambda/cognito_authorizer/ && npm install"
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    source_hash = sha256(
+      join("", [
+        filesha256("${path.module}/lambda/cognito_authorizer/package.json"),
+        filesha256("${path.module}/lambda/cognito_authorizer/package-lock.json"),
+        filesha256("${path.module}/lambda/cognito_authorizer/lambda_authorizer.js"),
+        filesha256("${path.module}/lambda/cognito_authorizer/cognito_role_mapping-${var.stage}.json"),
+      ])
+    )
   }
 }
 
@@ -53,11 +60,17 @@ data "archive_file" "cognito_authorizer" {
 
 resource "null_resource" "external_authorizer" {
   provisioner "local-exec" {
-    command = "cd ${path.module}/assets/external_authorizer/ && npm install"
+    command = "cd ${path.module}/lambda/external_authorizer/ && npm install"
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    source_hash = sha256(
+      join("", [
+        filesha256("${path.module}/lambda/external_authorizer/package.json"),
+        filesha256("${path.module}/lambda/external_authorizer/package-lock.json"),
+        filesha256("${path.module}/lambda/external_authorizer/lambda_authorizer.js")
+      ])
+    )
   }
 }
 
@@ -79,7 +92,7 @@ resource "aws_lambda_function" "cognito_authorizer" {
 
   environment {
     variables = {
-      ENV                = var.env
+      ENV                = var.stage
       JWKS_URI           = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.user_pool.id}/.well-known/jwks.json"
       JWKS_CACHE_ENABLED = var.lambda_authorizer_cache_enabled
       JWKS_CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age
@@ -98,7 +111,7 @@ resource "aws_lambda_function" "external_authorizer" {
 
   environment {
     variables = {
-      ENV                = var.env
+      ENV                = var.stage
       JWKS_URI           = var.jwks_uri
       JWKS_CACHE_ENABLED = var.lambda_authorizer_cache_enabled
       JWKS_CACHE_MAX_AGE = var.lambda_authorizer_cache_max_age

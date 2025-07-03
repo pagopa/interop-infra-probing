@@ -31,7 +31,13 @@ resource "null_resource" "lambda_cognito_messaging" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    source_hash = sha256(
+      join("", [
+        filesha256("${path.module}/lambda/lambda_cognito_messaging/package.json"),
+        filesha256("${path.module}/lambda/lambda_cognito_messaging/package-lock.json"),
+        filesha256("${path.module}/lambda/lambda_cognito_messaging/lambda_cognito_messaging.js")
+      ])
+    )
   }
 }
 

@@ -1,21 +1,21 @@
 resource "aws_cloudwatch_log_group" "apigw_access_logs" {
-  name = format("amazon-apigateway-%s-access-logs-%s", local.project, var.env)
+  name = format("amazon-apigateway-%s-access-logs-%s", local.project, var.stage)
 
-  retention_in_days = var.env == "prod" ? 365 : 90
+  retention_in_days = var.stage == "prod" ? 365 : 90
   skip_destroy      = true
 }
 
 module "probing_apigw" {
-  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/rest-apigw-openapi?ref=v1.21.0"
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/rest-apigw-openapi?ref=v1.22.0"
 
   maintenance_mode = false
 
-  env                    = var.env
-  type                   = "generic"
-  api_name               = "probing"
-  openapi_relative_path  = var.probing_openapi_path
-  domain_name            = var.probing_base_route53_zone_name
-  openapi_s3_bucket_name = null # After the apigw_openapi_bucket module (in 60-s3.tf) has been created, use 'module.apigw_openapi_bucket.bucket' and re-apply Terraform
+  env                   = var.stage
+  type                  = "generic"
+  api_name              = "probing"
+  openapi_relative_path = var.probing_openapi_path
+
+  openapi_s3_bucket_name = module.apigw_openapi_bucket.s3_bucket_id # After the apigw_openapi_bucket module (in 60-s3.tf) has been created, replace 'null' with 'module.apigw_openapi_bucket.s3_bucket_id' and re-apply Terraform
   openapi_s3_object_key  = replace(var.probing_openapi_path, "./", "")
 
   templating_map = {
@@ -25,7 +25,7 @@ module "probing_apigw" {
 
   vpc_link_id          = aws_api_gateway_vpc_link.integration.id
   service_prefix       = "probing"
-  web_acl_arn          = null # After the aws_wafv2_web_acl resource (in 10-waf.tf) has been created, use 'aws_wafv2_web_acl.probing.arn' and re-apply Terraform
+  web_acl_arn          = aws_wafv2_web_acl.probing.arn # After the aws_wafv2_web_acl resource (in 10-waf.tf) has been created, replace 'null' with 'aws_wafv2_web_acl.probing.arn' and re-apply Terraform
   access_log_group_arn = aws_cloudwatch_log_group.apigw_access_logs.arn
 
   create_cloudwatch_alarm     = true
@@ -41,6 +41,31 @@ module "probing_apigw" {
   alarm_4xx_period               = 60
   alarm_4xx_eval_periods         = 1
   alarm_4xx_datapoints           = 1
+}
+
+data "aws_iam_policy_document" "apigw_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["apigateway.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "push_logs_to_cloudwatch" {
+  name               = "AWSAPIGWPushLogsToCloudWatch"
+  assume_role_policy = data.aws_iam_policy_document.apigw_assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "push_logs_to_cloudwatch" {
+  role       = aws_iam_role.push_logs_to_cloudwatch.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+}
+
+resource "aws_api_gateway_account" "current" {
+  cloudwatch_role_arn = aws_iam_role.push_logs_to_cloudwatch.arn
 }
 
 resource "aws_api_gateway_usage_plan" "probing_apigw" {

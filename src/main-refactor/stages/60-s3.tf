@@ -57,7 +57,7 @@ module "well_known_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "3.15.1"
 
-  bucket = format("%s-alb-logs-%s", local.project, var.stage)
+  bucket = format("%s-well-known-%s", local.project, var.stage)
 
   block_public_acls       = true
   block_public_policy     = true
@@ -82,7 +82,7 @@ module "well_known_bucket" {
         Resource = "${module.well_known_bucket.s3_bucket_arn}/*"
         Condition = {
           StringEquals = {
-            "aws:SourceArn" = module.fe_cdn.cloudfront_distribution_arn #TOCHECK: create CloudFront distribution
+            "aws:SourceArn" = module.fe_cdn.cloudfront_distribution_arn
           }
         }
       }
@@ -119,7 +119,7 @@ module "fe_bucket" {
         Resource = "${module.fe_bucket.s3_bucket_arn}/*"
         Condition = {
           StringEquals = {
-            "aws:SourceArn" = module.fe_cdn.cloudfront_distribution_arn #TOCHECK: create CloudFront distribution
+            "aws:SourceArn" = module.fe_cdn.cloudfront_distribution_arn
           }
         }
       }

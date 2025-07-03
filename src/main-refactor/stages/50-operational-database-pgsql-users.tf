@@ -9,8 +9,7 @@ locals {
 module "probing_operational_database_flyway_pgsql_user" {
   count = local.use_postgresql_user_module ? 1 : 0
 
-  #source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.5.3"
-  source = "./modules/postgresql-user"
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
 
   username = "probing_operational_db_flyway_user_${var.stage}"
 
@@ -45,8 +44,7 @@ locals {
 
 # PostgreSQL users with no initial grants. The grants will be applied by Flyway
 module "probing_operational_database_be_app_pgsql_user" {
-  #source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.5.3"
-  source = "./modules/postgresql-user"
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
 
   for_each = local.be_app_psql_usernames
 

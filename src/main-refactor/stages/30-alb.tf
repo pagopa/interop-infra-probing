@@ -128,7 +128,7 @@ resource "aws_lb_listener_rule" "api" {
 
 resource "aws_lb_listener_rule" "statistics_api" {
   listener_arn = aws_lb_listener.probing_80.arn
-  priority     = 1
+  priority     = 2
 
   action {
     type             = "forward"

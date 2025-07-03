@@ -61,4 +61,3 @@ resource "aws_acm_certificate_validation" "probing_distribution" {
   certificate_arn         = aws_acm_certificate.probing_distribution.arn
   validation_record_fqdns = [for record in aws_route53_record.probing_cert_validation : record.fqdn]
 }
-
