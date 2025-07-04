@@ -17,12 +17,17 @@ interop_msk_cluster_arn = ""
 
 dns_probing_base_domain = "stato-eservice.interop.pagopa.it"
 
-dns_tracing_dev_ns_records = []
+dns_probing_dev_ns_records = [
+  "ns-790.awsdns-34.net.",
+  "ns-1703.awsdns-20.co.uk.",
+  "ns-1145.awsdns-15.org.",
+  "ns-323.awsdns-40.com."
+]
 
-dns_tracing_qa_ns_records = []
+dns_probing_qa_ns_records = []
 
-dns_tracing_vapt_ns_records = []
+dns_probing_vapt_ns_records = []
 
-dns_tracing_uat_ns_records = []
+dns_probing_uat_ns_records = []
 
-dns_tracing_att_ns_records = []
+dns_probing_att_ns_records = []
