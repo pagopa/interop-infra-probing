@@ -56,10 +56,10 @@ locals {
     admins = {
       micheledellipaoli = {
         username = "micheledellipaoli"
-        password = "Testmichele1!"
+        password = null # If null, a random password will be used
         attributes = {
           email          = "michele.dellipaoli@pagopa.it"
-          email_verified = "true"
+          email_verified = true
         }
         force_alias_creation = true
       }
@@ -68,12 +68,24 @@ locals {
   }
 }
 
+resource "random_password" "admins" {
+  for_each = local.cognito_users.admins
+
+  length  = 16
+  special = true
+  upper   = true
+  lower   = true
+  numeric = true
+}
+
 resource "aws_cognito_user" "admins" {
+  depends_on = [random_password.admins]
+
   for_each = local.cognito_users.admins
 
   user_pool_id = aws_cognito_user_pool.user_pool.id
   username     = each.value.username
-  password     = each.value.password != null ? each.value.password : null
+  password     = each.value.password != null ? each.value.password : random_password.admins[each.key].result
 
   attributes = {
     for key, value in each.value.attributes : key => value
@@ -90,12 +102,24 @@ resource "aws_cognito_user_in_group" "admins" {
   username     = each.value.username
 }
 
+resource "random_password" "users" {
+  for_each = local.cognito_users.users
+
+  length  = 16
+  special = true
+  upper   = true
+  lower   = true
+  numeric = true
+}
+
 resource "aws_cognito_user" "users" {
+  depends_on = [random_password.users]
+
   for_each = local.cognito_users.users
 
   user_pool_id = aws_cognito_user_pool.user_pool.id
   username     = each.value.username
-  password     = each.value.password != null ? each.value.password : null
+  password     = each.value.password != null ? each.value.password : random_password.users[each.key].result
 
   attributes = {
     for key, value in each.value.attributes : key => value
