@@ -40,3 +40,7 @@ probing_openapi_path = "./openapi/dev/interop-probing-dev-api-v1.yaml"
 eks_cluster_name = "probing-eks-cluster-dev"
 
 jwks_uri = "https://dev.interop.pagopa.it/.well-known/probing-jwks.json"
+
+timestream_instance_name = "probing-analytics-dev"
+
+probing_analytics_admin_secret_name = "timestream/probing-analytics-dev/users/admin"

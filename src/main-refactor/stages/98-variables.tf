@@ -118,3 +118,13 @@ variable "lambda_authorizer_cache_max_age" {
   description = "Max age for cache JWKS in lambda authorizer"
   default     = 86400
 }
+
+variable "timestream_instance_name" {
+  type        = string
+  description = "Name of the Timestream for InfluxDB instance"
+}
+
+variable "probing_analytics_admin_secret_name" {
+  type        = string
+  description = "Name of the SM secret for the admin user in the Timestream for InfluxDB instance"
+}
