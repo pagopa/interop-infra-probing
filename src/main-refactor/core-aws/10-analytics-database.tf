@@ -1,7 +1,3 @@
-# resource "aws_timestreamwrite_database" "probing_analytics_database" {
-#   database_name = format("%s_%s", var.probing_analytics_database_name, var.env)
-# }
-
 resource "aws_security_group" "probing_analytics" {
   name        = format("timestream/%s-analytics-%s", local.project, var.env)
   description = "SG for Timestream for InfluxDB instances"
@@ -23,12 +19,6 @@ resource "aws_security_group" "probing_analytics" {
 locals {
   timestream_instance_name = format("%s-analytics-%s", local.project, var.env)
   bucket_prefix_name       = "probing-telemetry"
-
-  # eks_secret_default_tags = {
-  #   EKSClusterName                     = module.eks.cluster_name
-  #   EKSClusterNamespacesSpaceSeparated = join(" ", [var.env])
-  #   TerraformState                     = local.terraform_state
-  # }
 }
 
 resource "random_password" "probing_analytics_admin" {
@@ -42,12 +32,6 @@ resource "random_password" "probing_analytics_admin" {
 resource "aws_secretsmanager_secret" "probing_analytics_admin" {
   name                    = "timestream/${local.timestream_instance_name}/users/admin"
   recovery_window_in_days = 0
-
-  # tags = merge(local.eks_secret_default_tags, 
-  # {
-  #   EKSReplicaSecretName = "timestream-admin-user"
-  # }
-  # )
 }
 
 resource "aws_secretsmanager_secret_version" "probing_analytics_admin" {
