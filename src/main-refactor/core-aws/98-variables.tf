@@ -62,6 +62,11 @@ variable "msk_cidrs" {
   description = "CIDRs of the subnets reserved to MSK"
 }
 
+variable "timestream_cidrs" {
+  type        = list(string)
+  description = "CIDRs of the subnets reserved to Timestream for InfluxDB instances"
+}
+
 variable "vpn_clients_security_group_id" {
   type        = string
   description = "ID of the Security Groups associated to the VPN"
