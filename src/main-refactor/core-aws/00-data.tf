@@ -14,6 +14,18 @@ data "aws_subnets" "aurora_probing_operational_store" {
   }
 }
 
+data "aws_subnets" "timestream_probing_analytics_store" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.probing.id]
+  }
+
+  filter {
+    name   = "cidr-block"
+    values = toset(var.timestream_cidrs)
+  }
+}
+
 data "aws_subnets" "eks_control_plane" {
   filter {
     name   = "vpc-id"
