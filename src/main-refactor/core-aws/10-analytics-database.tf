@@ -18,6 +18,7 @@ resource "aws_security_group" "probing_analytics" {
 
 locals {
   timestream_instance_name = format("%s-analytics-%s", local.project, var.env)
+  timestream_organization  = local.timestream_instance_name #TOCHECK
   bucket_prefix_name       = "probing-telemetry"
 }
 
@@ -41,13 +42,13 @@ resource "aws_secretsmanager_secret_version" "probing_analytics_admin" {
     timestream_instance = local.timestream_instance_name
     username            = "admin"
     password            = random_password.probing_analytics_admin.result
-    token               = "" # Must be generated via InfluxUI from AWS console and then manually set in the secret
+    token               = "" # Must be generated via Influx UI from AWS console and then manually set in the secret
   })
 }
 
 resource "aws_timestreaminfluxdb_db_instance" "probing_analytics" {
   name         = local.timestream_instance_name
-  organization = local.timestream_instance_name #TOCHECK
+  organization = local.timestream_organization
 
   bucket = format("%s-%s", local.bucket_prefix_name, var.env)
 
@@ -70,8 +71,9 @@ locals {
 
 # Create a bucket in the InfluxDB instance for each stage (excluding the one equals to the var.env value because it is already created by the aws_timestreaminfluxdb_db_instance.probing_analytics resource)
 resource "null_resource" "probing_analytics_create_bucket" {
-  depends_on = [aws_timestreaminfluxdb_db_instance.probing_analytics]
+  depends_on = [aws_timestreaminfluxdb_db_instance.probing_analytics, aws_secretsmanager_secret_version.probing_analytics_admin]
 
+  # The following check ensures that the buckets creation is attempted only if the admin token has already been set in the SM secret
   for_each = jsondecode(aws_secretsmanager_secret_version.probing_analytics_admin.secret_string)["token"] != "" ? toset(local.influxdb_buckets_to_create) : toset([])
 
   provisioner "local-exec" {
@@ -89,8 +91,6 @@ resource "null_resource" "probing_analytics_create_bucket" {
       secret_json=$(aws secretsmanager get-secret-value --secret-id $ADMIN_CREDENTIALS_SECRET_ARN --query SecretString --output text)
 
       ADMIN_TOKEN=$(echo $secret_json | jq -r '.token')
-
-      influx config create config-name admin-config host-url "$INSTANCE_ENDPOINT" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --active
 
       echo "Checking if bucket '$BUCKET_TO_CREATE' exists..."
       BUCKET_EXISTS=$(influx bucket list --host "$INSTANCE_ENDPOINT" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$BUCKET_TO_CREATE" '.[] | select(.name == $name) | .id')
