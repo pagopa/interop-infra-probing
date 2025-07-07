@@ -16,7 +16,7 @@ locals {
 module "probing_analytics_influx_users" {
   for_each = local.be_app_influx_users
 
-  source = "./stages/modules/influx-user"
+  source = "./modules/influx-user"
 
   timestream_influxdb_instance_endpoint             = var.timestream_instance_endpoint
   timestream_influxdb_instance_port                 = var.timestream_instance_port
