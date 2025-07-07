@@ -75,7 +75,7 @@ resource "terraform_data" "probing_analytics_generate_admin_token" {
 
   provisioner "local-exec" {
     environment = {
-      INSTANCE_ENDPOINT            = format("https://%s:8086", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint)
+      INSTANCE_HOST                = format("https://%s:%s", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint, aws_timestreaminfluxdb_db_instance.probing_analytics.port)
       ORGANIZATION                 = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
       ADMIN_CREDENTIALS_SECRET_ARN = aws_secretsmanager_secret.probing_analytics_admin.arn
     }
@@ -89,7 +89,7 @@ resource "terraform_data" "probing_analytics_generate_admin_token" {
       ADMIN_USERNAME=$(echo "$secret_json" | jq -r '.username')
       ADMIN_PASSWORD=$(echo "$secret_json" | jq -r '.password')
 
-      influx config create --config-name admin-config --host-url "$INSTANCE_ENDPOINT" --org "$ORGANIZATION" -p "$ADMIN_USERNAME":"$ADMIN_PASSWORD" --active
+      influx config create --config-name admin-config --host-url "$INSTANCE_HOST" --org "$ORGANIZATION" -p "$ADMIN_USERNAME":"$ADMIN_PASSWORD" --active
 
       echo "Creating an all-access token for the admin user..."
       TOKEN_JSON=$(influx auth create --org "$ORGANIZATION" --user "$ADMIN_USERNAME" --all-access --json)
@@ -116,13 +116,12 @@ resource "terraform_data" "probing_analytics_create_bucket" {
 
   triggers_replace = [
     aws_timestreaminfluxdb_db_instance.probing_analytics,
-    aws_secretsmanager_secret.probing_analytics_admin,
-    local.influxdb_buckets_to_create
+    each.key # The bucket name is used as a trigger to re-apply the terraform_data resource if it changes
   ]
 
   provisioner "local-exec" {
     environment = {
-      INSTANCE_ENDPOINT            = format("https://%s:8086", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint)
+      INSTANCE_HOST                = format("https://%s:%s", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint, aws_timestreaminfluxdb_db_instance.probing_analytics.port)
       ORGANIZATION                 = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
       BUCKET_TO_CREATE             = each.key
       ADMIN_CREDENTIALS_SECRET_ARN = aws_secretsmanager_secret.probing_analytics_admin.arn
@@ -141,11 +140,11 @@ resource "terraform_data" "probing_analytics_create_bucket" {
       fi
 
       echo "Checking if bucket '$BUCKET_TO_CREATE' exists..."
-      BUCKET_EXISTS=$(influx bucket list --host "$INSTANCE_ENDPOINT" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$BUCKET_TO_CREATE" '.[] | select(.name == $name) | .id')
+      BUCKET_EXISTS=$(influx bucket list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$BUCKET_TO_CREATE" '.[] | select(.name == $name) | .id')
 
       if [ -z "$BUCKET_EXISTS" ]; then
         echo "Creating bucket '$BUCKET_TO_CREATE' in organization '$ORGANIZATION'..."
-        influx bucket create --host "$INSTANCE_ENDPOINT" --org "$ORGANIZATION" --name "$BUCKET_TO_CREATE" --token "$ADMIN_TOKEN" --retention 0
+        influx bucket create --host "$INSTANCE_HOST" --org "$ORGANIZATION" --name "$BUCKET_TO_CREATE" --token "$ADMIN_TOKEN" --retention 0
       else
         echo "Bucket '$BUCKET_TO_CREATE' already exists."
       fi
