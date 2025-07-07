@@ -42,7 +42,7 @@ eks_cluster_name = "probing-eks-cluster-dev"
 jwks_uri = "https://dev.interop.pagopa.it/.well-known/probing-jwks.json"
 
 timestream_instance_name         = "probing-analytics-dev"
-timestream_instance_endpoint     = ""
+timestream_instance_endpoint     = "hqxn89h96e-p2jepkxlcngatz.timestream-influxdb.eu-south-1.on.aws"
 timestream_instance_organization = "probing-analytics-dev"
 timestream_instance_bucket_name  = "probing-telemetry-dev"
 
