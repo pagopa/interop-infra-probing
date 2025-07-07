@@ -124,6 +124,21 @@ variable "timestream_instance_name" {
   description = "Name of the Timestream for InfluxDB instance"
 }
 
+variable "timestream_instance_endpoint" {
+  type        = string
+  description = "Endpoint of the Timestream for InfluxDB instance"
+}
+
+variable "timestream_instance_organization" {
+  type        = string
+  description = "Organization name in the Timestream for InfluxDB instance"
+}
+
+variable "timestream_instance_bucket_name" {
+  type        = string
+  description = "Name of the bucket in the Timestream for InfluxDB instance"
+}
+
 variable "probing_analytics_admin_secret_name" {
   type        = string
   description = "Name of the SM secret for the admin user in the Timestream for InfluxDB instance"
