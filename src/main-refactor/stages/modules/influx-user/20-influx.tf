@@ -11,8 +11,8 @@ resource "terraform_data" "create_user_token" {
 
   provisioner "local-exec" {
     environment = {
-      INSTANCE_HOST                = format("https://%s:%s", var.timestream_influxdb_instance_endpoint, var.timestream_influxdb_instance_port) #TO CHECK: we should use a data source but the current version of aws provider does not support it, so we've created a variable
-      ORGANIZATION                 = var.timestream_influxdb_organization                                                                      #TO CHECK: we should use a data source but the current version of aws provider does not support it, so we've created a variable
+      INSTANCE_HOST                = format("https://%s:%s", var.timestream_influxdb_instance_endpoint, var.timestream_influxdb_instance_port) #TO CHECK: we should use a data source but the current version of aws provider does not support it, so we use a variable
+      ORGANIZATION                 = var.timestream_influxdb_organization                                                                      #TO CHECK: we should use a data source but the current version of aws provider does not support it, so we use a variable
       USERNAME                     = var.username
       PASSWORD                     = random_password.this.result
       ADMIN_CREDENTIALS_SECRET_ARN = data.aws_secretsmanager_secret.timestream_influxdb_admin.arn
