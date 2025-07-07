@@ -24,6 +24,12 @@ data "aws_subnets" "timestream_probing_analytics_store" {
     name   = "cidr-block"
     values = toset(var.timestream_cidrs)
   }
+
+  # Necessary otherwise InfluxDB instance creation fails with ValidationException: Subnets ${SUBNET_IDS} are in AZs [eus1-az1] that are not supported by the provided Amazon Timestream for InfluxDB DbInstanceType db.influx.medium.
+  filter {
+    name   = "availability-zone"
+    values = ["eu-south-1b", "eu-south-1c"]
+  }
 }
 
 data "aws_subnets" "eks_control_plane" {
