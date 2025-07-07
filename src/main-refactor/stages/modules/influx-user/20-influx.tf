@@ -1,5 +1,5 @@
+# Create a user and a related token in the InfluxDB instance for each entry in local.be_app_influx_users, and stores it in the relative SecretsManager secret
 resource "terraform_data" "create_user_token" {
-
   triggers_replace = [
     var.timestream_influxdb_instance_endpoint,
     var.timestream_influxdb_organization,
