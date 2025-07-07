@@ -109,7 +109,7 @@ resource "terraform_data" "delete_previous_user" {
             influx user update --host "$INSTANCE_HOST" --org "$ORGANIZATION" --id "$USERNAME" --name "$CURRENT_USERNAME" --token "$ADMIN_TOKEN"
         fi
         
-        echo "Saving token into Secrets Manager..."
+        echo "Saving updated username into Secrets Manager..."
         aws secretsmanager put-secret-value --secret-id "$SECRET_NAME" \
             --secret-string "$(echo "$secret_json" | jq --arg username "$CURRENT_USERNAME" '. + {username: $username}')"
       fi
