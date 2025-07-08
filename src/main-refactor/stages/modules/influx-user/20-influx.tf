@@ -1,65 +1,40 @@
 # Create an influx user and a related token in the InfluxDB instance, and stores it in the relative SecretsManager secret
-resource "terraform_data" "create_user_token" {
+resource "terraform_data" "manage_user_token" {
+  depends_on = [aws_secretsmanager_secret.this]
+
   triggers_replace = [
     var.timestream_influxdb_instance_endpoint,
     var.timestream_influxdb_organization,
-    var.username,
-    random_password.this,
-    var.permission_flags,
-    aws_secretsmanager_secret.this,
+    var.username
   ]
 
   provisioner "local-exec" {
     environment = {
-      INSTANCE_HOST                = format("https://%s:%s", var.timestream_influxdb_instance_endpoint, var.timestream_influxdb_instance_port) #TO CHECK: we should use a data source but the current version of aws provider does not support it, so we use a variable
-      ORGANIZATION                 = var.timestream_influxdb_organization                                                                      #TO CHECK: we should use a data source but the current version of aws provider does not support it, so we use a variable
+      INSTANCE_ENDPOINT            = var.timestream_influxdb_instance_endpoint
+      INSTANCE_HOST                = format("https://%s:%s", var.timestream_influxdb_instance_endpoint, var.timestream_influxdb_instance_port)
+      ORGANIZATION                 = var.timestream_influxdb_organization
       USERNAME                     = var.username
       PASSWORD                     = random_password.this.result
       ADMIN_CREDENTIALS_SECRET_ARN = data.aws_secretsmanager_secret.timestream_influxdb_admin.arn
       SECRET_NAME                  = aws_secretsmanager_secret.this.name
+      PERMISSION_FLAGS             = join(" ", var.permission_flags)
+      GRANT_READ_ON_BUCKETS        = join(" ", var.grant_read_on_buckets)
+      GRANT_WRITE_ON_BUCKETS       = join(" ", var.grant_write_on_buckets)
     }
 
     command = <<EOT
       #!/bin/bash
       set -euo pipefail
-      
-      secret_json=$(aws secretsmanager get-secret-value --secret-id $ADMIN_CREDENTIALS_SECRET_ARN --query SecretString --output text)
 
-      ADMIN_TOKEN=$(echo $secret_json | jq -r '.token')
-      if [ -z "$ADMIN_TOKEN" ]; then
-        echo "The admin token has not been set in the secret. The InfluxDB user creation will be skipped."
-        exit 0
-      fi
-
-      echo "Checking if user '$USERNAME' exists..."
-      USER_EXISTS=$(influx user list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$USERNAME" '.[] | select(.name == $name) | .id')
-
-      if [ -z "$USER_EXISTS" ]; then
-        echo "Creating user '$USERNAME'..."
-        influx user create --host "$INSTANCE_HOST" --org "$ORGANIZATION" --name "$USERNAME" --password "$PASSWORD" --token "$ADMIN_TOKEN"
-      else
-        echo "User '$USERNAME' already exists."
-      fi
-
-      echo "Creating token for user '$USERNAME'..."
-      TOKEN_JSON=$(influx auth create --host "$INSTANCE_HOST" --org "$ORGANIZATION" --user "$USERNAME" ${var.permission_flags} --token "$ADMIN_TOKEN" --json)
-      USER_TOKEN=$(echo "$TOKEN_JSON" | jq -r '.token')
-
-      echo "Saving secret to AWS Secrets Manager..."
-      aws secretsmanager put-secret-value --secret-id "$SECRET_NAME" \
-        --secret-string "$(jq -n \
-          --arg timestream_instance "${var.timestream_influxdb_instance_endpoint}" \
-          --arg timestream_organization "${var.timestream_influxdb_organization}" \
-          --arg username "$USERNAME" \
-          --arg password "$PASSWORD" \
-          --arg token "$USER_TOKEN" \
-          '{timestream_instance: $timestream_instance, timestream_organization: $timestream_organization, username: $username, password: $password, token: $token}'
-        )"
+      chmod +x "${path.module}/scripts/manage_user_token.sh"
+      bash "${path.module}/scripts/manage_user_token.sh"
     EOT
   }
 }
 
 resource "terraform_data" "delete_previous_user" {
+  depends_on = [aws_secretsmanager_secret.this]
+
   input = {
     instance_host                = format("https://%s:%s", var.timestream_influxdb_instance_endpoint, var.timestream_influxdb_instance_port)
     organization                 = var.timestream_influxdb_organization
@@ -70,10 +45,6 @@ resource "terraform_data" "delete_previous_user" {
 
   triggers_replace = [
     var.username
-  ]
-
-  depends_on = [
-    aws_secretsmanager_secret.this
   ]
 
   provisioner "local-exec" {
@@ -95,29 +66,36 @@ resource "terraform_data" "delete_previous_user" {
 
         ADMIN_TOKEN=$(echo $secret_json | jq -r '.token')
         if [ -z "$ADMIN_TOKEN" ]; then
-            echo "The admin token has not been set in the secret. The InfluxDB user update will be skipped."
-            exit 0
+          echo "The admin token has not been set in the secret. The InfluxDB user update will be skipped."
+          exit 0
         fi
 
         echo "Checking if user '$USERNAME' exists..."
-        USER_EXISTS=$(influx user list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$USERNAME" '.[] | select(.name == $name) | .id')
 
-        if [ -z "$USER_EXISTS" ]; then
-            echo "User '$USERNAME' does not exists."
+        set +e
+        USER_ID=$(influx user list --host "$INSTANCE_HOST" --token "$ADMIN_TOKEN" --name "$USERNAME" | awk 'NR>1 {print $1}')
+        USER_LIST_EXIT_CODE=$?
+        set -e
+
+        if [ $USER_LIST_EXIT_CODE -ne 0 ] && [ -z "$USER_ID" ]; then
+          echo "User '$USERNAME' does not exist"
+          exit 1
         else
-            echo "Updating user '$USERNAME'..."
-            influx user update --host "$INSTANCE_HOST" --org "$ORGANIZATION" --id "$USERNAME" --name "$CURRENT_USERNAME" --token "$ADMIN_TOKEN"
+          echo "Updating user '$USERNAME'..."
+          influx user update --host "$INSTANCE_HOST" --org "$ORGANIZATION" --id "$USERNAME" --name "$CURRENT_USERNAME" --token "$ADMIN_TOKEN"
         fi
         
         echo "Saving updated username into Secrets Manager..."
         aws secretsmanager put-secret-value --secret-id "$SECRET_NAME" \
-            --secret-string "$(echo "$secret_json" | jq --arg username "$CURRENT_USERNAME" '. + {username: $username}')"
+          --secret-string "$(echo "$secret_json" | jq --arg username "$CURRENT_USERNAME" '. + {username: $username}')"
       fi
     EOT
   }
 }
 
 resource "terraform_data" "delete_user" {
+  depends_on = [aws_secretsmanager_secret.this]
+
   input = {
     instance_host                = format("https://%s:%s", var.timestream_influxdb_instance_endpoint, var.timestream_influxdb_instance_port)
     organization                 = var.timestream_influxdb_organization
@@ -127,10 +105,6 @@ resource "terraform_data" "delete_user" {
 
   triggers_replace = [
     aws_secretsmanager_secret.this.id
-  ]
-
-  depends_on = [
-    aws_secretsmanager_secret.this
   ]
 
   provisioner "local-exec" {
@@ -156,13 +130,18 @@ resource "terraform_data" "delete_user" {
       fi
 
       echo "Checking if user '$USERNAME' exists..."
-      USER_EXISTS=$(influx user list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$USERNAME" '.[] | select(.name == $name) | .id')
 
-      if [ -z "$USER_EXISTS" ]; then
-        echo "User '$USERNAME' does not exists."
+      set +e
+        USER_ID=$(influx user list --host "$INSTANCE_HOST" --token "$ADMIN_TOKEN" --name "$USERNAME" | awk 'NR>1 {print $1}')
+        USER_LIST_EXIT_CODE=$?
+      set -e
+
+      if [ $USER_LIST_EXIT_CODE -ne 0 ] && [ -z "$USER_ID" ]; then
+        echo "User '$USERNAME' does not exist"
+        exit 1
       else
         echo "Deleting user '$USERNAME'..."
-        influx user delete --host "$INSTANCE_HOST" --org "$ORGANIZATION" --id "$USERNAME" --token "$ADMIN_TOKEN"
+        influx user delete --host "$INSTANCE_HOST" --id "$USER_ID" --token "$ADMIN_TOKEN"
       fi
     EOT
   }

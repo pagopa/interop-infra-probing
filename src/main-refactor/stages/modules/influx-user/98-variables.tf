@@ -29,9 +29,22 @@ variable "generated_password_length" {
   type        = number
 }
 
+variable "grant_read_on_buckets" {
+  description = "List of bucket names to which the user will be granted read access"
+  type        = list(string)
+  default     = []
+}
+
+variable "grant_write_on_buckets" {
+  description = "List of bucket names to which the user will be granted write access"
+  type        = list(string)
+  default     = []
+}
+
 variable "permission_flags" {
-  description = "Permission to grant be created"
-  type        = string
+  description = "List of flags that represent permissions to be granted to the user"
+  type        = list(string)
+  default     = []
 }
 
 variable "secret_prefix" {
