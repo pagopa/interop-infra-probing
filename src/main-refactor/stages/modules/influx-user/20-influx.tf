@@ -32,6 +32,8 @@ resource "terraform_data" "manage_user_token" {
   }
 }
 
+# Not needed since when the username changes, the relative aws_secretsmanager_secret resource is replaced, which triggers the terraform_data.delete_user to run. 
+# So, the influx user is deleted before the new one is created.
 resource "terraform_data" "delete_previous_user" {
   depends_on = [aws_secretsmanager_secret.this]
 
