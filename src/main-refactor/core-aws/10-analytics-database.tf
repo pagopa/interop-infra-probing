@@ -136,7 +136,7 @@ resource "terraform_data" "probing_analytics_create_bucket" {
       ADMIN_TOKEN=$(echo $secret_json | jq -r '.token')
       if [ -z "$ADMIN_TOKEN" ]; then
         echo "The admin token has not been set in the secret. The InfluxDB buckets creation will be skipped."
-        exit 0
+        exit 1
       fi
 
       echo "Checking if bucket '$BUCKET_TO_CREATE' exists..."
