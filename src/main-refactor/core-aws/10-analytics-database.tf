@@ -108,8 +108,8 @@ locals {
   ]
 }
 
-# Create a bucket in the InfluxDB instance for each stage (excluding the one equals to the var.env value because it is already created by the aws_timestreaminfluxdb_db_instance.probing_analytics resource)
-resource "terraform_data" "probing_analytics_create_bucket" {
+# Create or delete a bucket in the InfluxDB instance for each stage (excluding the one equals to the var.env value because it is already created by the aws_timestreaminfluxdb_db_instance.probing_analytics resource)
+resource "terraform_data" "probing_analytics_manage_bucket" {
   depends_on = [aws_timestreaminfluxdb_db_instance.probing_analytics, aws_secretsmanager_secret_version.probing_analytics_admin, terraform_data.probing_analytics_store_admin_token]
 
   for_each = toset(local.influxdb_buckets_to_create)
@@ -119,13 +119,22 @@ resource "terraform_data" "probing_analytics_create_bucket" {
     organization_name = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
   }
 
+  input = {
+    instance_host                = format("https://%s:%s", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint, aws_timestreaminfluxdb_db_instance.probing_analytics.port)
+    organization                 = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
+    bucket_name                  = each.key
+    bucket_retention             = var.probing_analytics_buckets_retention
+    admin_credentials_secret_arn = aws_secretsmanager_secret.probing_analytics_admin.arn
+  }
+
+
   provisioner "local-exec" {
     environment = {
-      INSTANCE_HOST                = format("https://%s:%s", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint, aws_timestreaminfluxdb_db_instance.probing_analytics.port)
-      ORGANIZATION                 = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
-      BUCKET_TO_CREATE             = each.key
-      BUCKET_RETENTION             = var.probing_analytics_buckets_retention
-      ADMIN_CREDENTIALS_SECRET_ARN = aws_secretsmanager_secret.probing_analytics_admin.arn
+      INSTANCE_HOST                = self.input.instance_host
+      ORGANIZATION                 = self.input.organization
+      BUCKET_TO_CREATE             = self.input.bucket_name
+      BUCKET_RETENTION             = self.input.bucket_retention
+      ADMIN_CREDENTIALS_SECRET_ARN = self.input.admin_credentials_secret_arn
     }
 
     command = <<EOT
@@ -152,15 +161,51 @@ resource "terraform_data" "probing_analytics_create_bucket" {
       fi
     EOT
   }
+
+  provisioner "local-exec" {
+    when = destroy
+
+    environment = {
+      INSTANCE_HOST                = self.input.instance_host
+      ORGANIZATION                 = self.input.organization
+      BUCKET_TO_DELETE             = self.input.bucket_name
+      ADMIN_CREDENTIALS_SECRET_ARN = self.input.admin_credentials_secret_arn
+    }
+
+    command = <<EOT
+      #!/bin/bash
+      set -euo pipefail
+      
+      secret_json=$(aws secretsmanager get-secret-value --secret-id $ADMIN_CREDENTIALS_SECRET_ARN --query SecretString --output text)
+
+      ADMIN_TOKEN=$(echo $secret_json | jq -r '.token')
+      if [ -z "$ADMIN_TOKEN" ]; then
+        echo "The admin token has not been set in the secret. The InfluxDB buckets creation will be skipped."
+        exit 1
+      fi
+
+      echo "Checking if bucket '$BUCKET_TO_DELETE' exists..."
+      BUCKET_ID=$(influx bucket list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$BUCKET_TO_DELETE" '.[] | select(.name == $name) | .id')
+
+      if [ -z "$BUCKET_ID" ]; then
+        echo "Bucket '$BUCKET_TO_DELETE' doesn't exist."
+        exit 1
+      else
+        echo "Deleting bucket '$BUCKET_TO_DELETE' in organization '$ORGANIZATION'..."
+        influx bucket delete --host "$INSTANCE_HOST" --org "$ORGANIZATION" --id "$BUCKET_ID" --token "$ADMIN_TOKEN"
+      fi
+    EOT
+  }
 }
 
 # Update the existing buckets in case their retention change
-resource "terraform_data" "probing_analytics_update_bucket" {
-  depends_on = [aws_timestreaminfluxdb_db_instance.probing_analytics, aws_secretsmanager_secret_version.probing_analytics_admin, terraform_data.probing_analytics_store_admin_token, terraform_data.probing_analytics_create_bucket]
+resource "terraform_data" "probing_analytics_update_bucket_retention" {
+  depends_on = [aws_timestreaminfluxdb_db_instance.probing_analytics, aws_secretsmanager_secret_version.probing_analytics_admin, terraform_data.probing_analytics_store_admin_token, terraform_data.probing_analytics_manage_bucket]
 
   for_each = toset(local.influxdb_buckets_to_create)
 
   triggers_replace = {
+    bucket_name      = each.key
     bucket_retention = var.probing_analytics_buckets_retention
   }
 
