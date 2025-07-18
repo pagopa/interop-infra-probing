@@ -144,7 +144,7 @@ resource "terraform_data" "probing_analytics_create_bucket" {
 
       if [ -z "$BUCKET_EXISTS" ]; then
         echo "Creating bucket '$BUCKET_TO_CREATE' in organization '$ORGANIZATION'..."
-        influx bucket create --host "$INSTANCE_HOST" --org "$ORGANIZATION" --name "$BUCKET_TO_CREATE" --token "$ADMIN_TOKEN" --retention 0
+        influx bucket create --host "$INSTANCE_HOST" --org "$ORGANIZATION" --name "$BUCKET_TO_CREATE" --token "$ADMIN_TOKEN" --retention ${var.probing_analytics_buckets_retention}
       else
         echo "Bucket '$BUCKET_TO_CREATE' already exists."
       fi
