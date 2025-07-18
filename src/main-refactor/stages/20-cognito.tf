@@ -69,24 +69,19 @@ locals {
   ], [])
 }
 
-resource "random_password" "admins" {
+data "aws_secretsmanager_random_password" "admins" {
   for_each = { for admin in local.cognito_admins : "${admin.username}" => admin }
 
-  length  = 16
-  special = true
-  upper   = true
-  lower   = true
-  numeric = true
+  password_length            = 16
+  require_each_included_type = true
 }
 
 resource "aws_cognito_user" "admins" {
-  depends_on = [random_password.admins]
-
   for_each = { for admin in local.cognito_admins : "${admin.username}" => admin }
 
   user_pool_id = aws_cognito_user_pool.user_pool.id
   username     = each.value.username
-  password     = random_password.admins[each.key].result
+  password     = data.aws_secretsmanager_random_password.admins[each.key].random_password
 
   attributes = {
     email          = each.value.email
@@ -94,6 +89,10 @@ resource "aws_cognito_user" "admins" {
   }
 
   force_alias_creation = true
+
+  lifecycle {
+    ignore_changes = [password]
+  }
 }
 
 resource "aws_cognito_user_in_group" "admins" {
@@ -104,24 +103,19 @@ resource "aws_cognito_user_in_group" "admins" {
   username     = each.value.username
 }
 
-resource "random_password" "users" {
+data "aws_secretsmanager_random_password" "users" {
   for_each = { for user in local.cognito_users : "${user.username}" => user }
 
-  length  = 16
-  special = true
-  upper   = true
-  lower   = true
-  numeric = true
+  password_length            = 16
+  require_each_included_type = true
 }
 
 resource "aws_cognito_user" "users" {
-  depends_on = [random_password.users]
-
   for_each = { for user in local.cognito_users : "${user.username}" => user }
 
   user_pool_id = aws_cognito_user_pool.user_pool.id
   username     = each.value.username
-  password     = random_password.users[each.key].result
+  password     = data.aws_secretsmanager_random_password.users[each.key].random_password
 
   attributes = {
     email          = each.value.email
@@ -129,6 +123,10 @@ resource "aws_cognito_user" "users" {
   }
 
   force_alias_creation = true
+
+  lifecycle {
+    ignore_changes = [password]
+  }
 }
 
 resource "aws_cognito_user_in_group" "users" {
