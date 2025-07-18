@@ -114,16 +114,17 @@ resource "terraform_data" "probing_analytics_create_bucket" {
 
   for_each = toset(local.influxdb_buckets_to_create)
 
-  triggers_replace = [
-    aws_timestreaminfluxdb_db_instance.probing_analytics,
-    each.key # The bucket name is used as a trigger to re-apply the terraform_data resource if it changes
-  ]
+  triggers_replace = {
+    instance_name     = aws_timestreaminfluxdb_db_instance.probing_analytics.name,
+    organization_name = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
+  }
 
   provisioner "local-exec" {
     environment = {
       INSTANCE_HOST                = format("https://%s:%s", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint, aws_timestreaminfluxdb_db_instance.probing_analytics.port)
       ORGANIZATION                 = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
       BUCKET_TO_CREATE             = each.key
+      BUCKET_RETENTION             = var.probing_analytics_buckets_retention
       ADMIN_CREDENTIALS_SECRET_ARN = aws_secretsmanager_secret.probing_analytics_admin.arn
     }
 
@@ -136,17 +137,80 @@ resource "terraform_data" "probing_analytics_create_bucket" {
       ADMIN_TOKEN=$(echo $secret_json | jq -r '.token')
       if [ -z "$ADMIN_TOKEN" ]; then
         echo "The admin token has not been set in the secret. The InfluxDB buckets creation will be skipped."
-        exit 0
+        exit 1
       fi
 
       echo "Checking if bucket '$BUCKET_TO_CREATE' exists..."
-      BUCKET_EXISTS=$(influx bucket list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$BUCKET_TO_CREATE" '.[] | select(.name == $name) | .id')
+      BUCKET_ID=$(influx bucket list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$BUCKET_TO_CREATE" '.[] | select(.name == $name) | .id')
 
-      if [ -z "$BUCKET_EXISTS" ]; then
+      if [ -z "$BUCKET_ID" ]; then
         echo "Creating bucket '$BUCKET_TO_CREATE' in organization '$ORGANIZATION'..."
-        influx bucket create --host "$INSTANCE_HOST" --org "$ORGANIZATION" --name "$BUCKET_TO_CREATE" --token "$ADMIN_TOKEN" --retention ${var.probing_analytics_buckets_retention}
+        influx bucket create --host "$INSTANCE_HOST" --org "$ORGANIZATION" --name "$BUCKET_TO_CREATE" --token "$ADMIN_TOKEN" --retention "$BUCKET_RETENTION"
       else
         echo "Bucket '$BUCKET_TO_CREATE' already exists."
+        exit 1
+      fi
+    EOT
+  }
+}
+
+# Update the existing buckets in case their retention change
+resource "terraform_data" "probing_analytics_update_bucket" {
+  depends_on = [aws_timestreaminfluxdb_db_instance.probing_analytics, aws_secretsmanager_secret_version.probing_analytics_admin, terraform_data.probing_analytics_store_admin_token, terraform_data.probing_analytics_create_bucket]
+
+  for_each = toset(local.influxdb_buckets_to_create)
+
+  triggers_replace = {
+    bucket_retention = var.probing_analytics_buckets_retention
+  }
+
+  provisioner "local-exec" {
+    environment = {
+      INSTANCE_HOST                = format("https://%s:%s", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint, aws_timestreaminfluxdb_db_instance.probing_analytics.port)
+      ORGANIZATION                 = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
+      BUCKET_NAME                  = each.key
+      BUCKET_RETENTION             = self.triggers_replace.bucket_retention
+      ADMIN_CREDENTIALS_SECRET_ARN = aws_secretsmanager_secret.probing_analytics_admin.arn
+    }
+
+    command = <<EOT
+      #!/bin/bash
+      set -euo pipefail
+      
+      secret_json=$(aws secretsmanager get-secret-value --secret-id $ADMIN_CREDENTIALS_SECRET_ARN --query SecretString --output text)
+
+      ADMIN_TOKEN=$(echo $secret_json | jq -r '.token')
+      if [ -z "$ADMIN_TOKEN" ]; then
+        echo "The admin token has not been set in the secret. The InfluxDB buckets creation will be skipped."
+        exit 1
+      fi
+
+      echo "Checking if bucket '$BUCKET_NAME' exists..."
+      BUCKET_ID=$(influx bucket list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --json | jq -r --arg name "$BUCKET_NAME" '.[] | select(.name == $name) | .id')
+
+      if [ -z "$BUCKET_ID" ]; then
+        echo "Bucket '$BUCKET_NAME' doesn't exist."
+        exit 1
+      else
+
+        CURRENT_BUCKET_RETENTION=$(influx bucket list --host "$INSTANCE_HOST" --org "$ORGANIZATION" --token "$ADMIN_TOKEN" --id "$BUCKET_ID" --json | jq -r '.[0].retentionRules[0].everySeconds // 0')
+        
+        DESIRED_RETENTION_SECONDS=$(echo "$BUCKET_RETENTION" | sed -E 's/([0-9]+)s/\1/; s/([0-9]+)m/\1*60/; s/([0-9]+)h/\1*3600/; s/([0-9]+)d/\1*86400/' | bc)
+
+        if [ "$CURRENT_BUCKET_RETENTION" != "$DESIRED_RETENTION_SECONDS" ]; then
+          echo "Updating bucket '$BUCKET_NAME'..."
+          
+          if [ "$DESIRED_RETENTION_SECONDS" -eq 0 ]; then
+            SHARD_GROUP_DURATION_SECONDS=604800
+          else
+            SHARD_GROUP_DURATION_SECONDS=$(( DESIRED_RETENTION_SECONDS / 2 ))
+          fi
+
+          influx bucket update --host "$INSTANCE_HOST" --id "$BUCKET_ID" --token "$ADMIN_TOKEN" --retention "$BUCKET_RETENTION" --shard-group-duration "$SHARD_GROUP_DURATION_SECONDS"s
+        else
+          echo "No need to update the bucket '$BUCKET_NAME'."
+        fi
+
       fi
     EOT
   }
