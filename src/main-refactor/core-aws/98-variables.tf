@@ -82,6 +82,12 @@ variable "probing_analytics_database_name" {
   description = "Probing analytics database name"
 }
 
+variable "probing_analytics_buckets_retention" {
+  type        = string
+  description = "Retenetion period of the buckets in the InfluxDB instance"
+  default     = "0"
+}
+
 variable "probing_operational_database_prefix_name" {
   type        = string
   description = "Prefix for the Probing operational database name"
