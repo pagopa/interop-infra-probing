@@ -29,3 +29,6 @@ override.tf.json
 # terraform.rc
 *.zip
 **/node_modules
+
+# Ignore OpenAPI templated files
+*_templated.yaml
