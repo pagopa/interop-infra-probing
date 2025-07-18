@@ -52,24 +52,25 @@ resource "aws_cognito_user_pool_client" "client" {
 }
 
 locals {
-  cognito_users = {
-    admins = {
-      micheledellipaoli = {
-        username = "micheledellipaoli"
-        password = null # If null, a random password will be used
-        attributes = {
-          email          = "michele.dellipaoli@pagopa.it"
-          email_verified = true
-        }
-        force_alias_creation = true
-      }
-    },
-    users = {}
-  }
+  cognito_users_json_data = jsondecode(file("./assets/cognito-users/cognito-users-${var.stage}.json"))
+
+  cognito_admins = try([
+    for admin in local.cognito_users_json_data.admins : {
+      username = admin.username
+      email    = admin.email
+    }
+  ], [])
+
+  cognito_users = try([
+    for user in local.cognito_users_json_data.users : {
+      username = user.username
+      email    = user.email
+    }
+  ], [])
 }
 
 resource "random_password" "admins" {
-  for_each = local.cognito_users.admins
+  for_each = { for admin in local.cognito_admins : "${admin.username}" => admin }
 
   length  = 16
   special = true
@@ -81,17 +82,18 @@ resource "random_password" "admins" {
 resource "aws_cognito_user" "admins" {
   depends_on = [random_password.admins]
 
-  for_each = local.cognito_users.admins
+  for_each = { for admin in local.cognito_admins : "${admin.username}" => admin }
 
   user_pool_id = aws_cognito_user_pool.user_pool.id
   username     = each.value.username
-  password     = each.value.password != null ? each.value.password : random_password.admins[each.key].result
+  password     = random_password.admins[each.key].result
 
   attributes = {
-    for key, value in each.value.attributes : key => value
+    email          = each.value.email
+    email_verified = true
   }
 
-  force_alias_creation = each.value.force_alias_creation
+  force_alias_creation = true
 }
 
 resource "aws_cognito_user_in_group" "admins" {
@@ -103,7 +105,7 @@ resource "aws_cognito_user_in_group" "admins" {
 }
 
 resource "random_password" "users" {
-  for_each = local.cognito_users.users
+  for_each = { for user in local.cognito_users : "${user.username}" => user }
 
   length  = 16
   special = true
@@ -115,17 +117,18 @@ resource "random_password" "users" {
 resource "aws_cognito_user" "users" {
   depends_on = [random_password.users]
 
-  for_each = local.cognito_users.users
+  for_each = { for user in local.cognito_users : "${user.username}" => user }
 
   user_pool_id = aws_cognito_user_pool.user_pool.id
   username     = each.value.username
-  password     = each.value.password != null ? each.value.password : random_password.users[each.key].result
+  password     = random_password.users[each.key].result
 
   attributes = {
-    for key, value in each.value.attributes : key => value
+    email          = each.value.email
+    email_verified = true
   }
 
-  force_alias_creation = each.value.force_alias_creation
+  force_alias_creation = true
 }
 
 resource "aws_cognito_user_in_group" "users" {
