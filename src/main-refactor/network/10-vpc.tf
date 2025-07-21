@@ -7,6 +7,7 @@ locals {
   vpce_cidrs              = ["10.0.36.0/24", "10.0.37.0/24", "10.0.38.0/24"]
   vpn_cidrs               = ["10.0.39.0/24", "10.0.40.0/24", "10.0.41.0/24"]
   msk_cidrs               = ["10.0.42.0/24", "10.0.43.0/24", "10.0.44.0/24"]
+  timestream_cidrs        = ["10.0.45.0/24", "10.0.46.0/24", "10.0.47.0/24"]
 
   eks_workload_subnets_names = [for idx, subn in local.eks_workload_cidrs :
   format("%s-eks-workload-%d-%s", local.project, idx + 1, var.env)]
@@ -31,6 +32,9 @@ locals {
 
   msk_subnets_names = [for idx, subn in local.msk_cidrs :
   format("%s-msk-%d-%s", local.project, idx + 1, var.env)]
+
+  timestream_subnets_names = [for idx, subn in local.timestream_cidrs :
+  format("%s-timestream-%d-%s", local.project, idx + 1, var.env)]
 }
 
 module "vpc" {
@@ -68,14 +72,16 @@ module "vpc" {
     local.int_lbs_cidrs,
     local.vpce_cidrs,
     local.vpn_cidrs,
-    local.msk_cidrs
+    local.msk_cidrs,
+    local.timestream_cidrs
   )
   intra_subnet_names = concat(
     local.eks_control_plane_subnets_names,
     local.int_lbs_subnets_names,
     local.vpce_subnets_names,
     local.vpn_subnets_names,
-    local.msk_subnets_names
+    local.msk_subnets_names,
+    local.timestream_subnets_names
   )
 
   create_database_subnet_group       = false
