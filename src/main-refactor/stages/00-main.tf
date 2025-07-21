@@ -33,8 +33,21 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us_east_1"
+
+  default_tags {
+    tags = var.tags
+  }
+}
+
 locals {
-  project = "probing"
+  project                        = "probing"
+  app_name                       = format("interop-%s", local.project)
+  terraform_state                = "stages"
+  use_postgresql_user_module     = var.stage == "dev"
+  deploy_interop_msk_integration = var.interop_msk_cluster_arn != null
 }
 
 data "aws_caller_identity" "current" {}

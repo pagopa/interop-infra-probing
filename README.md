@@ -7,6 +7,7 @@ The following tools are required to setup the project locally.
 
 1. [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) installed.
 2. [tfenv](https://github.com/tfutils/tfenv) to manage terraform versions.
+3. [influx cli](https://docs.influxdata.com/influxdb/v2/install) to manage InfluxDB buckets and users.
 
 ## Start building
 
