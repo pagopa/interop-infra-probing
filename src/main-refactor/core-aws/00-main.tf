@@ -34,7 +34,9 @@ provider "aws" {
 }
 
 locals {
-  project = "probing"
+  project                        = "probing"
+  terraform_state                = "core"
+  deploy_interop_msk_integration = var.interop_msk_clusters_arns != null
 }
 
 data "aws_caller_identity" "current" {}
