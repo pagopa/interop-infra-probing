@@ -128,7 +128,7 @@ resource "null_resource" "probing_operational_database_create_db" {
 
       if [ "$DB_EXISTS" != "1" ]; then
         echo "Creating database '$DATABASE_TO_CREATE'..."
-        psql --host "$HOST" --username "$ADMIN_USERNAME" --port "$DATABASE_PORT" --dbname "$DATABASE" -c "CREATE DATABASE '$DATABASE_TO_CREATE';"
+        psql --host "$HOST" --username "$ADMIN_USERNAME" --port "$DATABASE_PORT" --dbname "$DATABASE" -c "CREATE DATABASE $DATABASE_TO_CREATE;"
       else
         echo "Database '$DATABASE_TO_CREATE' already exists."
       fi

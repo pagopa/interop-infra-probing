@@ -15,14 +15,14 @@ tags = {
 
 sso_admin_role_name = "AWSReservedSSO_FullAdmin_bd35c1497d9407bb"
 
-vpc_id                  = "vpc-09c0f8ef497008e46"
+vpc_id                  = "vpc-0e2fb2d5964ac4d11"
 eks_workload_cidrs      = ["10.0.0.0/21", "10.0.8.0/21", "10.0.16.0/21"]
 eks_control_plane_cidrs = ["10.0.24.0/24", "10.0.25.0/24", "10.0.26.0/24"]
 aurora_cidrs            = ["10.0.30.0/24", "10.0.31.0/24", "10.0.32.0/24"]
 msk_cidrs               = ["10.0.42.0/24", "10.0.43.0/24", "10.0.44.0/24"]
 timestream_cidrs        = ["10.0.45.0/24", "10.0.46.0/24", "10.0.47.0/24"]
 
-vpn_clients_security_group_id = "sg-0237191e3bdabd886"
+vpn_clients_security_group_id = "sg-0c8f3d10d3335676c"
 
 interop_msk_clusters_arns = {
   dev = "arn:aws:kafka:eu-south-1:505630707203:cluster/interop-platform-events-dev/259df37b-31c3-405c-bb30-d2bce2ca67c6-2"

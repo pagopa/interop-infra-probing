@@ -78,6 +78,7 @@ resource "terraform_data" "probing_analytics_store_admin_token" {
 
   provisioner "local-exec" {
     environment = {
+      CONFIG_NAME                  = format("%s-%s-admin-config", local.project, var.env)
       INSTANCE_HOST                = format("https://%s:%s", aws_timestreaminfluxdb_db_instance.probing_analytics.endpoint, aws_timestreaminfluxdb_db_instance.probing_analytics.port)
       ORGANIZATION                 = aws_timestreaminfluxdb_db_instance.probing_analytics.organization
       ADMIN_CREDENTIALS_SECRET_ARN = aws_secretsmanager_secret.probing_analytics_admin.arn
@@ -91,8 +92,12 @@ resource "terraform_data" "probing_analytics_store_admin_token" {
       
       ADMIN_USERNAME=$(echo "$secret_json" | jq -r '.username')
       ADMIN_PASSWORD=$(echo "$secret_json" | jq -r '.password')
+      
+      if influx config list | grep "$CONFIG_NAME"; then
+        influx config delete "$CONFIG_NAME"
+      fi
 
-      influx config create --config-name admin-config --host-url "$INSTANCE_HOST" --org "$ORGANIZATION" -p "$ADMIN_USERNAME":"$ADMIN_PASSWORD" --active
+      influx config create --config-name "$CONFIG_NAME" --host-url "$INSTANCE_HOST" --org "$ORGANIZATION" -p "$ADMIN_USERNAME":"$ADMIN_PASSWORD" --active
 
       echo "Retrieving the admin token..."
       
