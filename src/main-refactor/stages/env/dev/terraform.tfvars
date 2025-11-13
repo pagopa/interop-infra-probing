@@ -15,7 +15,7 @@ tags = {
 
 sso_admin_role_name = "AWSReservedSSO_FullAdmin_bd35c1497d9407bb"
 
-vpc_id = "vpc-09c0f8ef497008e46"
+vpc_id = "vpc-0e2fb2d5964ac4d11"
 
 interop_msk_cluster_arn = "arn:aws:kafka:eu-south-1:774300547186:vpc-connection/505630707203/interop-platform-events-dev/0c3359f3-92be-4f3e-a52f-9f1b75dfe7df-2"
 
@@ -43,7 +43,7 @@ jwks_uri = "https://dev.interop.pagopa.it/.well-known/probing-jwks.json"
 
 timestream_instance_name         = "probing-analytics-dev"
 timestream_instance_port         = "8086"
-timestream_instance_endpoint     = "m34xinknng-p2jepkxlcngatz.timestream-influxdb.eu-south-1.on.aws"
+timestream_instance_endpoint     = "iyyprotlvq-p2jepkxlcngatz.timestream-influxdb.eu-south-1.on.aws"
 timestream_instance_organization = "probing-analytics-dev"
 timestream_instance_bucket_name  = "probing-telemetry-dev"
 
