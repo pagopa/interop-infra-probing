@@ -1,6 +1,6 @@
 resource "kubernetes_namespace_v1" "env" {
   metadata {
-    name = var.env
+    name = var.stage
 
     labels = {
       "elbv2.k8s.aws/pod-readiness-gate-inject" : "enabled"
