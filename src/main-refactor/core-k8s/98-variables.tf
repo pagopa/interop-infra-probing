@@ -58,6 +58,11 @@ variable "aws_lb_controller_replicas" {
   description = "Replica count for AWS Load Balancer Controller"
 }
 
+variable "kube_state_metrics_helm_chart_version" {
+  type        = string
+  description = "Helm chart version of Kube State Metrics"
+}
+
 variable "kube_state_metrics_image_version_tag" {
   type        = string
   description = "Image version tag of Kube State Metrics"
