@@ -14,9 +14,10 @@ variable "env" {
   }
 }
 
-variable "stage" {
-  type        = string
-  description = "Stage name"
+variable "stages_to_provision" {
+  type        = list(string)
+  default     = []
+  description = "Stages to provision in the environment (e.g. in the dev environment, the stages to be provisioned are: dev, qa, vapt)"
 }
 
 variable "tags" {

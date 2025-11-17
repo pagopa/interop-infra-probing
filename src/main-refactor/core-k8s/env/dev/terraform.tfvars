@@ -1,6 +1,7 @@
 aws_region = "eu-south-1"
 env        = "dev"
-stage      = "dev"
+
+stages_to_provision = ["dev", "qa", "vapt"]
 
 tags = {
   Account     = "pdnd-probing-dev"

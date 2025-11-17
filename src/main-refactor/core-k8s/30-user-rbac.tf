@@ -1,7 +1,9 @@
 resource "kubernetes_role_v1" "tgb_manager" {
+  for_each = toset(var.stages_to_provision)
+
   metadata {
     name      = "tgb-manager-role"
-    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    namespace = kubernetes_namespace_v1.env[each.key].metadata[0].name
   }
 
   rule {
@@ -12,15 +14,17 @@ resource "kubernetes_role_v1" "tgb_manager" {
 }
 
 resource "kubernetes_role_binding_v1" "tgb_manager" {
+  for_each = toset(var.stages_to_provision)
+
   metadata {
     name      = "tgb-manager-binding"
-    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    namespace = kubernetes_namespace_v1.env[each.key].metadata[0].name
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role_v1.tgb_manager.metadata[0].name
+    name      = kubernetes_role_v1.tgb_manager[each.key].metadata[0].name
   }
 
   subject {
@@ -31,11 +35,11 @@ resource "kubernetes_role_binding_v1" "tgb_manager" {
 }
 
 resource "kubernetes_role_v1" "keda_objects_manager" {
-  count = local.deploy_keda ? 1 : 0
+  for_each = local.deploy_keda ? toset(var.stages_to_provision) : toset([])
 
   metadata {
     name      = "keda-objects-manager-role"
-    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    namespace = kubernetes_namespace_v1.env[each.key].metadata[0].name
   }
 
   rule {
@@ -46,17 +50,17 @@ resource "kubernetes_role_v1" "keda_objects_manager" {
 }
 
 resource "kubernetes_role_binding_v1" "keda_objects_manager" {
-  count = local.deploy_keda ? 1 : 0
+  for_each = local.deploy_keda ? toset(var.stages_to_provision) : toset([])
 
   metadata {
     name      = "keda-objects-manager-binding"
-    namespace = kubernetes_namespace_v1.env.metadata[0].name
+    namespace = kubernetes_namespace_v1.env[each.key].metadata[0].name
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role_v1.keda_objects_manager[0].metadata[0].name
+    name      = kubernetes_role_v1.keda_objects_manager[each.key].metadata[0].name
   }
 
   subject {

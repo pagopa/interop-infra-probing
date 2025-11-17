@@ -1,6 +1,8 @@
 resource "kubernetes_namespace_v1" "env" {
+  for_each = toset(var.stages_to_provision)
+
   metadata {
-    name = var.stage
+    name = each.value
 
     labels = {
       "elbv2.k8s.aws/pod-readiness-gate-inject" : "enabled"
