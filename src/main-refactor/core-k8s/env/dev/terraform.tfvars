@@ -18,7 +18,7 @@ enable_fluentbit_process_logs            = false
 container_logs_cloudwatch_retention_days = 90
 
 aws_lb_controller_role_name     = "aws-load-balancer-controller-dev"
-aws_lb_controller_chart_version = "1.15.0"
+aws_lb_controller_chart_version = "1.14.1"
 aws_lb_controller_replicas      = 2
 
 kube_state_metrics_helm_chart_version = "6.4.1"
