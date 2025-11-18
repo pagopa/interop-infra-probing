@@ -24,6 +24,7 @@ locals {
   system_namespaces        = ["kube-system"]
   application_namespaces   = [for stage in var.stages_to_provision : format("%s*", stage)]
   observability_namespaces = ["aws-observability"]
+  tools_namespaces         = local.deploy_keda ? ["keda"] : []
 }
 
 module "eks" {
@@ -126,22 +127,26 @@ module "eks" {
     }
   }
 
-  fargate_profiles = {
+  fargate_profiles = merge({
     system = {
       name      = format("%s-fargate-system-profile-%s", local.project, var.env)
       selectors = [for ns in local.system_namespaces : { namespace = ns }]
     }
-
     application = {
       name      = format("%s-fargate-app-profile-%s", local.project, var.env) # e.g. the "probing-fargate-app-profile-dev" schedules on fargate all the pods in the application namespaces (dev, qa, vapt) in the dev cluster.
       selectors = [for ns in local.application_namespaces : { namespace = ns }]
     }
-
     observability = {
       name      = format("%s-fargate-obs-profile-%s", local.project, var.env)
       selectors = [for ns in local.observability_namespaces : { namespace = ns }]
-    }
-  }
+    } },
+    length(local.tools_namespaces) > 0 ? ({
+      tools = {
+        name      = format("%s-fargate-tools-profile-%s", local.project, var.env)
+        selectors = [for ns in local.tools_namespaces : { namespace = ns }]
+      }
+    }) : {}
+  )
 
   cluster_addons = {
     vpc-cni = {
