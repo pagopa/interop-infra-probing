@@ -37,6 +37,7 @@ locals {
   project                        = "probing"
   terraform_state                = "core"
   deploy_interop_msk_integration = var.interop_msk_clusters_arns != null
+  deploy_keda                    = var.env == "dev"
 }
 
 data "aws_caller_identity" "current" {}
