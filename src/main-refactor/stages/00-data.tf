@@ -14,10 +14,6 @@ data "aws_rds_cluster" "probing_operational_database" {
   cluster_identifier = var.probing_operational_database_cluster_identifier
 }
 
-# data "aws_timestreamwrite_database" "probing_analytics_database" {
-#   name = var.probing_analytics_database_name
-# }
-
 data "aws_subnets" "probing_int_lbs" {
   filter {
     name   = "vpc-id"
