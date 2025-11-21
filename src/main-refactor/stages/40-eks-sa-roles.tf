@@ -140,7 +140,7 @@ module "be_eservice_event_consumer_irsa" {
   }
 
   role_policy_arns = {
-    be_eservice_event_consumer = aws_iam_policy.be_eservice_event_consumer.arn
+    be_eservice_event_consumer = aws_iam_policy.be_eservice_event_consumer[0].arn
   }
 }
 
@@ -158,6 +158,6 @@ module "be_tenant_event_consumer_irsa" {
   }
 
   role_policy_arns = {
-    be_tenant_event_consumer = aws_iam_policy.be_tenant_event_consumer.arn
+    be_tenant_event_consumer = aws_iam_policy.be_tenant_event_consumer[0].arn
   }
 }
