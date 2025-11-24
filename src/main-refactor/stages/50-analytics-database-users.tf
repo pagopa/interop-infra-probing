@@ -1,13 +1,13 @@
 locals {
   be_app_influx_users = {
     telemetry_writer_user = {
-      username               = "probing_telemetry_writer_user_${var.stage}",
-      k8s_secret_name        = "probing-analytics-db-telemetry-writer-user-${var.stage}"
+      username               = "${var.stage}_probing_telemetry_writer_user",
+      k8s_secret_name        = "${var.stage}-probing-analytics-db-telemetry-writer-user"
       grant_write_on_buckets = [var.timestream_instance_bucket_name]
     }
     statistics_api_user = {
-      username              = "probing_statistics_api_user_${var.stage}",
-      k8s_secret_name       = "probing-analytics-db-statistics-api-user-${var.stage}"
+      username              = "${var.stage}_probing_statistics_api_user",
+      k8s_secret_name       = "${var.stage}-probing-analytics-db-statistics-api-user"
       grant_read_on_buckets = [var.timestream_instance_bucket_name]
     }
   }

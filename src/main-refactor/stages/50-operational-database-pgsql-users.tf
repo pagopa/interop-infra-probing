@@ -11,14 +11,14 @@ module "probing_operational_database_flyway_pgsql_user" {
 
   source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
 
-  username = "probing_operational_db_flyway_user_${var.stage}"
+  username = "${var.stage}_probing_flyway_user"
 
   generated_password_length = 30
   secret_prefix             = format("rds/%s/users/", data.aws_rds_cluster.probing_operational_database.cluster_identifier)
 
   secret_tags = merge(local.eks_secret_default_tags,
     {
-      EKSReplicaSecretName = "probing-operational-db-flyway-user-${var.stage}"
+      EKSReplicaSecretName = "${var.stage}-probing-operational-db-flyway-user"
     }
   )
 
@@ -29,33 +29,32 @@ module "probing_operational_database_flyway_pgsql_user" {
   db_admin_credentials_secret_arn = data.aws_rds_cluster.probing_operational_database.master_user_secret[0].secret_arn
 
   additional_sql_statements = <<-EOT
-    GRANT CREATE ON DATABASE "${var.probing_operational_database_name}" TO probing_operational_db_flyway_user_${var.stage};
+    GRANT CREATE ON DATABASE "${var.probing_operational_database_name}" TO ${var.stage}_probing_flyway_user;
   EOT
 }
 
 locals {
-  be_app_psql_usernames = local.use_postgresql_user_module ? {
-    eservice_operations_user = {
-      sql_name        = "probing_eservice_operations_user_${var.stage}",
-      k8s_secret_name = "probing-operational-db-eservice-operations-user-${var.stage}"
-    }
-  } : {}
+  be_app_psql_usernames = [
+    "eservice_operations_user"
+  ]
 }
 
 # PostgreSQL users with no initial grants. The grants will be applied by Flyway
 module "probing_operational_database_be_app_pgsql_user" {
+  depends_on = [module.probing_operational_database_flyway_pgsql_user]
+
   source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
 
-  for_each = local.be_app_psql_usernames
+  for_each = toset(local.be_app_psql_usernames)
 
-  username = each.value.sql_name
+  username = format("%s_%s", var.stage, each.value)
 
   generated_password_length = 30
   secret_prefix             = format("rds/%s/users/", data.aws_rds_cluster.probing_operational_database.cluster_identifier)
 
   secret_tags = merge(local.eks_secret_default_tags,
     {
-      EKSReplicaSecretName = each.value.k8s_secret_name
+      EKSReplicaSecretName = format("%s-probing-operational-db-%s", var.stage, replace(each.value, "_", "-"))
     }
   )
 
