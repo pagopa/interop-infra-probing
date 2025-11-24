@@ -129,6 +129,11 @@ variable "timestream_instance_port" {
   description = "Port of the Timestream for InfluxDB instance"
 }
 
+variable "timestream_instance_id" {
+  type        = string
+  description = "ID of the Timestream for InfluxDB instance"
+}
+
 variable "timestream_instance_endpoint" {
   type        = string
   description = "Endpoint of the Timestream for InfluxDB instance"

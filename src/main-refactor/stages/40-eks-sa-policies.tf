@@ -42,26 +42,13 @@ resource "aws_iam_policy" "be_telemetry_writer" {
         Resource = aws_sqs_queue.telemetry_record.arn
       },
       {
-        Sid    = "ListTimestreamDatabases"
+        Sid    = "GetTimestreamInstance"
         Effect = "Allow"
         Action = [
-          "timestream:ListDatabases",
-          "timestream:SelectValues",
-          "timestream:DescribeEndpoints"
+          "timestream-influxdb:GetDbInstance"
         ]
-        Resource = "*"
-      },
-      # {
-      #   Sid = "WriteOnTimestreamTable"
-      #   Effect = "Allow"
-      #   Action = [
-      #     "timestream:WriteRecords",
-      #     "timestream:ListTables",
-      #     "timestream:Select",
-      #     "timestream:UpdateTable"
-      #   ]
-      #   Resource = aws_timestreamwrite_table.probing_telemetry.arn  #TOCHECK: If the Timestream table is managed by the Core layer, we must restrict the actions only to the Timestream table of the current stage.
-      # }
+        Resource = "arn:aws:timestream-influxdb:${var.aws_region}:${data.aws_caller_identity.current.account_id}:db-instance/${var.timestream_instance_id}"
+      }
     ]
   })
 }
@@ -130,28 +117,13 @@ resource "aws_iam_policy" "be_statistics_api" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "ListTimestreamDatabases"
+        Sid    = "GetTimestreamInstance"
         Effect = "Allow"
         Action = [
-          "timestream:ListDatabases",
-          "timestream:SelectValues",
-          "timestream:DescribeEndpoints",
-          "timestream:ListTables",
-          "timestream:CancelQuery",
-          "timesteam:DescribeDatabase"
+          "timestream-influxdb:GetDbInstance"
         ]
-        Resource = "*"
-      },
-      # {
-      #   Sid = "ReadFromTimestreamTable"
-      #   Effect = "Allow"
-      #   Action = [
-      #     "timestream:DescribeTable",
-      #     "timestream:Select",
-      #     "timestream:ListMeasures"
-      #   ]
-      #   Resource = aws_timestreamwrite_table.probing_telemetry.arn #TOCHECK: If the Timestream table is managed by the Core layer, we must restrict the actions only to the Timestream table of the current stage.
-      # }
+        Resource = "arn:aws:timestream-influxdb:${var.aws_region}:${data.aws_caller_identity.current.account_id}:db-instance/${var.timestream_instance_id}"
+      }
     ]
   })
 }
