@@ -1,18 +1,25 @@
 locals {
+  cross_account_image_pull = {
+    "uat" = "010158505074"
+  }
+
   repository_names = [
-    "probing-be-api",
-    "probing-be-scheduler",
-    "probing-be-telemetry-writer",
-    "probing-be-caller",
-    "probing-be-response-updater",
-    "probing-be-statistics-api"
+    "probing-api",
+    "probing-caller",
+    "probing-eservice-event-consumer",
+    "probing-tenant-event-consumer",
+    "probing-eservice-operations",
+    "probing-response-updater",
+    "probing-scheduler",
+    "probing-statistics-api",
+    "probing-telemetry-writer"
   ]
 }
 
 resource "aws_ecr_repository" "app" {
-  for_each = var.env == "prod" ? toset(local.repository_names) : []
+  for_each = toset(local.repository_names)
 
-  image_tag_mutability = "MUTABLE" # needed to override "latest" tag
+  image_tag_mutability = var.env == "prod" ? "IMMUTABLE" : "MUTABLE"
   name                 = each.key
 }
 
@@ -42,37 +49,33 @@ resource "aws_ecr_lifecycle_policy" "delete_untagged" {
 }
 
 resource "aws_ecr_repository_policy" "cross_account_pull" {
-  for_each = var.env == "prod" ? aws_ecr_repository.app : {}
+  for_each = var.env == "dev" ? aws_ecr_repository.app : {}
 
   repository = each.value.name
 
-  policy = jsonencode({
-    Version = "2008-10-17",
-    Statement = [
-      {
-        Sid    = "DEV Image Pull",
-        Effect = "Allow",
-        Principal = {
-          AWS = "arn:aws:iam::774300547186:root"
-        },
-        Action = [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage",
-          "ecr:GetDownloadUrlForLayer"
-        ]
-      },
-      {
-        Sid    = "UAT Image Pull",
-        Effect = "Allow",
-        Principal = {
-          AWS = "arn:aws:iam::010158505074:root"
-        },
-        Action = [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage",
-          "ecr:GetDownloadUrlForLayer"
-        ]
+  policy = data.aws_iam_policy_document.cross_account_pull[0].json
+}
+
+data "aws_iam_policy_document" "cross_account_pull" {
+  count = var.env == "dev" ? 1 : 0
+
+  dynamic "statement" {
+    for_each = (local.cross_account_image_pull)
+
+    content {
+      sid    = "${upper(statement.key)} Image Pull"
+      effect = "Allow"
+
+      principals {
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${statement.value}:root"]
       }
-    ]
-  })
+
+      actions = [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer",
+      ]
+    }
+  }
 }
