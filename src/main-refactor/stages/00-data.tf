@@ -30,3 +30,7 @@ data "aws_route53_zone" "probing_base" {
   name         = var.probing_base_route53_zone_name
   private_zone = false
 }
+
+data "aws_iam_role" "probing_deployment_github_repo_role" {
+  name = var.probing_deployment_github_repo_role_name
+}

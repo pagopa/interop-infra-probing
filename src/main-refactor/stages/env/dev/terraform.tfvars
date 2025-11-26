@@ -49,3 +49,5 @@ timestream_instance_organization = "probing-analytics-dev"
 timestream_instance_bucket_name  = "probing-telemetry-dev"
 
 probing_analytics_admin_secret_name = "timestream/probing-analytics-dev/users/admin"
+
+probing_deployment_github_repo_role_name = "probing-deployment-github-repo-dev"

@@ -153,3 +153,8 @@ variable "probing_analytics_admin_secret_name" {
   type        = string
   description = "Name of the SM secret for the admin user in the Timestream for InfluxDB instance"
 }
+
+variable "probing_deployment_github_repo_role_name" {
+  description = "Name of the probing deployment-github-repo IAM role"
+  type        = string
+}
