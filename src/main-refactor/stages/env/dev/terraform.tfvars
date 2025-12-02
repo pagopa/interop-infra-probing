@@ -17,7 +17,7 @@ sso_admin_role_name = "AWSReservedSSO_FullAdmin_bd35c1497d9407bb"
 
 vpc_id = "vpc-0e2fb2d5964ac4d11"
 
-interop_msk_cluster_arn = "arn:aws:kafka:eu-south-1:774300547186:vpc-connection/505630707203/interop-platform-events-dev/0c3359f3-92be-4f3e-a52f-9f1b75dfe7df-2"
+interop_msk_cluster_arn = "arn:aws:kafka:eu-south-1:505630707203:cluster/interop-platform-events-dev/259df37b-31c3-405c-bb30-d2bce2ca67c6-2"
 
 probing_operational_database_cluster_identifier = "probing-store-dev" #TOCHECK
 probing_operational_database_name               = "interop_probing_operational_dev"
