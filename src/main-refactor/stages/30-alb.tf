@@ -118,12 +118,6 @@ resource "aws_lb_listener_rule" "statistics_api" {
       values = ["/telemetryData", "/telemetryData/*"]
     }
   }
-
-  condition {
-    host_header {
-      values = [var.stage == "prod" ? "stato-eservice.interop.pagopa.it" : format("*.%s.stato-eservice.interop.pagopa.it", var.stage)]
-    }
-  }
 }
 
 resource "aws_lb_listener_rule" "api" {
@@ -138,12 +132,6 @@ resource "aws_lb_listener_rule" "api" {
   condition {
     path_pattern {
       values = ["/*"]
-    }
-  }
-
-  condition {
-    host_header {
-      values = [var.stage == "prod" ? format("stato-eservice.interop.pagopa.it") : format("*.%s.stato-eservice.interop.pagopa.it", var.stage)]
     }
   }
 }
