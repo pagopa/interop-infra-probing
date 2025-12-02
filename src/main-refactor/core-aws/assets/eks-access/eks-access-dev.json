@@ -12,7 +12,7 @@
     },
     {
       "principal_arn": "arn:aws:iam::774300547186:role/probing-github-runner-task-dev",
-      "kubernetes_groups": ["tgb-manager-group"],
+      "kubernetes_groups": ["tgb-manager-group", "keda-objects-manager-group"],
       "access_policies": [
         {
           "eks_policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy",
