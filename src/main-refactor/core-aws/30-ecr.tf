@@ -4,15 +4,15 @@ locals {
   }
 
   repository_names = [
-    "probing-api",
-    "probing-caller",
-    "probing-eservice-event-consumer",
-    "probing-tenant-event-consumer",
-    "probing-eservice-operations",
-    "probing-response-updater",
-    "probing-scheduler",
-    "probing-statistics-api",
-    "probing-telemetry-writer"
+    "probing-be-api",
+    "probing-be-caller",
+    "probing-be-eservice-event-consumer",
+    "probing-be-tenant-event-consumer",
+    "probing-be-eservice-operations",
+    "probing-be-response-updater",
+    "probing-be-scheduler",
+    "probing-be-statistics-api",
+    "probing-be-telemetry-writer"
   ]
 }
 
