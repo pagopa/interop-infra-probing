@@ -236,7 +236,7 @@ resource "aws_iam_policy" "deployment_github_repo" {
         Condition = {
           StringEquals = {
             "aws:ResourceTag/EKSClusterName" = module.eks.cluster_name,
-            "aws:ResourceTag/TerraformState" = local.terraform_state
+            "aws:ResourceTag/TerraformState" = "stages"
           }
         }
       },
