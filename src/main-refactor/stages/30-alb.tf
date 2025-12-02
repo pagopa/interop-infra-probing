@@ -68,7 +68,7 @@ resource "aws_lb_target_group" "api" {
   health_check {
     enabled             = true
     interval            = 15
-    path                = "/api/status"
+    path                = "/status"
     port                = var.backend_microservices_port
     protocol            = "HTTP"
     timeout             = 5
@@ -94,13 +94,35 @@ resource "aws_lb_target_group" "statistics_api" {
   health_check {
     enabled             = true
     interval            = 15
-    path                = "/statistics-api/status"
+    path                = "/status"
     port                = var.backend_microservices_port
     protocol            = "HTTP"
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 2
     matcher             = 200
+  }
+}
+
+resource "aws_lb_listener_rule" "statistics_api" {
+  listener_arn = aws_lb_listener.probing_80.arn
+  priority     = 1
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.statistics_api.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/telemetryData", "/telemetryData/*"]
+    }
+  }
+
+  condition {
+    host_header {
+      values = [var.stage == "prod" ? "stato-eservice.interop.pagopa.it" : format("*.%s.stato-eservice.interop.pagopa.it", var.stage)]
+    }
   }
 }
 
@@ -115,35 +137,13 @@ resource "aws_lb_listener_rule" "api" {
 
   condition {
     path_pattern {
-      values = ["/api", "/api/*"]
+      values = ["/*"]
     }
   }
 
   condition {
     host_header {
-      values = [var.stage == "prod" ? format("*.stato-eservice.interop.pagopa.it") : format("*.%s.stato-eservice.interop.pagopa.it", var.stage)]
-    }
-  }
-}
-
-resource "aws_lb_listener_rule" "statistics_api" {
-  listener_arn = aws_lb_listener.probing_80.arn
-  priority     = 2
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.statistics_api.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/statistics-api", "/statistics-api/*"]
-    }
-  }
-
-  condition {
-    host_header {
-      values = [var.stage == "prod" ? format("*.stato-eservice.interop.pagopa.it") : format("*.%s.stato-eservice.interop.pagopa.it", var.stage)]
+      values = [var.stage == "prod" ? format("stato-eservice.interop.pagopa.it") : format("*.%s.stato-eservice.interop.pagopa.it", var.stage)]
     }
   }
 }
