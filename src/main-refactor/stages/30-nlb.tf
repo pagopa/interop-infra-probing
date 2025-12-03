@@ -45,7 +45,7 @@ module "nlb" {
       health_check = {
         enabled             = true
         interval            = 30
-        path                = "/"
+        path                = "/status"
         port                = "traffic-port"
         healthy_threshold   = 3
         unhealthy_threshold = 3
