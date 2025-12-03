@@ -35,7 +35,7 @@ fe_base_url = "https://dev.stato-eservice.interop.pagopa.it"
 
 backend_microservices_port = 8080
 
-probing_openapi_path = "./openapi/dev/interop-probing-dev-api-v1.yaml"
+probing_openapi_path = "./openapi/dev/interop-probing-dev-api-v2.yaml"
 
 eks_cluster_name = "probing-eks-cluster-dev"
 
