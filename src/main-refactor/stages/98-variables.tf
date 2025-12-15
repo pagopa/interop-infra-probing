@@ -158,3 +158,9 @@ variable "probing_deployment_github_repo_role_name" {
   description = "Name of the probing deployment-github-repo IAM role"
   type        = string
 }
+
+variable "eks_application_log_group_name" {
+  description = "Name of the application log group created by FluentBit"
+  type        = string
+  default     = null
+}

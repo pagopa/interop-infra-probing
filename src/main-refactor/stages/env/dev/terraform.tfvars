@@ -19,7 +19,7 @@ vpc_id = "vpc-0e2fb2d5964ac4d11"
 
 interop_msk_cluster_arn = "arn:aws:kafka:eu-south-1:505630707203:cluster/interop-platform-events-dev/259df37b-31c3-405c-bb30-d2bce2ca67c6-2"
 
-probing_operational_database_cluster_identifier = "probing-store-dev" #TOCHECK
+probing_operational_database_cluster_identifier = "probing-store-dev"
 probing_operational_database_name               = "interop_probing_operational_dev"
 
 probing_analytics_database_name = "interop_probing_telemetry"
@@ -51,3 +51,5 @@ timestream_instance_bucket_name  = "probing-telemetry-dev"
 probing_analytics_admin_secret_name = "timestream/probing-analytics-dev/users/admin"
 
 probing_deployment_github_repo_role_name = "probing-deployment-github-repo-dev"
+
+eks_application_log_group_name = "/aws/eks/probing-eks-cluster-dev/application"
