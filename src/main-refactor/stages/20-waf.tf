@@ -42,11 +42,6 @@ resource "aws_wafv2_web_acl" "probing" {
   }
 }
 
-resource "aws_wafv2_web_acl_association" "probing" {
-  web_acl_arn  = aws_wafv2_web_acl.probing.arn
-  resource_arn = aws_lb.probing.arn
-}
-
 resource "aws_cloudwatch_log_group" "probing_waf" {
   name = format("aws-waf-logs-%s-%s", local.project, var.stage)
 
