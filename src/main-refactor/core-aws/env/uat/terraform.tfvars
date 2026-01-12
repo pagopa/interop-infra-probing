@@ -47,6 +47,6 @@ project_monorepo_name = "pagopa/interop-probing-core"
 github_runners_allowed_repos = ["pagopa/interop-probing-deployment"]
 github_runners_cpu           = 2048
 github_runners_memory        = 4096
-github_runners_image_uri     = "ghcr.io/pagopa/interop-github-runner-aws:v1.16.0"
+github_runners_image_uri     = "ghcr.io/pagopa/interop-github-runner-aws:v1.20.0"
 
 deployment_repo_name = "pagopa/interop-probing-deployment"
