@@ -62,21 +62,6 @@ variable "probing_operational_database_name" {
   description = "Name of the Probing operational database for the current stage"
 }
 
-variable "probing_analytics_database_name" {
-  type        = string
-  description = "Name of the Probing analytics database"
-}
-
-variable "timestream_table_magnetic_store_retention_period_in_days" {
-  type        = number
-  description = "How long data stays in magnetic store in days"
-}
-
-variable "timestream_table_memory_store_retention_period_in_hours" {
-  type        = number
-  description = "How long data stays in memory store in hours"
-}
-
 variable "int_lbs_cidrs" {
   type        = list(string)
   description = "CIDRs of probing internal Load balancers subnets"

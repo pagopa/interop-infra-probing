@@ -7,7 +7,7 @@ locals {
 }
 
 resource "aws_route53_zone" "probing_public" {
-  name = var.dns_probing_base_domain
+  name = var.dns_probing_base_domain #Qui crea una hosted zone solo nell'ambiente DEV, mentre dovrebbe crearne altre in QA e UAT.
 }
 
 resource "aws_route53_record" "probing_dev_delegation" {

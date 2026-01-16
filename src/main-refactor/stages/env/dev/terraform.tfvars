@@ -22,11 +22,6 @@ interop_msk_cluster_arn = "arn:aws:kafka:eu-south-1:505630707203:cluster/interop
 probing_operational_database_cluster_identifier = "probing-store-dev"
 probing_operational_database_name               = "interop_probing_operational_dev"
 
-probing_analytics_database_name = "interop_probing_telemetry"
-
-timestream_table_magnetic_store_retention_period_in_days = 73000
-timestream_table_memory_store_retention_period_in_hours  = 8766
-
 int_lbs_cidrs = ["10.0.27.0/24", "10.0.28.0/24", "10.0.29.0/24"]
 
 probing_base_route53_zone_name = "dev.stato-eservice.interop.pagopa.it"
