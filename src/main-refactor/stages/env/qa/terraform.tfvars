@@ -33,7 +33,7 @@ backend_microservices_port = 8080
 probing_openapi_path = "./openapi/qa/interop-probing-qa-api-v2.yaml"
 eks_cluster_name     = "probing-eks-cluster-dev"
 
-jwks_uri = "https://qa.interop.pagopa.it/.well-known/probing-jwks.json" #NOT AVAILABLE
+jwks_uri = "https://qa.interop.pagopa.it/.well-known/probing-jwks.json"
 
 timestream_instance_name         = "probing-analytics-dev"
 timestream_instance_port         = "8086"
