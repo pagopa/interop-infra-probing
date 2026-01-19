@@ -131,7 +131,7 @@ resource "aws_iam_policy" "be_statistics_api" {
 resource "aws_iam_policy" "be_eservice_event_consumer" {
   count = local.deploy_interop_msk_integration ? 1 : 0
 
-  name = "ProbingBeEserviceEventConsumer"
+  name = "ProbingBeEserviceEventConsumer-${var.stage}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -159,7 +159,7 @@ resource "aws_iam_policy" "be_eservice_event_consumer" {
 resource "aws_iam_policy" "be_tenant_event_consumer" {
   count = local.deploy_interop_msk_integration ? 1 : 0
 
-  name = "ProbingBeTenantEventConsumer"
+  name = "ProbingBeTenantEventConsumer-${var.stage}"
 
   policy = jsonencode({
     Version = "2012-10-17"
