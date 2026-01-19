@@ -14,7 +14,7 @@ data "aws_subnets" "vpn" {
 data "aws_acm_certificate" "vpn" {
   count = var.env != "prod" ? 1 : 0
 
-  domain = format("vpn.%s", var.dns_probing_base_domain)
+  domain = format("vpn.%s.%s", var.env, var.dns_probing_base_domain)
 }
 
 # TODO
