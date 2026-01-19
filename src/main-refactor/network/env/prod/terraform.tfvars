@@ -26,7 +26,12 @@ dns_probing_dev_ns_records = [
   "ns-702.awsdns-23.net."
 ]
 
-dns_probing_qa_ns_records = []
+dns_probing_qa_ns_records = [
+  "ns-1449.awsdns-53.org.",
+  "ns-504.awsdns-63.com.",
+  "ns-1728.awsdns-24.co.uk.",
+  "ns-838.awsdns-40.net."
+]
 
 dns_probing_vapt_ns_records = []
 
