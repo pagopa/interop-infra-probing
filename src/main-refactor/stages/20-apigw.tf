@@ -15,7 +15,7 @@ module "probing_apigw" {
   api_name              = "probing"
   openapi_relative_path = var.probing_openapi_path
 
-  openapi_s3_bucket_name = null # After the apigw_openapi_bucket module (in 60-s3.tf) has been created, replace 'null' with 'module.apigw_openapi_bucket.s3_bucket_id' and re-apply Terraform
+  openapi_s3_bucket_name = module.apigw_openapi_bucket.s3_bucket_id # After the apigw_openapi_bucket module (in 60-s3.tf) has been created, replace 'null' with 'module.apigw_openapi_bucket.s3_bucket_id' and re-apply Terraform
   openapi_s3_object_key  = replace(var.probing_openapi_path, "./", "")
 
   templating_map = {
