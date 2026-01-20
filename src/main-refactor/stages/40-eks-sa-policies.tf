@@ -9,7 +9,7 @@ locals {
 }
 
 resource "aws_iam_policy" "be_scheduler" {
-  name = "ProbingBeScheduler-${var.stage}"
+  name = "ProbingBeScheduler${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -25,7 +25,7 @@ resource "aws_iam_policy" "be_scheduler" {
 }
 
 resource "aws_iam_policy" "be_telemetry_writer" {
-  name = "ProbingBeTelemetryWriter-${var.stage}"
+  name = "ProbingBeTelemetryWriter${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -54,7 +54,7 @@ resource "aws_iam_policy" "be_telemetry_writer" {
 }
 
 resource "aws_iam_policy" "be_caller" {
-  name = "ProbingBeCaller-${var.stage}"
+  name = "ProbingBeCaller${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -90,7 +90,7 @@ resource "aws_iam_policy" "be_caller" {
 }
 
 resource "aws_iam_policy" "be_response_updater" {
-  name = "ProbingBeResponseUpdater-${var.stage}"
+  name = "ProbingBeResponseUpdater${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -111,7 +111,7 @@ resource "aws_iam_policy" "be_response_updater" {
 }
 
 resource "aws_iam_policy" "be_statistics_api" {
-  name = "ProbingBeStatisticsApi-${var.stage}"
+  name = "ProbingBeStatisticsApi${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -131,7 +131,7 @@ resource "aws_iam_policy" "be_statistics_api" {
 resource "aws_iam_policy" "be_eservice_event_consumer" {
   count = local.deploy_interop_msk_integration ? 1 : 0
 
-  name = "ProbingBeEserviceEventConsumer-${var.stage}"
+  name = "ProbingBeEserviceEventConsumer${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -159,7 +159,7 @@ resource "aws_iam_policy" "be_eservice_event_consumer" {
 resource "aws_iam_policy" "be_tenant_event_consumer" {
   count = local.deploy_interop_msk_integration ? 1 : 0
 
-  name = "ProbingBeTenantEventConsumer-${var.stage}"
+  name = "ProbingBeTenantEventConsumer${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
