@@ -17,7 +17,6 @@ sso_admin_role_name = "AWSReservedSSO_FullAdmin_bd35c1497d9407bb"
 
 vpc_id = "vpc-0e2fb2d5964ac4d11"
 
-interop_msk_cluster_arn = "arn:aws:kafka:eu-south-1:755649575658:cluster/interop-platform-events-qa/185b388a-c94a-42a9-8167-a3797f265797-4"
 
 probing_operational_database_cluster_identifier = "probing-store-dev"
 probing_operational_database_name               = "interop_probing_operational_qa"
