@@ -2,6 +2,8 @@ aws_region = "eu-south-1"
 env        = "prod"
 azs        = ["eu-south-1a", "eu-south-1b", "eu-south-1c"]
 
+stages_to_provision = ["prod"]
+
 tags = {
   Account     = "pdnd-probing-prod"
   Layer       = "network"

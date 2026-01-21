@@ -47,18 +47,18 @@ module "fe_cdn" {
   }
 
   origin = {
-    fe_hosting_oac = {
+    "fe_hosting_${var.stage}" = {
       domain_name           = module.fe_bucket.s3_bucket_bucket_regional_domain_name
-      origin_access_control = "fe_hosting_oac"
+      origin_access_control = "fe_hosting_oac_${var.stage}"
     }
 
-    wellknown_hosting_oac = {
+    "wellknown_hosting_${var.stage}" = {
       domain_name           = module.well_known_bucket.s3_bucket_bucket_regional_domain_name
-      origin_access_control = "wellknown_hosting_oac"
+      origin_access_control = "wellknown_hosting_oac_${var.stage}"
     }
 
-    apigw = {
-      origin_id   = "apigw"
+    "apigw_${var.stage}" = {
+      origin_id   = "apigw_${var.stage}"
       origin_path = "/${module.probing_apigw.apigw_stage_name}"
       domain_name = "${module.probing_apigw.apigw_id}.execute-api.${var.aws_region}.amazonaws.com"
 
@@ -78,14 +78,14 @@ module "fe_cdn" {
 
   create_origin_access_control = true
   origin_access_control = {
-    fe_hosting_oac = {
+    "fe_hosting_oac_${var.stage}" = {
       description      = "CloudFront access to S3"
       origin_type      = "s3"
       signing_behavior = "always"
       signing_protocol = "sigv4"
     }
 
-    wellknown_hosting_oac = {
+    "wellknown_hosting_oac_${var.stage}" = {
       description      = "CloudFront access to S3"
       origin_type      = "s3"
       signing_behavior = "always"
@@ -94,7 +94,7 @@ module "fe_cdn" {
   }
 
   default_cache_behavior = {
-    target_origin_id       = "fe_hosting_oac"
+    target_origin_id       = "fe_hosting_${var.stage}"
     viewer_protocol_policy = "redirect-to-https"
 
     use_forwarded_values = false
@@ -111,7 +111,7 @@ module "fe_cdn" {
   ordered_cache_behavior = [
     {
       path_pattern           = "/.well-known/*"
-      target_origin_id       = "wellknown_hosting_oac"
+      target_origin_id       = "wellknown_hosting_${var.stage}"
       viewer_protocol_policy = "redirect-to-https"
       use_forwarded_values   = false
       allowed_methods        = ["GET", "HEAD", "OPTIONS"]
@@ -120,7 +120,7 @@ module "fe_cdn" {
     },
     {
       path_pattern             = "/eservices"
-      target_origin_id         = "apigw"
+      target_origin_id         = "apigw_${var.stage}"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
       origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host_header.id
@@ -130,7 +130,7 @@ module "fe_cdn" {
     },
     {
       path_pattern             = "/eservices/*"
-      target_origin_id         = "apigw"
+      target_origin_id         = "apigw_${var.stage}"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
       origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host_header.id
@@ -140,7 +140,7 @@ module "fe_cdn" {
     },
     {
       path_pattern             = "/telemetryData/*"
-      target_origin_id         = "apigw"
+      target_origin_id         = "apigw_${var.stage}"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
       origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host_header.id
@@ -150,7 +150,7 @@ module "fe_cdn" {
     },
     {
       path_pattern             = "/producers"
-      target_origin_id         = "apigw"
+      target_origin_id         = "apigw_${var.stage}"
       viewer_protocol_policy   = "redirect-to-https"
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
       origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host_header.id

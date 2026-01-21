@@ -5,7 +5,7 @@ resource "aws_iam_role_policy_attachment" "s3_sync_deployment_github_repo" {
 
 resource "aws_iam_policy" "s3_sync_deployment_github_repo" {
   depends_on = [module.fe_bucket, module.fe_cdn]
-  name       = "S3SyncAndInvalidateCloudFront"
+  name       = "S3SyncAndInvalidateCloudFront${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"

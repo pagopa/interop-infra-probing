@@ -19,6 +19,12 @@ variable "azs" {
   description = "Availability zones to use"
 }
 
+variable "stages_to_provision" {
+  type        = list(string)
+  default     = []
+  description = "Stages to provision in the environment (e.g. in the dev environment, the stages to be provisioned are: dev, qa, vapt)"
+}
+
 variable "tags" {
   type = map(any)
   default = {

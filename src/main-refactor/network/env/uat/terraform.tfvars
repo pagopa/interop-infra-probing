@@ -2,6 +2,8 @@ aws_region = "eu-south-1"
 env        = "uat"
 azs        = ["eu-south-1a", "eu-south-1b", "eu-south-1c"]
 
+stages_to_provision = ["uat", "att"]
+
 tags = {
   Account     = "pdnd-probing-uat"
   Layer       = "network"
@@ -15,4 +17,4 @@ sso_admin_role_name = "AWSReservedSSO_FullAdmin_4c15f6000e5b2a27"
 
 interop_msk_cluster_arn = ""
 
-dns_probing_base_domain = "uat.stato-eservice.interop.pagopa.it"
+dns_probing_base_domain = "stato-eservice.interop.pagopa.it"
