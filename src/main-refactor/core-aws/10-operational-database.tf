@@ -92,6 +92,20 @@ module "probing_operational_database" {
   performance_insights_kms_key_id       = aws_kms_key.probing_operational_database.arn
 }
 
+# Workaround
+resource "null_resource" "disable_secret_rotation" {
+  depends_on = [module.probing_operational_database]
+
+  triggers = {
+    secret_arn = module.probing_operational_database.cluster_master_user_secret[0].secret_arn
+  }
+
+  provisioner "local-exec" {
+    on_failure = fail
+    command    = "aws secretsmanager cancel-rotate-secret --region ${var.aws_region} --secret-id ${module.probing_operational_database.cluster_master_user_secret[0].secret_arn}"
+  }
+}
+
 locals {
   databases_to_create = [
     for stage in var.stages_to_provision : format("%s_%s", var.probing_operational_database_prefix_name, stage) if stage != var.env # Exclude the current environment from the list of databases to create
