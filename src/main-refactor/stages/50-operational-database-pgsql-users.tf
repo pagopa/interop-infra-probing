@@ -36,7 +36,7 @@ module "probing_operational_database_flyway_pgsql_user" {
 locals {
   be_app_psql_usernames = var.stage == "qa" ? [
     "eservice_operations_user",
-    "qa_user"
+    "user" # the final username will be qa_user
     ] : [
     "eservice_operations_user"
   ]
