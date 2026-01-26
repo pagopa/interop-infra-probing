@@ -49,6 +49,11 @@ resource "aws_cognito_user_pool_client" "client" {
 
   user_pool_id    = aws_cognito_user_pool.user_pool.id
   generate_secret = false
+
+  id_token_validity = var.stage == "qa" ? 24 : 1
+  token_validity_units {
+    id_token = "hours"
+  }
 }
 
 locals {

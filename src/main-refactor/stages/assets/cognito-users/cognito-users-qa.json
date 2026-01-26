@@ -5,5 +5,10 @@
       "email": "michele.dellipaoli@pagopa.it"
     }
   ],
-  "users": []
+  "users": [
+    {
+      "username": "niccolocacace", 
+      "email": "niccolo.cacace@alten.it"
+    }
+  ]
 }
