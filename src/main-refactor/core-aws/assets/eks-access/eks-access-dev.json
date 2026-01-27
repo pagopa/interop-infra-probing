@@ -17,7 +17,7 @@
         {
           "eks_policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy",
           "scope": "namespace",
-          "namespaces": ["dev"]
+          "namespaces": ["dev", "qa"]
         }
       ]
     },
