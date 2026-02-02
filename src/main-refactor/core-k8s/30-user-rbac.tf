@@ -69,3 +69,38 @@ resource "kubernetes_role_binding_v1" "keda_objects_manager" {
     name      = "keda-objects-manager-group"
   }
 }
+
+resource "kubernetes_cluster_role_v1" "port_forward" {
+  count = var.env != "prod" ? 1 : 0
+
+  metadata {
+    name = "port-forward-role"
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["pods/portforward"]
+    verbs      = ["create"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding_v1" "port_forward" {
+  count = var.env != "prod" ? 1 : 0
+
+  metadata {
+    name      = "port-forward"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role_v1.port_forward[0].metadata[0].name
+  }
+
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Group"
+    name      = "port-forwarders-group"
+  }
+}
+
