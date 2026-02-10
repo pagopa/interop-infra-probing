@@ -186,6 +186,11 @@ variable "deployment_repo_name" {
   type        = string
 }
 
+variable "backoffice_users_repo_name" {
+  description = "Github repository name containing backoffice users automation"
+  type        = string
+}
+
 variable "cognito_user_pool_ids" {
   description = "IDs of the Cognito user pools managed in the stages layer"
   type        = list(string)

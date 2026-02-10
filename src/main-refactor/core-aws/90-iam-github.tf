@@ -335,6 +335,25 @@ resource "aws_iam_policy" "deployment_github_repo" {
   })
 }
 
+data "aws_iam_policy_document" "backoffice_users_github_repo_assume" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+
+      values = [format("repo:%s:*", var.backoffice_users_repo_name)]
+    }
+  }
+}
+
 resource "aws_iam_role" "backoffice_users_github_repo" {
   name = format("%s-backoffice-users-github-repo-%s", local.project, var.env)
 
