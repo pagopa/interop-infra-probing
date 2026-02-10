@@ -50,3 +50,5 @@ github_runners_memory        = 4096
 github_runners_image_uri     = "ghcr.io/pagopa/interop-github-runner-aws:v1.20.0"
 
 deployment_repo_name = "pagopa/interop-probing-deployment"
+
+cognito_user_pool_ids = ["eu-south-1_2EtPSldp5", "eu-south-1_UFAEAInRF"]

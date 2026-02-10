@@ -334,3 +334,71 @@ resource "aws_iam_policy" "deployment_github_repo" {
     ]
   })
 }
+
+resource "aws_iam_role" "backoffice_users_github_repo" {
+  name = format("%s-backoffice-users-github-repo-%s", local.project, var.env)
+
+  assume_role_policy = data.aws_iam_policy_document.backoffice_users_github_repo_assume.json
+}
+
+resource "aws_iam_role_policy_attachment" "backoffice_users_github_repo" {
+  role       = aws_iam_role.backoffice_users_github_repo.name
+  policy_arn = aws_iam_policy.backoffice_users_github_repo.arn
+}
+
+resource "aws_iam_policy" "backoffice_users_github_repo" {
+  name = "BackofficeUsersGithubRepo"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject"
+        ]
+        Resource = flatten([
+          for stage in var.stages_to_provision : [
+            "${data.aws_s3_bucket.terraform_states.arn}/${stage}/interop-probing-backoffice-users/backoffice-users.tfstate"
+          ]
+        ])
+      },
+      {
+        Effect   = "Allow"
+        Action   = "s3:ListBucket"
+        Resource = [data.aws_s3_bucket.terraform_states.arn]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem"
+        ]
+        Resource = [data.aws_dynamodb_table.terraform_lock.arn]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-idp:DescribeUserPool",
+          "cognito-idp:GetGroup",
+          "cognito-idp:ListGroups",
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminSetUserPassword",
+          "cognito-idp:AdminUpdateUserAttributes",
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminDeleteUser",
+          "cognito-idp:AdminAddUserToGroup",
+          "cognito-idp:AdminRemoveUserFromGroup",
+          "cognito-idp:AdminListGroupsForUser"
+        ]
+        Resource = flatten([
+          for cognito_user_pool_id in var.cognito_user_pool_ids : [
+            format("arn:aws:cognito-idp:%s:%s:userpool/%s", var.aws_region, data.aws_caller_identity.current.account_id, cognito_user_pool_id)
+          ]
+        ])
+      }
+    ]
+  })
+}
