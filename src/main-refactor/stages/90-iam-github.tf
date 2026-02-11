@@ -63,7 +63,7 @@ resource "aws_iam_role_policy_attachment" "backoffice_users_github_repo" {
 }
 
 resource "aws_iam_policy" "backoffice_users_github_repo" {
-  name = "BackofficeUsersGithubRepo${title(var.stage)}"
+  name = "ProbingBackofficeUsersGithubRepo${title(var.stage)}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -105,7 +105,7 @@ resource "aws_iam_policy" "backoffice_users_github_repo" {
           "cognito-idp:AdminRemoveUserFromGroup",
           "cognito-idp:AdminListGroupsForUser"
         ]
-        Resource = format("arn:aws:cognito-idp:%s:%s:userpool/%s", var.aws_region, data.aws_caller_identity.current.account_id, aws_cognito_user_pool.user_pool.id)
+        Resource = aws_cognito_user_pool.user_pool.arn
       }
     ]
   })
