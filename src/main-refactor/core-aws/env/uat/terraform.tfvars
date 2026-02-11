@@ -32,7 +32,7 @@ probing_analytics_database_name = "interop_probing_telemetry"
 
 probing_operational_database_name               = "interop_probing_operational"
 probing_operational_database_master_username    = "root"
-probing_operational_database_engine_version     = "16.1"
+probing_operational_database_engine_version     = "16.8"
 probing_operational_database_instance_class     = "db.t4g.medium"
 probing_operational_database_number_instances   = 3
 probing_operational_database_ca_cert_id         = "rds-ca-rsa2048-g1"

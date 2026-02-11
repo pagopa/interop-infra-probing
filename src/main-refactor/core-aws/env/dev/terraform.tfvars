@@ -32,7 +32,7 @@ probing_analytics_database_name = "interop_probing_telemetry"
 
 probing_operational_database_prefix_name        = "interop_probing_operational"
 probing_operational_database_master_username    = "root"
-probing_operational_database_engine_version     = "16.1"
+probing_operational_database_engine_version     = "16.8"
 probing_operational_database_instance_class     = "db.t4g.medium"
 probing_operational_database_number_instances   = 3
 probing_operational_database_ca_cert_id         = "rds-ca-rsa2048-g1"
@@ -50,7 +50,3 @@ github_runners_memory        = 4096
 github_runners_image_uri     = "ghcr.io/pagopa/interop-github-runner-aws:v1.20.0"
 
 deployment_repo_name = "pagopa/interop-probing-deployment"
-
-backoffice_users_repo_name = "pagopa/interop-probing-backoffice-users"
-
-cognito_user_pool_ids = ["eu-south-1_2EtPSldp5", "eu-south-1_UFAEAInRF"]
