@@ -149,3 +149,8 @@ variable "eks_application_log_group_name" {
   type        = string
   default     = null
 }
+
+variable "backoffice_users_repo_name" {
+  description = "Github repository name containing backoffice users automation"
+  type        = string
+}

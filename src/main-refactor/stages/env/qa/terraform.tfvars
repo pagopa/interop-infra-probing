@@ -46,3 +46,5 @@ probing_analytics_admin_secret_name = "timestream/probing-analytics-dev/users/ad
 probing_deployment_github_repo_role_name = "probing-deployment-github-repo-dev"
 
 eks_application_log_group_name = "/aws/eks/probing-eks-cluster-dev/application"
+
+backoffice_users_repo_name = "pagopa/interop-probing-backoffice-users"
