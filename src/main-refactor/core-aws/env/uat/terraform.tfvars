@@ -15,11 +15,12 @@ tags = {
 
 sso_admin_role_name = "AWSReservedSSO_FullAdmin_4c15f6000e5b2a27"
 
-vpc_id                  = ""
-eks_workload_cidrs      = []
-eks_control_plane_cidrs = []
-aurora_cidrs            = []
-msk_cidrs               = []
+vpc_id                  = "vpc-0acbd5bcdb93a591d"
+eks_workload_cidrs      = ["10.0.0.0/21", "10.0.8.0/21", "10.0.16.0/21"]
+eks_control_plane_cidrs = ["10.0.24.0/24", "10.0.25.0/24", "10.0.26.0/24"]
+aurora_cidrs            = ["10.0.30.0/24", "10.0.31.0/24", "10.0.32.0/24"]
+msk_cidrs               = ["10.0.42.0/24", "10.0.43.0/24", "10.0.44.0/24"]
+timestream_cidrs        = ["10.0.45.0/24", "10.0.46.0/24", "10.0.47.0/24"]
 
 vpn_clients_security_group_id = ""
 
