@@ -1,0 +1,35 @@
+{
+  "iam_principals": [
+    {
+      "principal_arn": "arn:aws:iam::010158505074:role/GitHubActionIACRole",
+      "kubernetes_groups": [],
+      "access_policies": [
+        {
+          "eks_policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy",
+          "scope": "cluster"
+        }
+      ]
+    },
+    {
+      "principal_arn": "arn:aws:iam::010158505074:role/probing-github-runner-task-uat",
+      "kubernetes_groups": ["tgb-manager-group", "keda-objects-manager-group"],
+      "access_policies": [
+        {
+          "eks_policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy",
+          "scope": "namespace",
+          "namespaces": ["uat", "att"]
+        }
+      ]
+    },
+    {
+      "principal_arn": "arn:aws:iam::010158505074:role/aws-reserved/sso.amazonaws.com/eu-west-1/AWSReservedSSO_ReadOnlyAccess_74f6066e16ca9804",
+      "kubernetes_groups": [],
+      "access_policies": [
+        {
+          "eks_policy_arn": "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy",
+          "scope": "cluster"
+        }
+      ]
+    }
+  ]
+}

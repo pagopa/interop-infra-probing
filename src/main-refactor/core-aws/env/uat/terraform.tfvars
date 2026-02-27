@@ -22,7 +22,7 @@ aurora_cidrs            = ["10.0.30.0/24", "10.0.31.0/24", "10.0.32.0/24"]
 msk_cidrs               = ["10.0.42.0/24", "10.0.43.0/24", "10.0.44.0/24"]
 timestream_cidrs        = ["10.0.45.0/24", "10.0.46.0/24", "10.0.47.0/24"]
 
-vpn_clients_security_group_id = ""
+vpn_clients_security_group_id = "sg-07c2290ada626b422"
 
 interop_msk_clusters_arns = {
   test = "arn:aws:kafka:eu-south-1:895646477129:cluster/interop-platform-events-test/2952348f-d39d-47b2-925c-bd3edc78000c-3",
@@ -31,7 +31,7 @@ interop_msk_clusters_arns = {
 
 probing_analytics_database_name = "interop_probing_telemetry"
 
-probing_operational_database_name               = "interop_probing_operational"
+probing_operational_database_prefix_name        = "interop_probing_operational"
 probing_operational_database_master_username    = "root"
 probing_operational_database_engine_version     = "16.8"
 probing_operational_database_instance_class     = "db.t4g.medium"
