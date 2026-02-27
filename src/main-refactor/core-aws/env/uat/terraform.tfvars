@@ -24,8 +24,8 @@ msk_cidrs               = []
 vpn_clients_security_group_id = ""
 
 interop_msk_clusters_arns = {
-  test = "arn:aws:kafka:eu-south-1::cluster/interop-platform-events-test/"
-  att  = "arn:aws:kafka:eu-south-1::cluster/interop-platform-events-att/"
+  test = "arn:aws:kafka:eu-south-1:895646477129:cluster/interop-platform-events-test/2952348f-d39d-47b2-925c-bd3edc78000c-3",
+  att  = "arn:aws:kafka:eu-south-1:533267098416:cluster/interop-platform-events-att/ab17674c-f6d6-4a0b-a844-faab53eee76e-3"
 }
 
 probing_analytics_database_name = "interop_probing_telemetry"
