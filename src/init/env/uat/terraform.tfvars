@@ -1,4 +1,4 @@
-aws_region        = "eu-central-1"
+aws_region        = "eu-south-1"
 env               = "uat"
 github_repository = "pagopa/interop-infra-probing"
 

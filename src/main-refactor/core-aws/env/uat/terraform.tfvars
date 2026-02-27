@@ -15,22 +15,23 @@ tags = {
 
 sso_admin_role_name = "AWSReservedSSO_FullAdmin_4c15f6000e5b2a27"
 
-vpc_id                  = ""
-eks_workload_cidrs      = []
-eks_control_plane_cidrs = []
-aurora_cidrs            = []
-msk_cidrs               = []
+vpc_id                  = "vpc-0acbd5bcdb93a591d"
+eks_workload_cidrs      = ["10.0.0.0/21", "10.0.8.0/21", "10.0.16.0/21"]
+eks_control_plane_cidrs = ["10.0.24.0/24", "10.0.25.0/24", "10.0.26.0/24"]
+aurora_cidrs            = ["10.0.30.0/24", "10.0.31.0/24", "10.0.32.0/24"]
+msk_cidrs               = ["10.0.42.0/24", "10.0.43.0/24", "10.0.44.0/24"]
+timestream_cidrs        = ["10.0.45.0/24", "10.0.46.0/24", "10.0.47.0/24"]
 
-vpn_clients_security_group_id = ""
+vpn_clients_security_group_id = "sg-07c2290ada626b422"
 
 interop_msk_clusters_arns = {
-  test = "arn:aws:kafka:eu-south-1::cluster/interop-platform-events-test/"
-  att  = "arn:aws:kafka:eu-south-1::cluster/interop-platform-events-att/"
+  test = "arn:aws:kafka:eu-south-1:895646477129:cluster/interop-platform-events-test/2952348f-d39d-47b2-925c-bd3edc78000c-3",
+  att  = "arn:aws:kafka:eu-south-1:533267098416:cluster/interop-platform-events-att/ab17674c-f6d6-4a0b-a844-faab53eee76e-3"
 }
 
 probing_analytics_database_name = "interop_probing_telemetry"
 
-probing_operational_database_name               = "interop_probing_operational"
+probing_operational_database_prefix_name        = "interop_probing_operational"
 probing_operational_database_master_username    = "root"
 probing_operational_database_engine_version     = "16.8"
 probing_operational_database_instance_class     = "db.t4g.medium"

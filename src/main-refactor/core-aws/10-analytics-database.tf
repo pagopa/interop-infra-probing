@@ -73,7 +73,7 @@ resource "terraform_data" "probing_analytics_store_admin_token" {
 
   triggers_replace = [
     aws_timestreaminfluxdb_db_instance.probing_analytics.id,
-    aws_secretsmanager_secret.probing_analytics_admin
+    aws_secretsmanager_secret.probing_analytics_admin.id
   ]
 
   provisioner "local-exec" {
@@ -99,11 +99,10 @@ resource "terraform_data" "probing_analytics_store_admin_token" {
 
       influx config create --config-name "$CONFIG_NAME" --host-url "$INSTANCE_HOST" --org "$ORGANIZATION" -p "$ADMIN_USERNAME":"$ADMIN_PASSWORD" --active
 
-      echo "Retrieving the admin token..."
+      echo "Creating a custom token..."
+      ADMIN_TOKEN=$(influx auth create --user "$ADMIN_USERNAME" --description "Custom admin token" --operator --json | jq -r '.token')
 
-      ADMIN_TOKEN=$(influx auth list --user admin --json | jq -r '.[0].token')
-
-      echo "Saving token into Secrets Manager..."
+      echo "Saving the token into Secrets Manager..."
       aws secretsmanager put-secret-value --secret-id "$ADMIN_CREDENTIALS_SECRET_ARN" \
         --secret-string "$(echo "$secret_json" | jq --arg token "$ADMIN_TOKEN" '. + {token: $token}')"
     EOT
