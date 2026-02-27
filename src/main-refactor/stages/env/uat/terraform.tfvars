@@ -38,8 +38,8 @@ jwks_uri = "https://uat.interop.pagopa.it/.well-known/probing-jwks.json"
 
 timestream_instance_name         = "probing-analytics-uat"
 timestream_instance_port         = "8086"
-timestream_instance_id           = ""
-timestream_instance_endpoint     = ".timestream-influxdb.eu-south-1.on.aws"
+timestream_instance_id           = "wz5wkydgr2"
+timestream_instance_endpoint     = "wz5wkydgr2-a2sqrsogbxh5nt.timestream-influxdb.eu-south-1.on.aws"
 timestream_instance_organization = "probing-analytics-uat"
 timestream_instance_bucket_name  = "probing-telemetry-uat"
 

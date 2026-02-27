@@ -100,7 +100,7 @@ resource "terraform_data" "probing_analytics_store_admin_token" {
       influx config create --config-name "$CONFIG_NAME" --host-url "$INSTANCE_HOST" --org "$ORGANIZATION" -p "$ADMIN_USERNAME":"$ADMIN_PASSWORD" --active
 
       echo "Creating a custom token..."
-      ADMIN_TOKEN=$(influx auth create --user "$ADMIN_USERNAME" --description "Custom admin token" --all-access --org "$ORGANIZATION" --json | jq -r '.token')
+      ADMIN_TOKEN=$(influx auth create --user "$ADMIN_USERNAME" --description "Custom admin token" --operator --json | jq -r '.token')
 
       echo "Saving the token into Secrets Manager..."
       aws secretsmanager put-secret-value --secret-id "$ADMIN_CREDENTIALS_SECRET_ARN" \
