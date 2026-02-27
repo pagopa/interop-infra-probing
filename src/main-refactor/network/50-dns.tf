@@ -20,7 +20,7 @@ resource "aws_route53_zone" "probing_public" {
 resource "aws_route53_record" "probing_dev_delegation" {
   count = local.delegate_probing_dev_subdomain ? 1 : 0
 
-  zone_id = aws_route53_zone.probing_public[0].zone_id
+  zone_id = aws_route53_zone.probing_public[var.dns_probing_base_domain].zone_id
   name    = format("dev.%s", var.dns_probing_base_domain)
   type    = "NS"
   records = toset(var.dns_probing_dev_ns_records)
@@ -30,7 +30,7 @@ resource "aws_route53_record" "probing_dev_delegation" {
 resource "aws_route53_record" "probing_qa_delegation" {
   count = local.delegate_probing_qa_subdomain ? 1 : 0
 
-  zone_id = aws_route53_zone.probing_public[0].zone_id
+  zone_id = aws_route53_zone.probing_public[var.dns_probing_base_domain].zone_id
   name    = format("qa.%s", var.dns_probing_base_domain)
   type    = "NS"
   records = toset(var.dns_probing_qa_ns_records)
@@ -40,7 +40,7 @@ resource "aws_route53_record" "probing_qa_delegation" {
 resource "aws_route53_record" "probing_vapt_delegation" {
   count = local.delegate_probing_vapt_subdomain ? 1 : 0
 
-  zone_id = aws_route53_zone.probing_public[0].zone_id
+  zone_id = aws_route53_zone.probing_public[var.dns_probing_base_domain].zone_id
   name    = format("vapt.%s", var.dns_probing_base_domain)
   type    = "NS"
   records = toset(var.dns_probing_vapt_ns_records)
@@ -50,7 +50,7 @@ resource "aws_route53_record" "probing_vapt_delegation" {
 resource "aws_route53_record" "probing_uat_delegation" {
   count = local.delegate_probing_uat_subdomain ? 1 : 0
 
-  zone_id = aws_route53_zone.probing_public[0].zone_id
+  zone_id = aws_route53_zone.probing_public[var.dns_probing_base_domain].zone_id
   name    = format("uat.%s", var.dns_probing_base_domain)
   type    = "NS"
   records = toset(var.dns_probing_uat_ns_records)
@@ -60,7 +60,7 @@ resource "aws_route53_record" "probing_uat_delegation" {
 resource "aws_route53_record" "probing_att_delegation" {
   count = local.delegate_probing_att_subdomain ? 1 : 0
 
-  zone_id = aws_route53_zone.probing_public[0].zone_id
+  zone_id = aws_route53_zone.probing_public[var.dns_probing_base_domain].zone_id
   name    = format("att.%s", var.dns_probing_base_domain)
   type    = "NS"
   records = toset(var.dns_probing_att_ns_records)
