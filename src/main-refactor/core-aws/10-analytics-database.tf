@@ -73,7 +73,7 @@ resource "aws_cloudwatch_metric_alarm" "probing_analytics_instance_disk_utilizat
   alarm_actions = [aws_sns_topic.core_alarms.arn]
 
   metric_name = "DiskUtilization"
-  namespace   = "TimeStream/InfluxDB"
+  namespace   = "Timestream/InfluxDB"
   dimensions = {
     DBInstanceName = aws_timestreaminfluxdb_db_instance.probing_analytics.name
   }
