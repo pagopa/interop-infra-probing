@@ -73,13 +73,14 @@ resource "aws_cloudwatch_metric_alarm" "probing_analytics_instance_disk_utilizat
   alarm_actions = [aws_sns_topic.core_alarms.arn]
 
   metric_name = "DiskUtilization"
-  namespace   = "Timestream/InfluxDB"
+  namespace   = "AWS/Timestream/InfluxDB"
   dimensions = {
-    DBInstanceName = aws_timestreaminfluxdb_db_instance.probing_analytics.name
+    DbInstanceName = aws_timestreaminfluxdb_db_instance.probing_analytics.name
   }
 
   comparison_operator = "GreaterThanOrEqualToThreshold"
   statistic           = "Average"
+  treat_missing_data  = "notBreaching"
 
   threshold           = var.probing_analytics_instance_disk_utilization_threshold
   period              = var.probing_analytics_instance_disk_utilization_alarm_period_seconds
