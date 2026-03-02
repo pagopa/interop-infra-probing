@@ -15,6 +15,4 @@ tags = {
 
 sso_admin_role_name = "AWSReservedSSO_FullAdmin_4c15f6000e5b2a27"
 
-interop_msk_cluster_arn = ""
-
 dns_probing_base_domain = "stato-eservice.interop.pagopa.it"

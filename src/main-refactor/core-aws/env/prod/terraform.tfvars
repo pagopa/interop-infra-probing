@@ -27,7 +27,13 @@ interop_msk_clusters_arns = {
   prod = ""
 }
 
-probing_analytics_database_name = "interop_probing_telemetry"
+probing_analytics_instance_allocated_storage = 0
+probing_analytics_instance_type              = ""
+
+probing_analytics_instance_disk_utilization_threshold            = 30
+probing_analytics_instance_disk_utilization_alarm_period_seconds = 300
+probing_analytics_instance_disk_utilization_evaluation_periods   = 1
+probing_analytics_instance_disk_utilization_alarm_datapoints     = 1
 
 probing_operational_database_prefix_name        = "interop_probing_operational"
 probing_operational_database_master_username    = "root"

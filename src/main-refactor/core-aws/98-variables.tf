@@ -77,15 +77,42 @@ variable "interop_msk_clusters_arns" {
   type        = map(any)
 }
 
-variable "probing_analytics_database_name" {
+variable "probing_analytics_instance_allocated_storage" {
+  type        = number
+  description = "Allocated storage (in GB) for the InfluxDB instance"
+}
+
+variable "probing_analytics_instance_type" {
   type        = string
-  description = "Probing analytics database name"
+  description = "Instance type for the InfluxDB instance"
 }
 
 variable "probing_analytics_buckets_retention" {
   type        = string
   description = "Retenetion period of the buckets in the InfluxDB instance"
   default     = "0"
+}
+
+variable "probing_analytics_instance_disk_utilization_threshold" {
+  type        = number
+  description = "Threshold to trigger (in percentage) the InfluxDB instance disk utilization alarm"
+}
+
+variable "probing_analytics_instance_disk_utilization_alarm_period_seconds" {
+  type        = number
+  description = "Period (in seconds) over which the InfluxDB instance disk utilization alarm statistic is applied for the alarm"
+}
+
+variable "probing_analytics_instance_disk_utilization_evaluation_periods" {
+  type        = number
+  description = "Number of periods to evaluate for the InfluxDB instance disk utilization alarm"
+  default     = 1
+}
+
+variable "probing_analytics_instance_disk_utilization_alarm_datapoints" {
+  type        = number
+  description = "Number of breaching datapoints in the evaluation period to trigger the InfluxDB instance disk utilization alarm"
+  default     = 1
 }
 
 variable "probing_operational_database_prefix_name" {

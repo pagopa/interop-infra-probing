@@ -28,7 +28,13 @@ interop_msk_clusters_arns = {
   dev = "arn:aws:kafka:eu-south-1:505630707203:cluster/interop-platform-events-dev/259df37b-31c3-405c-bb30-d2bce2ca67c6-2"
 }
 
-probing_analytics_database_name = "interop_probing_telemetry"
+probing_analytics_instance_allocated_storage = 20
+probing_analytics_instance_type              = "db.influx.medium"
+
+probing_analytics_instance_disk_utilization_threshold            = 30
+probing_analytics_instance_disk_utilization_alarm_period_seconds = 300
+probing_analytics_instance_disk_utilization_evaluation_periods   = 1
+probing_analytics_instance_disk_utilization_alarm_datapoints     = 1
 
 probing_operational_database_prefix_name        = "interop_probing_operational"
 probing_operational_database_master_username    = "root"

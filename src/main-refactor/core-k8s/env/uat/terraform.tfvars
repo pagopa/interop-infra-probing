@@ -12,7 +12,7 @@ tags = {
   Source      = "https://github.com/pagopa/interop-infra-probing"
 }
 
-eks_cluster_name = "probing-eks-cluster-prod"
+eks_cluster_name = "probing-eks-cluster-uat"
 
 enable_fluentbit_process_logs            = false
 container_logs_cloudwatch_retention_days = 90

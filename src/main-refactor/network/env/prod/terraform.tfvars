@@ -35,6 +35,11 @@ dns_probing_qa_ns_records = [
 
 dns_probing_vapt_ns_records = []
 
-dns_probing_uat_ns_records = []
+dns_probing_uat_ns_records = [
+  "ns-298.awsdns-37.com.",
+  "ns-1984.awsdns-56.co.uk.",
+  "ns-1437.awsdns-51.org.",
+  "ns-802.awsdns-36.net."
+]
 
 dns_probing_att_ns_records = []
