@@ -46,7 +46,7 @@ locals {
   project                        = "probing"
   app_name                       = format("interop-%s", local.project)
   terraform_state                = "stages"
-  use_postgresql_user_module     = var.stage == "dev" || var.stage == "qa"
+  use_postgresql_user_module     = var.stage == "dev" || var.stage == "qa" || var.stage == "uat"
   deploy_interop_msk_integration = var.interop_msk_cluster_arn != null
 }
 
