@@ -56,9 +56,10 @@ module "probing_operational_database_readonly_pgsql_user" {
   db_admin_credentials_secret_arn = data.aws_rds_cluster.probing_operational_database.master_user_secret[0].secret_arn
 
   additional_sql_statements = <<-EOT
-    ALTER DEFAULT PRIVILEGES GRANT USAGE ON SCHEMAS TO ${var.stage}_probing_readonly_user;
-    ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO ${var.stage}_probing_readonly_user;
-    ALTER DEFAULT PRIVILEGES GRANT SELECT ON SEQUENCES TO ${var.stage}_probing_readonly_user;
+    SET ROLE "${var.stage}_probing_flyway_user";
+    ALTER DEFAULT PRIVILEGES FOR ROLE "${var.stage}_probing_flyway_user" GRANT USAGE ON SCHEMAS TO ${var.stage}_probing_readonly_user;
+    ALTER DEFAULT PRIVILEGES FOR ROLE "${var.stage}_probing_flyway_user" GRANT SELECT ON TABLES TO ${var.stage}_probing_readonly_user;
+    ALTER DEFAULT PRIVILEGES FOR ROLE "${var.stage}_probing_flyway_user" GRANT SELECT ON SEQUENCES TO ${var.stage}_probing_readonly_user;
   EOT
 }
 
