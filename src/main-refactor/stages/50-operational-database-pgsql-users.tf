@@ -33,6 +33,36 @@ module "probing_operational_database_flyway_pgsql_user" {
   EOT
 }
 
+module "probing_operational_database_readonly_pgsql_user" {
+  depends_on = [module.probing_operational_database_flyway_pgsql_user]
+
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
+
+  username = "${var.stage}_probing_readonly_user"
+
+  generated_password_length = 30
+  secret_prefix             = format("rds/%s/users/", data.aws_rds_cluster.probing_operational_database.cluster_identifier)
+
+  secret_tags = merge(local.eks_secret_default_tags,
+    {
+      EKSReplicaSecretName = "${var.stage}-probing-operational-db-readonly-user"
+    }
+  )
+
+  db_host = data.aws_rds_cluster.probing_operational_database.endpoint
+  db_port = data.aws_rds_cluster.probing_operational_database.port
+  db_name = var.probing_operational_database_name
+
+  db_admin_credentials_secret_arn = data.aws_rds_cluster.probing_operational_database.master_user_secret[0].secret_arn
+
+  additional_sql_statements = <<-EOT
+    SET ROLE "${var.stage}_probing_flyway_user";
+    ALTER DEFAULT PRIVILEGES FOR ROLE "${var.stage}_probing_flyway_user" GRANT USAGE ON SCHEMAS TO ${var.stage}_probing_readonly_user;
+    ALTER DEFAULT PRIVILEGES FOR ROLE "${var.stage}_probing_flyway_user" GRANT SELECT ON TABLES TO ${var.stage}_probing_readonly_user;
+    ALTER DEFAULT PRIVILEGES FOR ROLE "${var.stage}_probing_flyway_user" GRANT SELECT ON SEQUENCES TO ${var.stage}_probing_readonly_user;
+  EOT
+}
+
 locals {
   be_app_psql_usernames = [
     "eservice_operations_user"
