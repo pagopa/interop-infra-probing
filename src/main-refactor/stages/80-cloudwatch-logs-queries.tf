@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_query_definition" "app_logs_errors" {
-  name = "Application-Logs-Errors"
+  name = "Application-Logs-Errors-${title(var.stage)}"
 
   log_group_names = [var.eks_application_log_group_name]
 
@@ -8,13 +8,13 @@ resource "aws_cloudwatch_query_definition" "app_logs_errors" {
     | sort @timestamp asc
     | filter (@message like /ERROR/ or stream = "stderr")
     | filter @logStream not like /adot-collector/
+    | filter pod_namespace = "${var.stage}"
     # | filter pod_app like /probing-be-api/
-    # | filter pod_namespace = "dev"
   EOT
 }
 
 resource "aws_cloudwatch_query_definition" "cid_tracker" {
-  name = "CID-Tracker"
+  name = "CID-Tracker-${title(var.stage)}"
 
   log_group_names = [var.eks_application_log_group_name]
 
@@ -23,12 +23,13 @@ resource "aws_cloudwatch_query_definition" "cid_tracker" {
     | sort @timestamp asc
     | parse @message "[CID=*]" as CID
     | filter CID = ""
+    | filter pod_namespace = "${var.stage}"
     | display @message
   EOT
 }
 
 resource "aws_cloudwatch_query_definition" "apigw_5xx" {
-  name = "APIGW-Probing-5xx"
+  name = "APIGW-Probing-5xx-${title(var.stage)}"
 
   log_group_names = [aws_cloudwatch_log_group.apigw_access_logs.name]
 
@@ -41,7 +42,7 @@ resource "aws_cloudwatch_query_definition" "apigw_5xx" {
 }
 
 resource "aws_cloudwatch_query_definition" "apigw_waf_block" {
-  name = "APIGW-Probing-WAF-Block"
+  name = "APIGW-Probing-WAF-Block-${title(var.stage)}"
 
   log_group_names = [aws_cloudwatch_log_group.apigw_access_logs.name]
 
@@ -54,7 +55,7 @@ resource "aws_cloudwatch_query_definition" "apigw_waf_block" {
 }
 
 resource "aws_cloudwatch_query_definition" "apigw_extended_request_id" {
-  name = "APIGW-Probing-ExtendedRequestId"
+  name = "APIGW-Probing-ExtendedRequestId-${title(var.stage)}"
 
   log_group_names = [aws_cloudwatch_log_group.apigw_access_logs.name]
 
