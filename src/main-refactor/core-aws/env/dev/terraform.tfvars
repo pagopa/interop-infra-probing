@@ -44,7 +44,7 @@ probing_operational_database_number_instances   = 3
 probing_operational_database_ca_cert_id         = "rds-ca-rsa2048-g1"
 probing_operational_database_param_group_family = "aurora-postgresql16"
 
-eks_k8s_version = "1.32"
+eks_k8s_version = "1.34"
 
 backend_microservices_port = 8080
 
@@ -53,6 +53,6 @@ project_monorepo_name = "pagopa/interop-probing-core"
 github_runners_allowed_repos = ["pagopa/interop-probing-deployment"]
 github_runners_cpu           = 2048
 github_runners_memory        = 4096
-github_runners_image_uri     = "ghcr.io/pagopa/interop-github-runner-aws:v1.20.0"
+github_runners_image_uri     = "ghcr.io/pagopa/interop-github-runner-aws:v1.21.1"
 
 deployment_repo_name = "pagopa/interop-probing-deployment"
