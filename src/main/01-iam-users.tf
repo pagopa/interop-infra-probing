@@ -263,7 +263,7 @@ resource "aws_iam_group_policy" "local_development" {
           "kms:Verify"
         ]
         Resource = [
-          "${aws_kms_key.jwt_sign_key.arn}"
+          aws_kms_key.jwt_sign_key.arn
         ]
       },
       {
