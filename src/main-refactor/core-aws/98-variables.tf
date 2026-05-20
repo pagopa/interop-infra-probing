@@ -179,11 +179,6 @@ variable "eks_kube_proxy_version" {
   default     = null
 }
 
-variable "backend_microservices_port" {
-  description = "Port on which the backend microservices listen"
-  type        = number
-}
-
 variable "project_monorepo_name" {
   description = "Project monorepo name (format: organization/repo-name)."
   type        = string

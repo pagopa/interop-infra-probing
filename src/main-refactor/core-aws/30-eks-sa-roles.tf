@@ -1,7 +1,3 @@
-locals {
-  be_prefix = format("%s-be", local.project)
-}
-
 data "aws_iam_policy" "aws_managed_cloudwatch_agent_server" {
   name = "CloudWatchAgentServerPolicy"
 }

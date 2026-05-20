@@ -24,27 +24,13 @@ provider "aws" {
   }
 }
 
-provider "aws" {
-  region = "eu-central-1"
-  alias  = "ec1"
-
-  default_tags {
-    tags = var.tags
-  }
-}
-
 locals {
   project                        = "probing"
-  terraform_state                = "core"
   deploy_interop_msk_integration = var.interop_msk_clusters_arns != null
   deploy_keda                    = var.env == "dev"
 }
 
 data "aws_caller_identity" "current" {}
-
-data "aws_iam_role" "github_iac" {
-  name = "GitHubActionIACRole"
-}
 
 data "aws_iam_role" "sso_admin" {
   name = var.sso_admin_role_name

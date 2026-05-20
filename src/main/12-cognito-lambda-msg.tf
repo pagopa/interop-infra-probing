@@ -31,7 +31,7 @@ resource "null_resource" "lambda_cognito_messaging" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 

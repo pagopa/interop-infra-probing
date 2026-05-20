@@ -27,11 +27,6 @@ variable "tags" {
   }
 }
 
-variable "sso_admin_role_name" {
-  type        = string
-  description = "Name of the SSO admin role"
-}
-
 variable "vpc_id" {
   type        = string
   description = "ID of the probing VPC"
