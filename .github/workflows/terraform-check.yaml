@@ -41,7 +41,7 @@ jobs:
           echo "tf_version=$tf_version" >> "$GITHUB_OUTPUT"  
         
   terraform-checks:
-    name: Terraform checks via reusable pre-commit workflow
+    name: Terraform checks (reusable workflow)
     needs: [compute-terraform-version]
     uses: pagopa/interop-infra-commons/.github/workflows/common-terraform-check-precommit.yaml@feature/pin-9552-tf-check-precommit
     
