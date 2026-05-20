@@ -47,7 +47,7 @@ jobs:
     
     with:
       search_path: "src"
-
+      discovery_mode: "env-roots"
       # Keep aligned with the existing Terraform check workflow while testing the migration.
       tflint_version: v0.61.0
       tfversion: ${{ needs.compute-terraform-version.outputs.tf_version }}
