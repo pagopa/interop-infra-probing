@@ -214,6 +214,7 @@ module "aws_load_balancer_controller_role" {
 }
 
 module "adot_role" {
+  version = "5.18.0"
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "adot"
@@ -231,6 +232,7 @@ module "adot_role" {
 }
 
 module "xray_daemon_role" {
+  version = "5.18.0"
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "xray-daemon"
