@@ -1,7 +1,3 @@
-data "aws_iam_policy" "aws_managed_cloudwatch_agent_server" {
-  name = "CloudWatchAgentServerPolicy"
-}
-
 #### SYSTEM ROLES ####
 
 data "aws_iam_policy" "cloudwatch_agent_server" {
