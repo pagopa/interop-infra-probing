@@ -25,15 +25,6 @@ provider "aws" {
 }
 
 provider "aws" {
-  region = "eu-central-1"
-  alias  = "ec1"
-
-  default_tags {
-    tags = var.tags
-  }
-}
-
-provider "aws" {
   region = "us-east-1"
   alias  = "us_east_1"
 
@@ -51,11 +42,3 @@ locals {
 }
 
 data "aws_caller_identity" "current" {}
-
-data "aws_iam_role" "github_iac" {
-  name = "GitHubActionIACRole"
-}
-
-data "aws_iam_role" "sso_admin" {
-  name = var.sso_admin_role_name
-}

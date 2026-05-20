@@ -170,6 +170,7 @@ variable "lambda_authorizer_cache_max_age" {
 }
 variable "tags" {
   type = map(any)
+  description = "Tags to apply to AWS resources created by Terraform"
   default = {
     CreatedBy = "Terraform"
   }

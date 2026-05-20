@@ -19,13 +19,9 @@ variable "stage" {
   description = "Stage name"
 }
 
-variable "azs" {
-  type        = list(string)
-  description = "Availability zones to use"
-}
-
 variable "tags" {
   type = map(any)
+  description = "Tags to apply to AWS resources created by Terraform"
   default = {
     CreatedBy = "Terraform"
   }

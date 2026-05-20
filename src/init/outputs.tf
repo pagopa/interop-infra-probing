@@ -1,9 +1,11 @@
 output "backend_bucket_name" {
   value = aws_s3_bucket.terraform_states.bucket
+  description = "Name of the S3 bucket used for storing Terraform state files."
 }
 
 output "dynamodb_lock_table" {
   value = aws_dynamodb_table.dynamodb-terraform-state-lock.name
+  description = "Name of the DynamoDB table used for Terraform state locking."
 }
 
 output "iac_role_arn" {

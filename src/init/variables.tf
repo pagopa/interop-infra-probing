@@ -10,6 +10,7 @@ variable "github_repository" {
 
 variable "tags" {
   type = map(any)
+  description = "Tags to apply to AWS resources created by Terraform"
   default = {
     "CreatedBy" : "Terraform",
   }
