@@ -15,7 +15,7 @@ module "probing_apigw" {
   api_name              = "probing"
   openapi_relative_path = var.probing_openapi_path
 
-  openapi_s3_bucket_name = null # After the apigw_openapi_bucket module (in 60-s3.tf) has been created, replace 'null' with 'module.apigw_openapi_bucket.s3_bucket_id' and re-apply Terraform
+  openapi_s3_bucket_name = module.apigw_openapi_bucket.s3_bucket_id # After the apigw_openapi_bucket module (in 60-s3.tf) has been created, replace 'null' with 'module.apigw_openapi_bucket.s3_bucket_id' and re-apply Terraform
   openapi_s3_object_key  = replace(var.probing_openapi_path, "./", "")
 
   templating_map = {
@@ -28,7 +28,7 @@ module "probing_apigw" {
   enable_base_path_mapping     = false
 
   vpc_link_id          = aws_api_gateway_vpc_link.integration.id
-  web_acl_arn          = null # After the aws_wafv2_web_acl resource (in 10-waf.tf) has been created, replace 'null' with 'aws_wafv2_web_acl.probing.arn' and re-apply Terraform
+  web_acl_arn          = aws_wafv2_web_acl.probing.arn # After the aws_wafv2_web_acl resource (in 10-waf.tf) has been created, replace 'null' with 'aws_wafv2_web_acl.probing.arn' and re-apply Terraform
   access_log_group_arn = aws_cloudwatch_log_group.apigw_access_logs.arn
 
   create_cloudwatch_alarm     = true
