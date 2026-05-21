@@ -1,7 +1,7 @@
 aws_region = "eu-south-1"
 env        = "uat"
 
-stages_to_provision = ["uat"]
+stages_to_provision = ["uat", "att"]
 
 tags = {
   Account     = "pdnd-probing-uat"

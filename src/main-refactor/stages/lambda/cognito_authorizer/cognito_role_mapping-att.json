@@ -1,0 +1,8 @@
+{
+  "admins": {
+    "/telemetryData/eservices/filtered": ["GET"]
+  },
+  "users": {
+    "/api": ["POST"]
+  }
+}
