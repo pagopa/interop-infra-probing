@@ -42,4 +42,9 @@ dns_probing_uat_ns_records = [
   "ns-802.awsdns-36.net."
 ]
 
-dns_probing_att_ns_records = []
+dns_probing_att_ns_records = [
+  "ns-124.awsdns-15.com.",
+  "ns-1186.awsdns-20.org.",
+  "ns-1685.awsdns-18.co.uk.",
+  "ns-930.awsdns-52.net."
+]
