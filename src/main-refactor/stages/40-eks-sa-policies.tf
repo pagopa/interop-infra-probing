@@ -149,7 +149,7 @@ resource "aws_iam_policy" "be_eservice_event_consumer" {
         Resource = [
           var.interop_msk_cluster_arn,
           "${local.msk_topic_iam_prefix}/outbound.*_catalog.events",
-          "${local.msk_group_iam_prefix}/probing-${var.env}*-eservice-event-consumer"
+          "${local.msk_group_iam_prefix}/probing-${var.stage}*-eservice-event-consumer"
         ]
       }
     ]
@@ -177,7 +177,7 @@ resource "aws_iam_policy" "be_tenant_event_consumer" {
         Resource = [
           var.interop_msk_cluster_arn,
           "${local.msk_topic_iam_prefix}/outbound.*_tenant.events",
-          "${local.msk_group_iam_prefix}/probing-${var.env}*-tenant-event-consumer"
+          "${local.msk_group_iam_prefix}/probing-${var.stage}*-tenant-event-consumer"
         ]
       }
     ]
