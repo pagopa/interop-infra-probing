@@ -47,6 +47,5 @@ jobs:
     
     with:
       search_path: "src"
-      #discovery_mode: "env-roots"
       precommit_image_version: "4ef4b8323b27fc263535ad88c9d2f20488fcb3b520258e5e7f0553ed5f6692b5" # v1.105.0
       tfversion: ${{ needs.compute-terraform-version.outputs.tf_version }}
