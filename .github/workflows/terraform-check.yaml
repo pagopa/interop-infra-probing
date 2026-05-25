@@ -41,11 +41,11 @@ jobs:
           echo "tf_version=$tf_version" >> "$GITHUB_OUTPUT"  
         
   terraform-checks:
-    name: Terraform checks (reusable workflow)
+    name: Terraform static analysis
     needs: [compute-terraform-version]
     uses: pagopa/interop-infra-commons/.github/workflows/common-terraform-check-precommit.yaml@feature/pin-9552-tf-check-precommit
     
     with:
       search_path: "src"
-      precommit_image_version: "4ef4b8323b27fc263535ad88c9d2f20488fcb3b520258e5e7f0553ed5f6692b5" # v1.105.0
+      precommit_image_version: "v1.105.0"
       tfversion: ${{ needs.compute-terraform-version.outputs.tf_version }}
