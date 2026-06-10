@@ -42,7 +42,7 @@ jobs:
   terraform-checks:
     name: Terraform static analysis
     needs: [compute-terraform-version]
-    uses: pagopa/interop-infra-commons/.github/workflows/common-terraform-check-precommit.yaml@main
+    uses: pagopa/interop-infra-commons/.github/workflows/common-terraform-static-analysis.yaml@main
     
     with:
       search_path: "src"
