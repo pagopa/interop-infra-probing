@@ -26,7 +26,8 @@ variable "stages_to_provision" {
 }
 
 variable "tags" {
-  type = map(any)
+  type        = map(any)
+  description = "Tags to apply to AWS resources created by Terraform"
   default = {
     CreatedBy = "Terraform"
   }
@@ -176,11 +177,6 @@ variable "eks_kube_proxy_version" {
   type        = string
   description = "EKS kube-proxy addon version"
   default     = null
-}
-
-variable "backend_microservices_port" {
-  description = "Port on which the backend microservices listen"
-  type        = number
 }
 
 variable "project_monorepo_name" {

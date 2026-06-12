@@ -19,21 +19,12 @@ variable "stage" {
   description = "Stage name"
 }
 
-variable "azs" {
-  type        = list(string)
-  description = "Availability zones to use"
-}
-
 variable "tags" {
-  type = map(any)
+  type        = map(any)
+  description = "Tags to apply to AWS resources created by Terraform"
   default = {
     CreatedBy = "Terraform"
   }
-}
-
-variable "sso_admin_role_name" {
-  type        = string
-  description = "Name of the SSO admin role"
 }
 
 variable "vpc_id" {

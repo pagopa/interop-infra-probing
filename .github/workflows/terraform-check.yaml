@@ -1,0 +1,50 @@
+name: Terraform Checks
+run-name: "Terraform Checks - ${{ github.ref_name }}"
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+
+permissions:
+  contents: read
+
+env:
+  TERRAFORM_VERSION_PATH: "./src"
+
+jobs:
+  compute-terraform-version:
+    name: Compute Terraform version
+    runs-on: ubuntu-24.04
+    outputs:
+      tf_version: ${{ steps.compute-tf-version.outputs.tf_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 #v4
+
+      - name: Read terraform version from .terraform-version file in $TERRAFORM_VERSION_PATH
+        id: compute-tf-version
+        env:
+          TERRAFORM_VERSION_PATH: ${{ env.TERRAFORM_VERSION_PATH }}
+        run: |
+          set -euo pipefail
+          version_file="$TERRAFORM_VERSION_PATH/.terraform-version"
+          if [ -f "$version_file" ]; then
+            tf_version="$(<"$version_file")"
+            echo "Terraform version read from $version_file: $tf_version"
+          else
+            echo "No .terraform-version file found at $TERRAFORM_VERSION_PATH, defaulting to empty version"
+            tf_version=""
+          fi
+          echo "tf_version=$tf_version" >> "$GITHUB_OUTPUT"  
+        
+  terraform-checks:
+    name: Terraform static analysis
+    needs: [compute-terraform-version]
+    uses: pagopa/interop-infra-commons/.github/workflows/common-terraform-static-analysis.yaml@main
+    
+    with:
+      search_path: "src"
+      precommit_image_version: "v1.105.0"
+      tfversion: ${{ needs.compute-terraform-version.outputs.tf_version }}

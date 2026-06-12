@@ -43,9 +43,6 @@ provider "helm" {
   }
 }
 
-data "aws_caller_identity" "current" {}
-
 locals {
-  project     = "probing"
   deploy_keda = var.env == "dev"
 }

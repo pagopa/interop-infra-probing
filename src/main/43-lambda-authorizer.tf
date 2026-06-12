@@ -48,7 +48,7 @@ resource "null_resource" "cognito_authorizer" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -65,7 +65,7 @@ resource "null_resource" "external_authorizer" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 

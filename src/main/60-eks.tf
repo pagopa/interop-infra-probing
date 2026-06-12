@@ -4,13 +4,6 @@ locals {
   observability_namespaces = ["aws-observability", "opentelemetry-operator-system"]
 }
 
-data "aws_iam_policy" "cloudwatch_agent_server" {
-  name = "CloudWatchAgentServerPolicy"
-}
-
-data "aws_iam_policy" "xray_daemon_write" {
-  name = "AWSXRayDaemonWriteAccess"
-}
 resource "aws_iam_policy" "fargate_profile_logging" {
   name = "EksFargateProfileLogging"
 

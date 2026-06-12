@@ -26,15 +26,11 @@ variable "stages_to_provision" {
 }
 
 variable "tags" {
-  type = map(any)
+  type        = map(any)
+  description = "Tags to apply to AWS resources created by Terraform"
   default = {
     CreatedBy = "Terraform"
   }
-}
-
-variable "sso_admin_role_name" {
-  type        = string
-  description = "Name of the SSO admin role"
 }
 
 variable "dns_probing_base_domain" {

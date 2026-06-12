@@ -22,7 +22,7 @@ locals {
 }
 
 resource "aws_eks_access_entry" "this" {
-  for_each = { for item in local.principals : "${item.principal_arn}" => item }
+  for_each = { for item in local.principals : item.principal_arn => item }
 
   cluster_name      = module.eks.cluster_name
   principal_arn     = each.value.principal_arn

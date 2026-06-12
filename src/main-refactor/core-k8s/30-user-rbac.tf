@@ -88,7 +88,7 @@ resource "kubernetes_cluster_role_binding_v1" "port_forward" {
   count = var.env != "prod" ? 1 : 0
 
   metadata {
-    name      = "port-forward"
+    name = "port-forward"
   }
 
   role_ref {

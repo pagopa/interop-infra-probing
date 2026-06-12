@@ -120,11 +120,6 @@ variable "alb_ingress_group" {
   description = "Name of the ALB ingress group"
 }
 
-variable "api_version" {
-  type        = string
-  description = "Version of the API definition in openapi"
-}
-
 variable "openapi_spec_path" {
   type        = string
   description = "The relative path in the repo for open api specification"
@@ -169,7 +164,8 @@ variable "lambda_authorizer_cache_max_age" {
   default     = 86400
 }
 variable "tags" {
-  type = map(any)
+  type        = map(any)
+  description = "Tags to apply to AWS resources created by Terraform"
   default = {
     CreatedBy = "Terraform"
   }
