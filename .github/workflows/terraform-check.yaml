@@ -1,5 +1,4 @@
 name: Terraform Checks
-run-name: "Terraform Checks - ${{ github.ref_name }}"
 
 on:
   pull_request:
