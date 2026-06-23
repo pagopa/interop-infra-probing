@@ -9,10 +9,8 @@ repos:
         name: Terraform fmt
         files: \.(tf|tfvars)$
         args:
-          - --args=-check
           - --args=-diff
           - --args=-recursive
-          - --args=-write=false
 
       - id: terraform_validate
         name: Terraform validate
