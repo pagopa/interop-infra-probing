@@ -6,12 +6,13 @@ resource "aws_cloudwatch_log_group" "apigw_access_logs" {
 }
 
 module "probing_apigw" {
-  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/rest-apigw-openapi?ref=v1.31.0"
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/rest-apigw-openapi?ref=v1.44.2"
 
   maintenance_mode = false
 
   env                   = var.stage
   type                  = "generic"
+  rest_apigw_name       = format("interop-%s-%s", "probing", var.stage)
   api_name              = "probing"
   openapi_relative_path = var.probing_openapi_path
 
@@ -25,11 +26,10 @@ module "probing_apigw" {
 
   domain_name                  = data.aws_route53_zone.probing_base.name
   disable_execute_api_endpoint = false
-  enable_base_path_mapping     = false
 
   vpc_link_id          = aws_api_gateway_vpc_link.integration.id
   web_acl_arn          = aws_wafv2_web_acl.probing.arn # After the aws_wafv2_web_acl resource (in 10-waf.tf) has been created, replace 'null' with 'aws_wafv2_web_acl.probing.arn' and re-apply Terraform
-  access_log_group_arn = aws_cloudwatch_log_group.apigw_access_logs.arn
+  access_log_group_name = aws_cloudwatch_log_group.apigw_access_logs.name
 
   create_cloudwatch_alarm     = true
   create_cloudwatch_dashboard = true
