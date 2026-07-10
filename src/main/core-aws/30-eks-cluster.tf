@@ -120,27 +120,27 @@ module "eks" {
 
   fargate_profiles = merge({
     system = {
-      subnet_ids = data.aws_subnets.eks_workload.ids
-      name      = format("%s-fargate-system-profile-%s", local.project, var.env)
-      selectors = [for ns in local.system_namespaces : { namespace = ns }]
+      subnet_ids               = data.aws_subnets.eks_workload.ids
+      name                     = format("%s-fargate-system-profile-%s", local.project, var.env)
+      selectors                = [for ns in local.system_namespaces : { namespace = ns }]
       iam_role_use_name_prefix = false
       iam_role_additional_policies = {
         fargate_logging = aws_iam_policy.fargate_profile_logging.arn
       }
     }
     application = {
-      subnet_ids = data.aws_subnets.eks_workload.ids
-      name      = format("%s-fargate-app-profile-%s", local.project, var.env) # e.g. the "probing-fargate-app-profile-dev" schedules on fargate all the pods in the application namespaces (dev, qa, vapt) in the dev cluster.
-      selectors = [for ns in local.application_namespaces : { namespace = ns }]
+      subnet_ids               = data.aws_subnets.eks_workload.ids
+      name                     = format("%s-fargate-app-profile-%s", local.project, var.env) # e.g. the "probing-fargate-app-profile-dev" schedules on fargate all the pods in the application namespaces (dev, qa, vapt) in the dev cluster.
+      selectors                = [for ns in local.application_namespaces : { namespace = ns }]
       iam_role_use_name_prefix = false
       iam_role_additional_policies = {
         fargate_logging = aws_iam_policy.fargate_profile_logging.arn
       }
     }
     observability = {
-      subnet_ids = data.aws_subnets.eks_workload.ids
-      name      = format("%s-fargate-obs-profile-%s", local.project, var.env)
-      selectors = [for ns in local.observability_namespaces : { namespace = ns }]
+      subnet_ids               = data.aws_subnets.eks_workload.ids
+      name                     = format("%s-fargate-obs-profile-%s", local.project, var.env)
+      selectors                = [for ns in local.observability_namespaces : { namespace = ns }]
       iam_role_use_name_prefix = false
       iam_role_additional_policies = {
         fargate_logging = aws_iam_policy.fargate_profile_logging.arn
@@ -148,9 +148,9 @@ module "eks" {
     } },
     length(local.tools_namespaces) > 0 ? ({
       tools = {
-        subnet_ids = data.aws_subnets.eks_workload.ids
-        name      = format("%s-fargate-tools-profile-%s", local.project, var.env)
-        selectors = [for ns in local.tools_namespaces : { namespace = ns }]
+        subnet_ids               = data.aws_subnets.eks_workload.ids
+        name                     = format("%s-fargate-tools-profile-%s", local.project, var.env)
+        selectors                = [for ns in local.tools_namespaces : { namespace = ns }]
         iam_role_use_name_prefix = false
         iam_role_additional_policies = {
           fargate_logging = aws_iam_policy.fargate_profile_logging.arn

@@ -27,8 +27,8 @@ module "probing_apigw" {
   domain_name                  = data.aws_route53_zone.probing_base.name
   disable_execute_api_endpoint = false
 
-  vpc_link_id          = aws_api_gateway_vpc_link.integration.id
-  web_acl_arn          = aws_wafv2_web_acl.probing.arn # After the aws_wafv2_web_acl resource (in 10-waf.tf) has been created, replace 'null' with 'aws_wafv2_web_acl.probing.arn' and re-apply Terraform
+  vpc_link_id           = aws_api_gateway_vpc_link.integration.id
+  web_acl_arn           = aws_wafv2_web_acl.probing.arn # After the aws_wafv2_web_acl resource (in 10-waf.tf) has been created, replace 'null' with 'aws_wafv2_web_acl.probing.arn' and re-apply Terraform
   access_log_group_name = aws_cloudwatch_log_group.apigw_access_logs.name
 
   create_cloudwatch_alarm     = true
