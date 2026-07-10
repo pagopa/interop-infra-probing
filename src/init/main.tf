@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.15.7"
+  required_version = "~> 1.15"
 
   # TODO Uncomment once the backend S3 bucket is created and upload the state file.
   backend "s3" {}
@@ -7,7 +7,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.53.0"
+      version = "~> 6.53"
     }
   }
 }
