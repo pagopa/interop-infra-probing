@@ -2,8 +2,6 @@ name: Terraform Checks
 
 on:
   pull_request:
-    paths:
-      - "src/**"
 
 permissions:
   contents: read
