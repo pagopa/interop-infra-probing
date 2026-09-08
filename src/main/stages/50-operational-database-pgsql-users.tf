@@ -9,7 +9,7 @@ locals {
 module "probing_operational_database_flyway_pgsql_user" {
   count = local.use_postgresql_user_module ? 1 : 0
 
-  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.44.2"
 
   username = "${var.stage}_probing_flyway_user"
 
@@ -36,7 +36,7 @@ module "probing_operational_database_flyway_pgsql_user" {
 module "probing_operational_database_readonly_pgsql_user" {
   depends_on = [module.probing_operational_database_flyway_pgsql_user]
 
-  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.44.2"
 
   username = "${var.stage}_probing_readonly_user"
 
@@ -73,7 +73,7 @@ locals {
 module "probing_operational_database_be_app_pgsql_user" {
   depends_on = [module.probing_operational_database_flyway_pgsql_user]
 
-  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.22.0"
+  source = "git::https://github.com/pagopa/interop-infra-commons//terraform/modules/postgresql-user?ref=v1.44.2"
 
   for_each = local.use_postgresql_user_module ? toset(local.be_app_psql_usernames) : []
 

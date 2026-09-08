@@ -87,7 +87,7 @@ resource "aws_lambda_function" "cognito_authorizer" {
   role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.cognito_authorizer.output_base64sha256
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs22.x"
   timeout          = 15
 
   environment {
@@ -106,7 +106,7 @@ resource "aws_lambda_function" "external_authorizer" {
   role             = aws_iam_role.lambda_authorizer_execution_role.arn
   handler          = "lambda_authorizer.handler"
   source_code_hash = data.archive_file.external_authorizer.output_base64sha256
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs22.x"
   timeout          = 15
 
   environment {
