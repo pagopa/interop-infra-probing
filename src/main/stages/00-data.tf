@@ -10,10 +10,6 @@ data "aws_s3_bucket" "terraform_states" {
   bucket = format("terraform-backend-%s-es1", data.aws_caller_identity.current.account_id)
 }
 
-data "aws_dynamodb_table" "terraform_lock" {
-  name = "terraform-lock"
-}
-
 data "aws_iam_openid_connect_provider" "github" {
   url = "https://token.actions.githubusercontent.com"
 }

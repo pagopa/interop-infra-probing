@@ -127,10 +127,6 @@ data "aws_s3_bucket" "terraform_states" {
   bucket = format("terraform-backend-%s-es1", data.aws_caller_identity.current.account_id)
 }
 
-data "aws_dynamodb_table" "terraform_lock" {
-  name = "terraform-lock"
-}
-
 data "aws_iam_policy_document" "deployment_github_repo_assume" {
   statement {
     effect  = "Allow"
@@ -188,12 +184,15 @@ resource "aws_iam_policy" "deployment_github_repo" {
         Effect = "Allow"
         Action = [
           "s3:GetObject",
-          "s3:PutObject"
+          "s3:PutObject",
+          "s3:DeleteObject"
         ]
         Resource = flatten([
           for stage in var.stages_to_provision : [
-            "${data.aws_s3_bucket.terraform_states.arn}/${stage}/interop-probing-deployment/monitoring.tfstate", #For each stage, there will be a monitoring.tfstate in the dedicated stage folder
-            "${data.aws_s3_bucket.terraform_states.arn}/${stage}/interop-probing-deployment/secrets.tfstate"     #For each stage, there will be a secrets.tfstate in the dedicated stage folder
+            format("%s/%s/interop-probing-deployment/monitoring.tfstate", data.aws_s3_bucket.terraform_states.arn, stage), #For each stage, there will be a monitoring.tfstate in the dedicated stage folder
+            format("%s/%s/interop-probing-deployment/secrets.tfstate", data.aws_s3_bucket.terraform_states.arn, stage),    #For each stage, there will be a secrets.tfstate in the dedicated stage folder
+            format("%s/%s/interop-probing-deployment/monitoring.tfstate.tflock", data.aws_s3_bucket.terraform_states.arn, stage),
+            format("%s/%s/interop-probing-deployment/secrets.tfstate.tflock", data.aws_s3_bucket.terraform_states.arn, stage)
           ]
         ])
       },
@@ -201,15 +200,6 @@ resource "aws_iam_policy" "deployment_github_repo" {
         Effect   = "Allow"
         Action   = "s3:ListBucket"
         Resource = [data.aws_s3_bucket.terraform_states.arn]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem"
-        ]
-        Resource = [data.aws_dynamodb_table.terraform_lock.arn]
       },
       {
         Effect = "Allow"
