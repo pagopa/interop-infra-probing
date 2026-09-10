@@ -54,7 +54,7 @@ resource "aws_lambda_function" "cognito_messaging" {
   role             = aws_iam_role.lambda_cognito_messaging_execution_role.arn
   handler          = "lambda_cognito_messaging.handler"
   source_code_hash = data.archive_file.lambda_cognito_messaging.output_base64sha256
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs22.x"
 
   environment {
     variables = {
