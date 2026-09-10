@@ -72,23 +72,18 @@ resource "aws_iam_policy" "backoffice_users_github_repo" {
         Effect = "Allow"
         Action = [
           "s3:GetObject",
-          "s3:PutObject"
+          "s3:PutObject",
+          "s3:DeleteObject"
         ]
-        Resource = format("%s/%s/interop-probing-backoffice-users/backoffice-users.tfstate", data.aws_s3_bucket.terraform_states.arn, var.stage)
+        Resource = [
+          format("%s/%s/interop-probing-backoffice-users/backoffice-users.tfstate", data.aws_s3_bucket.terraform_states.arn, var.stage),
+          format("%s/%s/interop-probing-backoffice-users/backoffice-users.tfstate.tflock", data.aws_s3_bucket.terraform_states.arn, var.stage)
+        ]
       },
       {
         Effect   = "Allow"
         Action   = "s3:ListBucket"
         Resource = [data.aws_s3_bucket.terraform_states.arn]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem"
-        ]
-        Resource = [data.aws_dynamodb_table.terraform_lock.arn]
       },
       {
         Effect = "Allow"
